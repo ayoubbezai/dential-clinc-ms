@@ -100,9 +100,15 @@ public function login(Request $request){
 }
 public function logout(Request $request)
 {
+
+    //delete the token
+
     $request->user()->currentAccessToken()->delete();
 
+    //return success response
+    
     return response()->json([
+        "success" => true,
         "message" => "Logged out successfully"
     ], 200);
 }
