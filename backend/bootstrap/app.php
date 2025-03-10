@@ -4,6 +4,9 @@ use Illuminate\Foundation\Configuration\Middleware;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful;
 use App\Http\Middleware\RoleMiddleware;
+use Illuminate\Routing\Middleware\ThrottleRequests;
+use Illuminate\Http\Exceptions\ThrottleRequestsException;
+use Symfony\Component\HttpFoundation\Response;
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
@@ -14,13 +17,28 @@ return Application::configure(basePath: dirname(__DIR__))
     )
     ->withMiddleware(function (Middleware $middleware) {
        
+        // Global API Middleware (Sanctum for SPA authentication)
         $middleware->api([
-            EnsureFrontendRequestsAreStateful::class, // Sanctum Middleware
+            EnsureFrontendRequestsAreStateful::class,
         ]);
-         $middleware->alias([
-            'role' => RoleMiddleware::class, // Register Role Middleware
+
+        // Middleware Aliases
+        $middleware->alias([
+            'role' => RoleMiddleware::class,
+            'throttle' => ThrottleRequests::class,
         ]);
+
     })
     ->withExceptions(function (Exceptions $exceptions) {
         //
-    })->create();
+                // Handle rate limit exceptions globally
+        $exceptions->renderable(function (ThrottleRequestsException $e, $request) {
+            return response()->json([
+                'error' => 'Too many requests',
+                'message' => 'You are making too many requests. Please slow down.',
+                'retry_after' => $e->getHeaders()['Retry-After'] ?? 60 // Retry time in seconds
+            ], Response::HTTP_TOO_MANY_REQUESTS);
+        });
+
+    })
+    ->create();

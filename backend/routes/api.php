@@ -9,7 +9,7 @@ $auth = 'auth:sanctum';
 // Public authentication routes (No authentication required)
 Route::prefix('auth')->group(function () {
     Route::post('/register', [AuthController::class, 'register']);
-    Route::post('/login', [AuthController::class, 'login']);
+    Route::post('/login', [AuthController::class, 'login'])->middleware('throttle:login');
 });
 
 // Protected authentication routes (Require authentication)
