@@ -162,6 +162,7 @@ class UserController extends Controller
                 'data' => $user,
                 'message' => 'User details retrieved successfully'
             ], Response::HTTP_OK); // Explicit 200 OK status
+        
         } catch (ModelNotFoundException $e) {
             return response()->json([
                 'success' => false,
@@ -176,7 +177,53 @@ class UserController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        //find or fail will throw auto 404
+        try{
+            $user = User::findOrFail($id);
+             $data = $request->validate([
+            'name' => 'sometimes|required|string|max:255',
+            'email' => 'sometimes|required|email|unique:users,email,' . $id, //.id will ignor id row
+            'password' => 'sometimes|required|min:6|confirmed',
+        ]);
+
+         // Update the user's attributes if provided
+
+       
+        if ($request->has('name')) {
+            $user->name = $data['name'];
+        }
+        if ($request->has('email')) {
+            $user->email = $data['email'];
+        }
+        if ($request->has('password')) {
+            $user->password = $data['password'];//password auto hashed in User model
+        }
+
+        // Save the updated user
+        $user->save();
+
+        return response()->json([
+            "success" => true,
+            "message" => "User updated  successfully.",
+            "user" => [
+                "id" => $user->id,
+                "name" => $user->name,
+                "email" => $user->email,
+                "role" => $user->role->name,
+            ],
+        ], Response::HTTP_OK); // 200 OK
+
+
+    }catch (\Exception $e) {
+
+            
+            return response()->json([
+                'success' => false,
+                'message' => 'An error occurred',
+                'error' => $e->getMessage(),
+            ], Response::HTTP_INTERNAL_SERVER_ERROR); // 500 Internal Server Error
+        }
+        
     }
 
     /**
@@ -185,5 +232,33 @@ class UserController extends Controller
     public function destroy(string $id)
     {
         //
+          //find or fail will throw auto 404
+        try{
+            $user = User::findOrFail($id);
+            
+
+         // Update the user's attributes if provided
+
+       
+
+        // Save the updated user
+        $user->delete();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'User deleted successfully',
+            'data' => [],
+        ], Response::HTTP_OK); // 200 OK
+
+
+        
+    }catch (\Exception $e) {
+            
+            return response()->json([
+                'success' => false,
+                'message' => 'An error occurred',
+                'error' => $e->getMessage(),
+            ], Response::HTTP_INTERNAL_SERVER_ERROR); // 500 Internal Server Error
+        }
     }
 }
