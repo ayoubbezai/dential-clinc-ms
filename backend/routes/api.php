@@ -17,6 +17,6 @@ Route::prefix('auth')->group(function () {
 Route::middleware('auth:sanctum')->prefix('auth')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout']);
 });
-Route::middleware(['auth:sanctum', 'role:dentist'])->prefix('users')->group(function () {
+Route::middleware(['auth:sanctum', 'role:dentist'])->prefix('user')->group(function () {
     Route::post('/receptionist', [UserController::class, 'createReceptionist']);
 });
