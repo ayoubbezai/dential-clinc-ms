@@ -20,6 +20,7 @@ Route::middleware($auth)->prefix('auth')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout']);
 });
 
-Route::middleware([$auth, 'role:dentist'])->prefix('user')->group(function () {
-    Route::post('/receptionist', [UserController::class, 'createReceptionist']);
+Route::middleware([$auth, 'role:dentist'])->group(function () {
+    Route::post('users/receptionist', [UserController::class, 'createReceptionist']);
+    Route::apiResources(['/users' => UserController::class,]);
 });
