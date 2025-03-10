@@ -37,7 +37,7 @@ class UserController extends Controller
                 "id" => $receptionist->id,
                 "name" => $receptionist->name,
                 "email" => $receptionist->email,
-                "role" => "Receptionist",
+                "role" => "receptionist",
              ],
             ],201);
 
