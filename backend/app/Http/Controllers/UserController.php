@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use App\Models\Role;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response; // Import Response facade
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Log; // For logging errors
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
@@ -42,7 +42,7 @@ class UserController extends Controller
             return response()->json([
                 "success" => true,
                 "message" => "Receptionist created successfully",
-                "user" => [
+                "data" => [
                     "id" => $receptionist->id,
                     "name" => $receptionist->name,
                     "email" => $receptionist->email,
@@ -51,6 +51,7 @@ class UserController extends Controller
             ], Response::HTTP_CREATED); // 201 Created
 
         } catch (\Exception $e) {
+
             // Log the error for debugging
             Log::error('Failed to create receptionist: ' . $e->getMessage());
 

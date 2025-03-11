@@ -3,6 +3,7 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\PatientController;
 use Illuminate\Support\Facades\Route;
 
 $auth = 'auth:sanctum';
@@ -23,4 +24,5 @@ Route::middleware($auth)->prefix('auth')->group(function () {
 Route::middleware([$auth, 'role:dentist'])->group(function () {
     Route::post('users/receptionist', [UserController::class, 'createReceptionist']);
     Route::apiResources(['/users' => UserController::class,]);
+    Route::apiResources(['/patients' => PatientController::class,]);
 });
