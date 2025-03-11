@@ -40,7 +40,8 @@ class PatientController extends Controller
            // Get the data
 
 
-        $data = Patient::query()->select([
+   $data = Patient::query()
+    ->select([
         'patients.id',
         'patients.patient_name',
         'patients.phone',
@@ -49,8 +50,13 @@ class PatientController extends Controller
         'patients.notes',
         'patients.diseases',
         'patients.created_at',
-        'patients.updated_at'
+        'patients.updated_at',
+        'patients.user_id',
+    ])
+    ->with([
+        'user:id,name,email' // Load only selected user fields
     ]);
+
 
   
                 if (!empty($request_query['search'])) {
@@ -213,25 +219,42 @@ public function store(Request $request)
              $patient->notes = $patient->notes ? Crypt::decryptString($patient->notes) : null;
             $patient->diseases = $patient->diseases ? Crypt::decryptString($patient->diseases) : null;
 
-        }catch(DecryptException $e){
-            //if somthing went wrong with decryption
-            return response()->json([
-        "success" => false,
-        "message" => "Failed to dycript patient data",
-        "error" => $e->getMessage(),
-    ], Response::HTTP_INTERNAL_SERVER_ERROR);
+    // Prepare user details if patient has a linked user
+
+        $userDetails = null;
+        if ($patient->user) {
+            $userDetails = [
+                "id" => $patient->user->id,
+                "name" => $patient->user->name,
+                "email" => $patient->user->email,
+            ];
         }
-
-        //success response
-
+    } catch (DecryptException $e) {
         return response()->json([
+            "success" => false,
+            "message" => "Failed to decrypt patient data",
+            "error" => $e->getMessage(),
+        ], Response::HTTP_INTERNAL_SERVER_ERROR);
+    }
+
+    // Success response
+    return response()->json([
         "success" => true,
         "message" => "Patient retrieved successfully",
-        "data" => $patient
+        "data" => [
+            "id" => $patient->id,
+            "patient_name" => $patient->patient_name,
+            "phone" => $patient->phone,
+            "gender" => $patient->gender,
+            "age" => $patient->age,
+            "notes" => $patient->notes,
+            "diseases" => $patient->diseases,
+            "user" => $userDetails, // Include user details if available
+            "created_at" => $patient->created_at,
+            "updated_at" => $patient->updated_at,
+        ],
     ], Response::HTTP_OK);
-
 }
-    
 
     /**
      * Update the specified resource in storage.
