@@ -130,19 +130,25 @@ class UserController extends Controller
         $paginatedData = $data->paginate($perPage);
 
         // Prepare a structured response
-        $response = [
-            'success' => true,
-            'message' => 'Data fetched successfully',
-            'data' => $paginatedData->items(), // Paginated data items
-            'pagination' => [
-                'total' => $paginatedData->total(), // Total number of items
-                'current_page' => $paginatedData->currentPage(), // Current page
-                'last_page' => $paginatedData->lastPage(), // Last page number
-                'per_page' => $paginatedData->perPage(), // Items per page
-                'from' => $paginatedData->firstItem(), // Starting item on the current page
-                'to' => $paginatedData->lastItem(), // Last item on the current page
-            ]
-        ];
+      $response = [
+    'success' => true,
+    'message' => 'Data fetched successfully',
+    'data' => $paginatedData->items(), // Paginated data items
+    'pagination' => [
+        'total_items' => $paginatedData->total(), // Total number of items
+        'items_per_page' => $paginatedData->perPage(), // Items per page
+        'current_page' => $paginatedData->currentPage(), // Current page number
+        'total_pages' => $paginatedData->lastPage(), // Last page number
+        'from' => $paginatedData->firstItem(), // First item on the current page
+        'to' => $paginatedData->lastItem(), // Last item on the current page
+        'first_page_url' => $paginatedData->url(1), // First page URL
+        'last_page_url' => $paginatedData->url($paginatedData->lastPage()), // Last page URL
+        'next_page_url' => $paginatedData->nextPageUrl(), // Next page URL
+        'prev_page_url' => $paginatedData->previousPageUrl(), // Previous page URL
+        'path' => $paginatedData->path(), // Base path of pagination
+    ]
+];
+
 
         // Return JSON response
         return response()->json($response, Response::HTTP_OK); // 200 OK
