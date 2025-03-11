@@ -73,10 +73,8 @@ class UserController extends Controller
         $request_query = $request->query();
 
         // Get pages elements based on 'per_page' param if provided
-        $perPage = $request_query['per_page'] ?? 15;
-        if ($perPage <= 0) {
-            $perPage = 15;
-        }
+        $perPage = filter_var($request_query["per_page"] ?? 15, FILTER_VALIDATE_INT) ?: 15;
+        $perPage = max($perPage, 1);
 
         // Validate sortBy and sortDirection inputs
         $validSortColumns = ['name', 'created_at', 'updated_at'];
@@ -110,7 +108,7 @@ class UserController extends Controller
             $data->where('roles.name', 'like', '%' . $roleName . '%');
         }
 
-        // Filter by role name if 'role_name' query parameter is provided
+        // Filter by date name if 'created_at' query parameter is provided
         if (!empty($request_query['created_at'])) {
             $createdAt = $request_query['created_at'];
             // The date format is (yyyy-mm-dd)
@@ -154,7 +152,7 @@ class UserController extends Controller
 
      public function show($id)
     {
-        try {
+       
             // Fetch the user with necessary fields, including timestamps
             $user = User::select('id', 'name', 'email', 'created_at', 'updated_at')->findOrFail($id);
             
@@ -164,13 +162,6 @@ class UserController extends Controller
                 'message' => 'User details retrieved successfully'
             ], Response::HTTP_OK); // Explicit 200 OK status
         
-        } catch (ModelNotFoundException $e) {
-            return response()->json([
-                'success' => false,
-                'data' => null,
-                'message' => 'User not found'
-            ], Response::HTTP_NOT_FOUND); // Explicit 404 Not Found status
-        }
     }
 
           /**
@@ -236,13 +227,8 @@ class UserController extends Controller
           //find or fail will throw auto 404
         try{
             $user = User::findOrFail($id);
-            
-
-         // Update the user's attributes if provided
-
-       
-
-        // Save the updated user
+        
+        // delete the user
         $user->delete();
 
         return response()->json([

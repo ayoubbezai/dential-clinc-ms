@@ -17,6 +17,7 @@ class Patient extends Model
         'age',
         'notes',
         'diseases',
+        "patient_name_tokens"
     ];
 
     public function user()
