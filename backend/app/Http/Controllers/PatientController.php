@@ -409,8 +409,5 @@ public function store(Request $request)
             ], Response::HTTP_INTERNAL_SERVER_ERROR); // 500 Internal Server Error
         }
 
-
     }
-
-
     }
