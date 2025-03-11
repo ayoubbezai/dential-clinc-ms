@@ -23,6 +23,7 @@ Route::middleware($auth)->prefix('auth')->group(function () {
 
 Route::middleware([$auth, 'role:dentist'])->group(function () {
     Route::post('users/receptionist', [UserController::class, 'createReceptionist']);
+Route::post('patients/{id}/createUser', [PatientController::class, 'createUser']);
     Route::apiResources(['/users' => UserController::class,]);
     Route::apiResources(['/patients' => PatientController::class,]);
 });

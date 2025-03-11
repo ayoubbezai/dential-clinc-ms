@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 use Illuminate\Support\Facades\Crypt;
-
+use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use App\Models\Patient;
+use App\Models\Role;
+use App\Models\User;
 use Illuminate\Http\Response;
 use Illuminate\Contracts\Encryption\DecryptException;
 class PatientController extends Controller
@@ -153,7 +155,6 @@ public function store(Request $request)
 {
     // Validate the data from the request
     $data = $request->validate([
-        "user_id" => "nullable|string|exists:users,id",
         "patient_name" => "required|string|max:255",
         "phone" => "nullable|string|max:255",
         "gender" => "required|string|in:male,female",
@@ -161,8 +162,8 @@ public function store(Request $request)
         "notes" => "nullable|string",
         "diseases" => "nullable|string",
     ]);
-    //keep a copy on decrypted data 
-    $decryptedData =$data;
+    //keep a copy on decrypted data
+    $originalData =$data;
 
     try {
         // Create the patient record
@@ -170,11 +171,12 @@ public function store(Request $request)
          // Encrypt sensitive data
         $data['patient_name'] = Crypt::encryptString($data['patient_name']);
         $data['phone'] = $data['phone'] ? Crypt::encryptString($data['phone']) : null;
-        $data['notes'] = $data['notes'] ? Crypt::encryptString($data['notes']) : null;
-        $data['diseases'] = $data['diseases'] ? Crypt::encryptString($data['diseases']) : null;
+        $data['notes'] = !empty($data['notes']) ? Crypt::encryptString($data['notes']) : null;
+        $data['diseases'] = !empty($data['diseases']) ? Crypt::encryptString($data['diseases']) : null;
+
 
         // Tokenize patient name split by spaces
-        $tokens = explode(' ', strtolower($decryptedData['patient_name']));
+        $tokens = explode(' ', strtolower($originalData['patient_name']));
 
         $hashedTokens = array_map(function($token) {
             return hash('sha256', $token);
@@ -184,14 +186,15 @@ public function store(Request $request)
     $data['patient_name_tokens'] = implode(' ', $hashedTokens);
 
 
-         Patient::create($data);
+        $patient = Patient::create($data);
 
 
         // Return success response
         return response()->json([
             "success" => true,
             "message" => "Patient created successfully",
-            "data" => $decryptedData
+            "data" => array_merge(["id" => $patient->id], $originalData) // return the id and decrypted data
+
         ], Response::HTTP_CREATED); // 201 Created
 
     } catch (\Exception $e) {
@@ -344,6 +347,70 @@ public function store(Request $request)
             ], Response::HTTP_INTERNAL_SERVER_ERROR); // 500 Internal Server Error
         }
         }
-    
+
+    public function createUser(Request $request, string $id){
+
+        $patient = Patient::findOrFail($id);
+
+        $data = $request->validate([
+            "email" => "required|string|max:255|email|unique:users,email",
+            "password" => "required|min:6",
+        ]);
+
+            $role = Role::where("name", "patient")->first();
+
+         if (!$role) {
+             return response()->json([
+                 "success" => false,
+                 "message" => "patient role not found."
+             ], Response::HTTP_NOT_FOUND); // 404 Not Found
+         }
+            // Wrap both actions in a transaction
+            DB::beginTransaction();
+
+            //decrypte the patient name first
+
+            $decrypted_patient_name = Crypt::decryptString($patient->patient_name);
+        try{
+            $user =User::create([
+                "name" => $decrypted_patient_name,
+                "email" => $data["email"],
+                "password" => $data["password"],
+                "role_id" => $role->id,
+            ]);
+
+             // Assign user to patient
+
+             $patient->user_id = $user->id;
+             $patient->save();
+
+            // If everything is successful, commit the transaction
+              DB::commit();
+
+            // Return success response
+            return response()->json([
+                "success" => true,
+                "message" => "patinet  updated  successfully and user account created",
+                "data" => [
+                    "patient_id" => $patient->id,
+                    "patient_name" => $decrypted_patient_name,
+                    "user_id" => $patient->user_id,
+                ],
+            ], Response::HTTP_CREATED);
+
+         
+        }catch(\Exception $e){
+            // if somthing went wrong dont do anything
+                    DB::rollBack();
+              return response()->json([
+                'success' => false,
+                'message' => 'faild to create a user for the patient',
+                'error' => $e->getMessage(),
+            ], Response::HTTP_INTERNAL_SERVER_ERROR); // 500 Internal Server Error
+        }
+
+
+    }
+
 
     }
