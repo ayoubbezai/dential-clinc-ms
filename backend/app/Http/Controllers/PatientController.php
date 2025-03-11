@@ -150,7 +150,7 @@ public function store(Request $request)
         "notes" => "nullable|string",
         "diseases" => "nullable|string",
     ]);
-
+    //keep a copy on decrypted data 
     $decryptedData =$data;
 
     try {
@@ -233,7 +233,63 @@ public function store(Request $request)
      */
     public function update(Request $request, string $id)
     {
-        //
+           $patient = Patient::findOrFail($id);
+
+            // Validate the data from the request
+        $data = $request->validate([
+            "patient_name" => "nullable|string|max:255",
+            "phone" => "nullable|string|max:255",
+            "gender" => "nullable|string|in:male,female",
+            "age" => "nullable|integer|min:1|max:120",
+            "notes" => "nullable|string",
+            "diseases" => "nullable|string",
+        ]);
+        //keep a copy on decrypted data
+        $decryptedData =$data;
+
+          // Encrypt sensitive fields before updating
+        if (!empty($data['patient_name'])) {
+            $data['patient_name'] = Crypt::encryptString($data['patient_name']);
+                    // Tokenize patient name split by spaces
+            $tokens = explode(' ', strtolower($decryptedData['patient_name']));
+
+            $hashedTokens = array_map(function($token) {
+                return hash('sha256', $token);
+            }, $tokens);
+
+        // Store hashed tokens as a string for easy searching
+        $data['patient_name_tokens'] = implode(' ', $hashedTokens);
+        }
+        if (!empty($data['phone'])) {
+            $data['phone'] = Crypt::encryptString($data['phone']);
+        }
+        if (!empty($data['notes'])) {
+            $data['notes'] = Crypt::encryptString($data['notes']);
+        }
+        if (!empty($data['diseases'])) {
+            $data['diseases'] = Crypt::encryptString($data['diseases']);
+        }
+    
+
+
+          try{
+            $patient->update($data);
+
+         return response()->json([
+            'success' => true,
+            'message' => 'patient updated successfully',
+            'data' => $decryptedData,
+        ], Response::HTTP_OK);
+
+        }catch(\Exception $e){
+              return response()->json([
+                'success' => false,
+                'message' => 'faild to updated the patient',
+                'error' => $e->getMessage(),
+            ], Response::HTTP_INTERNAL_SERVER_ERROR); // 500 Internal Server Error
+        }
+        
+
     }
 
     /**
@@ -260,8 +316,6 @@ public function store(Request $request)
             ], Response::HTTP_INTERNAL_SERVER_ERROR); // 500 Internal Server Error
         }
         }
-        
-
-
+    
 
     }
