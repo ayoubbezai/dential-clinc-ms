@@ -61,4 +61,11 @@ class User extends Authenticatable
     {
         return $this->role && $this->role->name === $role;
     }
+
+     // A user has one patient
+     
+    public function patient()
+    {
+        return $this->hasOne(Patient::class);
+    }
 }
