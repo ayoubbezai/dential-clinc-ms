@@ -27,3 +27,6 @@ Route::post('patients/{id}/createUser', [PatientController::class, 'createUser']
     Route::apiResources(['/users' => UserController::class,]);
     Route::apiResources(['/patients' => PatientController::class,]);
 });
+
+
+
