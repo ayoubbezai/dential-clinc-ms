@@ -12,15 +12,12 @@ export const AuthProvider = ({ children }) => {
 
   useEffect(() => {
     const token = localStorage.getItem("token");
-    const storedUser = localStorage.getItem("user");
-    if (token && storedUser) {
+    if (token ) {
       try {
-        setUser(storedUser);
         api.defaults.headers.Authorization = `Bearer ${token}`;
       } catch (error) {
         console.log("Failed to parse user data:", error);
         localStorage.removeItem("token");
-        localStorage.removeItem("user");
       }
     }
     setLoading(false);

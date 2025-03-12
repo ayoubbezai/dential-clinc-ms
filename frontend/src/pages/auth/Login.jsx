@@ -4,7 +4,7 @@ import { useRole } from "../../hooks/useRole";
 
 const Login = () => {
     const { login, error } = useAuth();
-    const role = useRole(); // ✅ Now using the custom hook
+    const role = useRole();
 
     const emailRef = useRef(null);
     const passwordRef = useRef(null);

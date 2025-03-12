@@ -16,10 +16,9 @@ export const AuthService = {
 
       const { user, token } = response.data;
 
-      // ✅ Store data correctly
+      
       localStorage.setItem("token", token);
-      localStorage.setItem("user", JSON.stringify(user));
-      localStorage.setItem("role", user.role); // ✅ No need for JSON.stringify()
+
 
       return {
         user,
