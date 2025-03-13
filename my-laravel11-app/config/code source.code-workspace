@@ -1,0 +1,13 @@
+{
+	"folders": [
+		{
+			"name": "code source",
+			"path": "../.."
+		},
+		{
+			"name": "frontend",
+			"path": "../../../frontend"
+		}
+	],
+	"settings": {}
+}

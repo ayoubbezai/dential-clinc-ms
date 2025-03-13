@@ -31,3 +31,6 @@ Route::post('patients/{id}/createUser', [PatientController::class, 'createUser']
 
 
 
+Route::get('/sanctum/csrf-cookie', function (Request $request) {
+    return response()->json(['message' => 'CSRF cookie set']);
+});

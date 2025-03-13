@@ -3,6 +3,7 @@ import { useRole } from "@/hooks/useRole";
 
 const RoleBasedRoute = ({ allowedRoles }) => {
     const { role } = useRole();
+    console.log(role)
 
     if (!role) {
         return <div>Loading...</div>; // Prevents premature redirection

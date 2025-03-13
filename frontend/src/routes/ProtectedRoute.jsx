@@ -1,16 +1,19 @@
 import { Navigate, Outlet } from "react-router-dom";
-import { useAuth } from "@/hooks/useAuth";
+import { useAuth } from "../hooks/useAuth"; // Adjust the path if needed
 
 const ProtectedRoute = () => {
-    const { user } = useAuth();
+    const { user, loading } = useAuth();
 
-    console.log("ProtectedRoute: User =", user);
+
+    if (loading) {
+        return <div>Loading...</div>; 
+    }
+
     if (!user) {
         return <Navigate to="/login" replace />;
     }
 
-
-    return <Outlet />; // IMPORTANT: This renders child routes
+    return <Outlet />; // Renders the protected child routes
 };
 
 export default ProtectedRoute;

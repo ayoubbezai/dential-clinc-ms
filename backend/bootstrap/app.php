@@ -20,7 +20,10 @@ return Application::configure(basePath: dirname(__DIR__))
         // Global API Middleware (Sanctum for SPA authentication)
         $middleware->api([
             EnsureFrontendRequestsAreStateful::class,
+                App\Http\Middleware\CorsMiddleware::class,
+
         ]);
+        
 
         // Middleware Aliases
         $middleware->alias([

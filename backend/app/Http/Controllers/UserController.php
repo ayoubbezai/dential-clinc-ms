@@ -255,29 +255,5 @@ class UserController extends Controller
         }
     }
 
-    public function currentUser(Request $request){
-
-        try{
-            $currentUser = $request->user();
-            if (!$currentUser) {
-                return response()->json([
-                    'success' => false,
-                    'message' => 'User not authenticated',
-                ], Response::HTTP_UNAUTHORIZED);
-            }
-            return response()->json([
-            'success' => true,
-            'message' => "User retrieved successfully",
-            'data' => $currentUser,
-        ], Response::HTTP_OK);
-
-        }catch(\Exception $e){
-             return response()->json([
-                'success' => false,
-                'message' => 'faild to get the current user',
-                'error' => $e->getMessage(),
-            ], Response::HTTP_INTERNAL_SERVER_ERROR);
-        }
-
-    }
+  
 }

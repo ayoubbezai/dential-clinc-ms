@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Hash;
 use App\Models\User;
 use App\Models\Role;
 use Illuminate\Support\Facades\Log; // For logging errors
+use Illuminate\Http\Response;
 
 class AuthController extends Controller
 {
@@ -117,5 +118,35 @@ class AuthController extends Controller
             "success" => true,
             "message" => "Logged out successfully"
         ], 200);
+    }
+      public function currentUser(Request $request){
+
+        try{
+            $currentUser = $request->user();
+            if (!$currentUser) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'User not authenticated',
+                ], Response::HTTP_UNAUTHORIZED);
+            }
+           return response()->json([
+            "success" => true,
+            "message" => "User logged in successfully.",
+            "user" => [
+                "id" => $currentUser->id,
+                "name" => $currentUser->name,
+                "email" => $currentUser->email,
+                "role" => $currentUser->role->name,
+            ],
+        ], 200);
+
+        }catch(\Exception $e){
+             return response()->json([
+                'success' => false,
+                'message' => 'faild to get the current user',
+                'error' => $e->getMessage(),
+            ], Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+
     }
 }

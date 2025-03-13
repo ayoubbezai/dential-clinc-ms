@@ -17,11 +17,11 @@ function App() {
           <Route path="/login" element={<Login />} />
 
           {/* this rout should be a user */}
-        <Route element={<ProtectedRoute />}>
+          <Route element={<ProtectedRoute />}>
 
-        {/* this qre for dentist  */}
+            {/* this qre for dentist  */}
+            <Route path="/dentist/dashboard" element={<DentistDashboard />} />
             <Route element={<RoleBasedRoute allowedRoles={["dentist"]} />}>
-              <Route path="/dentist/dashboard" element={<DentistDashboard />} />
             </Route>
 
             {/* these are for receptionist */}
@@ -33,10 +33,10 @@ function App() {
             <Route element={<RoleBasedRoute allowedRoles={["client"]} />}>
               <Route path="/client/dashboard" element={<ClientDashboard />} />
             </Route>
-          
-        </Route>
 
-          
+          </Route>
+
+
         </Routes>
 
       </Router>
