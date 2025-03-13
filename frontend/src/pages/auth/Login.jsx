@@ -1,38 +1,54 @@
-import { useRef } from "react";
-import { useAuth } from "../../hooks/useAuth";
-import { useRole } from "../../hooks/useRole";
-import LoginImage from "../../assets/images/auth/473812939_988438703349267_4731828135405535889_n.jpg"
-import { Button } from "@/components/ui/button.jsx";
+import LoginImage from "../../assets/images/auth/ozkan-guner-kEbwxfC33qY-unsplash.jpg"
+import logo from "../../assets/logos/logo_2-removebg-preview.png"
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { useLogin } from "../../hooks/useLogin";
+import LoadingButton from "@/components/small/LoadingButton";
+import { PasswordInput } from "@/components/small/PasswordInput";
+
 const Login = () => {
-    const { login, error } = useAuth();
-    const role = useRole();
-
-    const emailRef = useRef(null);
-    const passwordRef = useRef(null);
-
-    const handleSubmitLogin = async (e) => {
-        e.preventDefault();
-        const email = emailRef.current.value;
-        const password = passwordRef.current.value;
-        await login(email, password);
-    };
+    const {
+        emailRef,
+        passwordRef,
+        handleSubmitLogin,
+        showPassword,
+        setShowPassword,
+        loading,
+        error,
+        message,
+    } = useLogin();
 
     return (
-        <div className="flex">
-            <div className="w-1/2">
-
-                <img src={LoginImage} alt="" />
+        <div className="flex bg-back">
+            <div className="w-1/2 hidden md:flex">
+                <img src={LoginImage} alt="" className="hidden md:flex h-screen " />
             </div>
-            <div className="w-1/2">
-                <h2 className="">Login</h2>
-                {error && <p style={{ color: "red" }}>{error.message || "Login failed."}</p>}
-                {error?.errors?.email && <p style={{ color: "red" }}>{error.errors.email[0]}</p>}
+            <div className="md:w-2/3 flex flex-col md:justify-center w-full items-center ">
+                <img src={logo} alt="logo" className="w-52 mb-8   " />
+                <div className="bg-white  rounded-2xl p-8 w-100 px-12">
+                    <h2 className="font-bold text-xl my-3">Login to your account</h2>
+                    {error && <p className="text-danger">{error.message || "Login failed."}</p>}
+                    {!error && message && <p className="text-success">{message || "login in successfuly"}</p>}
 
-                <form onSubmit={handleSubmitLogin}>
-                    <input ref={emailRef} type="email" placeholder="Email" />
-                    <input ref={passwordRef} type="password" placeholder="Password" />
-                    <button type="submit">Login</button>
-                </form>
+                    <form onSubmit={handleSubmitLogin} className="flex flex-col gap-4">
+                        <div>
+                            <Label className="my-2 text-sm">email</Label>
+                            <Input ref={emailRef}
+                                required
+                                type="email"
+                                placeholder="Enter your email"
+                                className="border-[#D0D5DD] text-xs placeholder:text-xs " />
+                        </div>
+                        <PasswordInput
+                            passwordRef={passwordRef}
+                            showPassword={showPassword}
+                            setShowPassword={setShowPassword}
+                        />
+                        {LoadingButton(loading, "login now")}
+                    </form>
+
+                </div>
+
             </div>
 
         </div>

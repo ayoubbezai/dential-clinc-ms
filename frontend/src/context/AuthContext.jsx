@@ -28,6 +28,7 @@ export const AuthProvider = ({ children }) => {
     const { user, error, message } = await AuthService.login(email, password);
     if (error) {
       setError(error);
+      setMessage(message);
     } else {
       setUser(user);
       setMessage(message);
