@@ -19,6 +19,7 @@ Route::prefix('auth')->group(function () {
 
 Route::middleware($auth)->prefix('auth')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout']);
+    Route::get('/me', [AuthController::class, 'currentUser']);
 });
 
 Route::middleware([$auth, 'role:dentist'])->group(function () {
