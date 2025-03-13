@@ -20,8 +20,10 @@ function App() {
           <Route element={<ProtectedRoute />}>
 
             {/* this qre for dentist  */}
-            <Route path="/dentist/dashboard" element={<DentistDashboard />} />
+          </Route>
+
             <Route element={<RoleBasedRoute allowedRoles={["dentist"]} />}>
+            <Route path="/dentist/dashboard" element={<DentistDashboard />} />
             </Route>
 
             {/* these are for receptionist */}
@@ -34,7 +36,6 @@ function App() {
               <Route path="/client/dashboard" element={<ClientDashboard />} />
             </Route>
 
-          </Route>
 
 
         </Routes>

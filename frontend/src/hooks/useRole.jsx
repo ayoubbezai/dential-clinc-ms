@@ -1,10 +1,8 @@
 import { useAuth } from "./useAuth";
 
 export const useRole = () => {
-    const { user } = useAuth();
-    console.log("use auth", user)
-    console.log("use role", user.role)
-    console.log("use role", user["role"])
+    const { user  } = useAuth();
+    const role = user && user["role"] ? user["role"] : null;
 
-    return user ? user["role"] : " ";
+    return {role};
 };
