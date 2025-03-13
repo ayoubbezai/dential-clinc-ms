@@ -2,6 +2,7 @@ import { useRef } from "react";
 import { useAuth } from "../../hooks/useAuth";
 import { useRole } from "../../hooks/useRole";
 import LoginImage from "../../assets/images/auth/473812939_988438703349267_4731828135405535889_n.jpg"
+import { Button } from "@/components/ui/button.jsx";
 const Login = () => {
     const { login, error } = useAuth();
     const role = useRole();
@@ -18,11 +19,12 @@ const Login = () => {
 
     return (
         <div className="flex">
-            <div className="w-1/3">
+            <div className="w-1/2">
+
                 <img src={LoginImage} alt="" />
             </div>
             <div className="w-1/2">
-                <h2>Login</h2>
+                <h2 className="">Login</h2>
                 {error && <p style={{ color: "red" }}>{error.message || "Login failed."}</p>}
                 {error?.errors?.email && <p style={{ color: "red" }}>{error.errors.email[0]}</p>}
 
