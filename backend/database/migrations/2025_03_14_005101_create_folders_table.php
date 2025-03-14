@@ -16,7 +16,7 @@ return new class extends Migration
             $table->foreignId('patient_id')->constrained('patients')->onDelete('cascade');
             $table->string('folder_name');
             $table->string('price');
-            $table->enum('status', ['working_on_it', 'done']);
+            $table->enum('status', ['working_on_it', 'done'])->default('working_on_it');
             $table->timestamps();
         });
     }

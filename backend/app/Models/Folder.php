@@ -23,7 +23,7 @@ class Folder extends Model
     {
         return $this->belongsTo(Patient::class);
     }
-     public function visit()
+     public function visits()
     {
         return $this->hasMany(FolderVisit::class);
     }

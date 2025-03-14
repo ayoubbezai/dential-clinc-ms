@@ -80,7 +80,7 @@ class PatientController extends Controller
         if (!empty($request_query['created_at'])) {
             $createdAt = $request_query['created_at'];
             // The date format is (yyyy-mm-dd)
-            $data->whereRaw("DATE(patients.created_at) = ?", [$createdAt]);
+    $data->whereDate('patients.created_at', $createdAt);
         }
 
         // We need to have start and end date as today if not exist
@@ -88,7 +88,7 @@ class PatientController extends Controller
         $endDate = $request_query['end_date'] ?? now()->toDateString(); // Defaults to today if not provided
 
         if ($startDate && $endDate) {
-            $data->whereRaw("DATE(patients.created_at) BETWEEN ? AND ?", [$startDate, $endDate]);
+    $data->whereBetween('patients.created_at', [$startDate, $endDate]);
         }
 
          // Apply sorting
@@ -98,7 +98,7 @@ class PatientController extends Controller
         $paginatedData = $data->paginate($perPage);
 
 // Decrypt patient data
-$paginatedData->getCollection()->transform(function ($patient) {
+$paginatedData->through(function ($patient) {
     try {
         $patient->phone = $patient->phone ? Crypt::decryptString($patient->phone) : null;
         $patient->notes = $patient->notes ? Crypt::decryptString($patient->notes) : null;
@@ -109,7 +109,7 @@ $paginatedData->getCollection()->transform(function ($patient) {
             return response()->json([
         "success" => false,
         "message" => "Failed to dycript patient data",
-        "error" => $e->getMessage(),
+        "error" => "Decryption failed due to invalid data."
     ], Response::HTTP_INTERNAL_SERVER_ERROR);
         
     }
