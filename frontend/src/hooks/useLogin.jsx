@@ -1,8 +1,9 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { useAuth } from "./useAuth";
 import { useRole } from "./useRole";
 import { navigateToDashboard } from "@/utils/navigation";
 import { useNavigate } from "react-router-dom";
+
 export const useLogin = () => {
     const { login, error, message } = useAuth();
     const role = useRole();
@@ -11,22 +12,36 @@ export const useLogin = () => {
     const passwordRef = useRef(null);
     const [loading, setLoading] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
 
     const handleSubmitLogin = async (e) => {
         e.preventDefault();
         setLoading(true);
+
+        const email = emailRef.current?.value;
+        const password = passwordRef.current?.value;
+
+        if (!email || !password) {
+            setLoading(false);
+            return;
+        }
+
         try {
-            await login(emailRef.current.value, passwordRef.current.value);
-            console.log("uselogin", role)
-            navigate(navigateToDashboard(role.role));
+            await login(email, password);
+            setIsLoggedIn(true); // Set state to indicate successful login
         } catch (error) {
-            console.log("Login error:", error);
+            console.error("Login error:", error);
         } finally {
             setLoading(false);
-            emailRef.current.value = "";
-            passwordRef.current.value = "";
         }
     };
+
+    useEffect(() => {
+        if (role?.role) {
+            console.log("Navigating after login:", role.role);
+            navigate(navigateToDashboard(role.role));
+        }
+    }, [role, navigate]);
 
     return {
         emailRef,

@@ -6,7 +6,7 @@ export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [message, setMessage] = useState(null);
 
@@ -16,6 +16,8 @@ export const AuthProvider = ({ children }) => {
       if (token) {
         api.defaults.headers.Authorization = `Bearer ${token}`;
         try {
+          setLoading(true);
+
           const { user, error, message } = await AuthService.getCurrentUser();
           setError(error);
           setUser(user);
