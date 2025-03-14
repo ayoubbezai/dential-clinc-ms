@@ -17,7 +17,8 @@ export const useLogin = () => {
         setLoading(true);
         try {
             await login(emailRef.current.value, passwordRef.current.value);
-            navigate(navigateToDashboard(role));
+            console.log("uselogin", role)
+            navigate(navigateToDashboard(role.role));
         } catch (error) {
             console.log("Login error:", error);
         } finally {

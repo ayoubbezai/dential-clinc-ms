@@ -1,6 +1,7 @@
+import { Button } from "@/components/ui/button";
 
 const LoadingDots = (loading, text) => (
-    <button disabled={loading} type="submit" className="bg-[#1570EF] px-16 py-3 my-4 text-white flex items-center justify-center gap-2 hover:bg-[#1570EF]/90">
+    <Button disabled={loading} type="submit" className="bg-[#1570EF] px-16 py-4 my-4 text-white flex items-center justify-center gap-2 hover:bg-[#1570EF]/90">
         {loading ? (
             <>
                 Loading
@@ -11,7 +12,7 @@ const LoadingDots = (loading, text) => (
         ) : (
             text
         )}
-    </button>
+    </Button>
 );
 
 export default LoadingDots;

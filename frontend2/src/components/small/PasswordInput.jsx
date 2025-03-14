@@ -1,11 +1,13 @@
 
 import { Eye, EyeOff } from "lucide-react";
-
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { Label } from "@/components/ui/label";
 export const PasswordInput = ({ passwordRef, showPassword, setShowPassword }) => {
     return (
         <div className="relative w-full">
-            <label className="my-2 ">Password</label>
-            <input
+            <Label className="my-2 ">Password</Label>
+            <Input
                 ref={passwordRef}
                 type={showPassword ? "text" : "password"}
                 placeholder="Enter your password"

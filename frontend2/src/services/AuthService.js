@@ -6,10 +6,11 @@ export const AuthService = {
     try {
       //api call using api
       const response = await api.post("/auth/login", { email, password });
-      if (response.data.token ) {
+      console.log(response);
+      if (response.data.token) {
         //if token exict put it in localstorge
         localStorage.setItem("token", response.data.token);
-              api.defaults.headers.Authorization = `Bearer ${response.data.token}`;
+        api.defaults.headers.Authorization = `Bearer ${response.data.token}`;
 
         //success response
         return {
@@ -30,8 +31,6 @@ export const AuthService = {
 
   async getCurrentUser() {
     try {
-      
-
       // the token is in automatically
 
       const response = await api.get("/auth/me");
