@@ -10,7 +10,6 @@ export const AuthProvider = ({ children }) => {
   const [error, setError] = useState(null);
   const [message, setMessage] = useState(null);
 
-
   useEffect(() => {
     const fetchUser = async () => {
       const token = localStorage.getItem("token");

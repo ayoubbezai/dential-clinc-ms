@@ -60,20 +60,14 @@ class PatientController extends Controller
     ]);
 
 
-  
-                if (!empty($request_query['search'])) {
-            $searchTerm = strtolower($request_query['search']);
-            $searchTokens = explode(' ', $searchTerm);
+  //search by patient name
 
-            // Hash each search token
-            $hashedSearchTokens = array_map(function($token) {
-                return hash('sha256', $token);
-            }, $searchTokens);
-
-            foreach ($hashedSearchTokens as $hashedToken) {
-                $data->where('patient_name_tokens', 'LIKE', "%{$hashedToken}%");
-            }
-}
+            if (!empty($request_query['search'])) {
+            $search = $request_query['search'];
+            $data->where(function ($query) use ($search) {
+                $query->where('patient_name', 'like', '%' . $search . '%');
+            });
+        }
 
         //filter by gender if "gender" query exicts
           if(!empty($request_query["gender"])){
@@ -106,7 +100,6 @@ class PatientController extends Controller
 // Decrypt patient data
 $paginatedData->getCollection()->transform(function ($patient) {
     try {
-        $patient->patient_name = Crypt::decryptString($patient->patient_name);
         $patient->phone = $patient->phone ? Crypt::decryptString($patient->phone) : null;
         $patient->notes = $patient->notes ? Crypt::decryptString($patient->notes) : null;
         $patient->diseases = $patient->diseases ? Crypt::decryptString($patient->diseases) : null;
@@ -169,23 +162,13 @@ public function store(Request $request)
         // Create the patient record
 
          // Encrypt sensitive data
-        $data['patient_name'] = Crypt::encryptString($data['patient_name']);
-        $data['phone'] = $data['phone'] ? Crypt::encryptString($data['phone']) : null;
+
+         $data['phone'] = $data['phone'] ? Crypt::encryptString($data['phone']) : null;
         $data['notes'] = !empty($data['notes']) ? Crypt::encryptString($data['notes']) : null;
         $data['diseases'] = !empty($data['diseases']) ? Crypt::encryptString($data['diseases']) : null;
 
 
-        // Tokenize patient name split by spaces
-        $tokens = explode(' ', strtolower($originalData['patient_name']));
-
-        $hashedTokens = array_map(function($token) {
-            return hash('sha256', $token);
-        }, $tokens);
-
-    // Store hashed tokens as a string for easy searching
-    $data['patient_name_tokens'] = implode(' ', $hashedTokens);
-
-
+    
         $patient = Patient::create($data);
 
 
@@ -217,7 +200,6 @@ public function store(Request $request)
         //decrypte sensetive data
         try{
 
-            $patient->patient_name = Crypt::decryptString($patient->patient_name);
              $patient->phone = $patient->phone ? Crypt::decryptString($patient->phone) : null;
              $patient->notes = $patient->notes ? Crypt::decryptString($patient->notes) : null;
             $patient->diseases = $patient->diseases ? Crypt::decryptString($patient->diseases) : null;
@@ -278,19 +260,9 @@ public function store(Request $request)
         //keep a copy on decrypted data
         $decryptedData =$data;
 
-          // Encrypt sensitive fields before updating
-        if (!empty($data['patient_name'])) {
-            $data['patient_name'] = Crypt::encryptString($data['patient_name']);
-                    // Tokenize patient name split by spaces
-            $tokens = explode(' ', strtolower($decryptedData['patient_name']));
+   
 
-            $hashedTokens = array_map(function($token) {
-                return hash('sha256', $token);
-            }, $tokens);
-
-        // Store hashed tokens as a string for easy searching
-        $data['patient_name_tokens'] = implode(' ', $hashedTokens);
-        }
+        
         if (!empty($data['phone'])) {
             $data['phone'] = Crypt::encryptString($data['phone']);
         }
@@ -300,7 +272,6 @@ public function store(Request $request)
         if (!empty($data['diseases'])) {
             $data['diseases'] = Crypt::encryptString($data['diseases']);
         }
-    
 
 
           try{
@@ -370,10 +341,9 @@ public function store(Request $request)
 
             //decrypte the patient name first
 
-            $decrypted_patient_name = Crypt::decryptString($patient->patient_name);
         try{
             $user =User::create([
-                "name" => $decrypted_patient_name,
+                "name" => $patient->patient_name,
                 "email" => $data["email"],
                 "password" => $data["password"],
                 "role_id" => $role->id,
@@ -393,7 +363,7 @@ public function store(Request $request)
                 "message" => "patinet  updated  successfully and user account created",
                 "data" => [
                     "patient_id" => $patient->id,
-                    "patient_name" => $decrypted_patient_name,
+                    "patient_name" =>  $patient->patient_name,
                     "user_id" => $patient->user_id,
                 ],
             ], Response::HTTP_CREATED);

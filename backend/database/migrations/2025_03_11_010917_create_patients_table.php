@@ -16,7 +16,6 @@ return new class extends Migration
             $table->uuid('user_id')->nullable();
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->string('patient_name')->nullable();
-            $table->text("patient_name_tokens")->nullable();
             $table->string('phone')->nullable();
             $table->enum('gender', ['male', 'female'])->nullable();
             $table->integer('age')->nullable();

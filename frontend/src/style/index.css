@@ -1,4 +1,6 @@
-@import "tailwindcss";
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
 :root {
   --color-primary: 0 171 198;
@@ -56,3 +58,5 @@
 .text-danger {
   color: rgb(var(--color-danger));
 }
+
+
