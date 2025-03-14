@@ -13,6 +13,10 @@ return new class extends Migration
     {
         Schema::create('folder_visits', function (Blueprint $table) {
             $table->id();
+            $table->integer('dent')->nullable();
+            $table->text('reason_of_visit')->nullable();
+            $table->text('treatment_details')->nullable();
+            $table->foreignId('folder_id')->constrained('folders')->onDelete('cascade');
             $table->timestamps();
         });
     }
