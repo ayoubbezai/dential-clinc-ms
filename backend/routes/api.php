@@ -31,6 +31,7 @@ Route::middleware([$auth, 'role:dentist'])->group(function () {
     Route::post('patients/{id}/createUser', [PatientController::class, 'createUser']);
     Route::get('patients/{id}/folders', [FolderController::class, 'getFoldersOfPatient']);
     Route::get('folders/{id}/appointments', [AppointmentController::class, 'getAppointmentsOfFolder']);
+    Route::get('folders/{id}/notes', [NoteController::class, 'getNotesOfFolder']);
     Route::apiResources(['/users' => UserController::class,]);
     Route::apiResources(['/patients' => PatientController::class,]);
     Route::apiResources(['/folders' => FolderController::class,]);
