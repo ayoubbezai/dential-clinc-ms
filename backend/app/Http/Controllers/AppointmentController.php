@@ -93,7 +93,9 @@ public function store(Request $request)
      */
     public function update(Request $request, string $id)
     {
-        //update appoinmetns 
+        //update appointmens
+      
+    
     }
 
     /**
@@ -101,7 +103,25 @@ public function store(Request $request)
      */
     public function destroy(string $id)
     {
-        //
+        
+          //get appoinment in a folder ther id is for the fodler
+        try{
+        $appointment = Appointment::findOrFail($id);
+        $appointment->delete();
+
+        return response()->json([
+            "success" => true,
+            "message" => "Appointment deleted successfully",
+            "data" => []
+        ], Response::HTTP_OK);
+
+        }catch (\Exception $e) {
+        return response()->json([
+            'success' => false,
+            'message' => 'Failed to delete the appointment',
+            'error' => $e->getMessage(),
+        ], Response::HTTP_INTERNAL_SERVER_ERROR);
+    }
     }
 
       public function getAppointmentsOfFolder(string $id)
