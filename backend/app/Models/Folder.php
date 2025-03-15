@@ -32,10 +32,10 @@ class Folder extends Model
     {
         return $this->hasMany(Appointment::class);
     }
-    // public function notes()
-    // {
-    //     return $this->hasMany(Note::class);
-    // }
+    public function notes()
+    {
+        return $this->hasMany(Note::class);
+    }
 
     // public function files()
     // {
