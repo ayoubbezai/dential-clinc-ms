@@ -13,9 +13,126 @@ class AppointmentController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        //get all appoinemtns
+        //get the query from the request
+
+        try{
+        $request_query = $request->query();
+
+        //get the number of elements perPage by the front
+
+        $perPage = filter_var($request_query["per_page"]?? 15 ,FILTER_VALIDATE_INT)?:15;
+        $perPage = max($perPage,1);
+
+        //validate sort bu and direction to avoid sql injection
+        $validSortColumns = ["date",'created_at','updated_at'];
+         $validSortDirection = ["asc","desc"];
+        $sortBy = in_array($request_query['sort_by'] ?? 'created_at', $validSortColumns)
+                ? $request_query['sort_by'] ?? 'created_at'
+                : 'created_at';
+
+        $sortDirection = in_array(strtolower($request_query['sort_direction'] ?? 'asc'), $validSortDirection)
+            ? strtolower($request_query['sort_direction'] ?? 'asc')
+            : 'asc';
+
+            //get the data
+            
+            $data = Appointment::query()
+    ->with(["folder:id,folder_name,patient_id", "folder.patient:id,patient_name"]);
+
+     //search by appointemnt title
+
+            if (!empty($request_query['search'])) {
+            $search = $request_query['search'];
+            $data->where(function ($query) use ($search) {
+                $query->where('title', 'like', '%' . $search . '%')
+                      ->orWhereHas('folder.patient',function ($q) use ($search){
+                            $q->where('patient_name', 'like', '%' . $search . '%');
+                      } )
+;
+            });
+        }
+
+        //filter by status if it provided
+        if(!empty($request_query["status"])){
+            $status = $request_query["status"];
+                $data->where("status", $status);
+          }
+
+             // Filter by date name if 'date' query parameter is provided
+        if (!empty($request_query['date'])) {
+            $date = $request_query['date'];
+            // The date format is (yyyy-mm-dd)
+    $data->whereDate('appointemnts.date', $date);
+        }
+
+           $startDate = $request_query['start_date'] ?? null;
+        $endDate = $request_query['end_date'] ?? null;
+        if ($startDate && $endDate) {
+            $data->whereBetween('appointments.date', [$startDate, $endDate]);
+        } elseif ($startDate) {
+            $data->where('appointments.date', '>=', $startDate);
+        } elseif ($endDate) {
+            $data->where('appointments.date', '<=', $endDate);
+        }
+         // Apply sorting
+        $data->orderBy($sortBy, $sortDirection);
+
+        // Get paginated results
+        $paginatedData = $data->paginate($perPage);
+
+        // Map data
+        //get collection to get items of paginatedData
+        $mappedData = $paginatedData->getCollection()->map(function ($appointment) {
+            return [
+                'id' => $appointment->id,
+                'date' => $appointment->date,
+                'status' => $appointment->status,
+                'title' => $appointment->title,
+                'content' => $appointment->content,
+                'folder_name' => $appointment->folder->folder_name,
+                'patient_name' => $appointment->folder->patient->patient_name,
+            ];
+        });
+                //get collection to set items of paginatedData
+
+         $paginatedData->setCollection($mappedData);
+
+
+        
+         // Prepare a structured response
+        $response = [
+            'success' => true,
+            'message' => 'Data fetched successfully',
+            'data' => $paginatedData->items(), // Paginated data items
+            'pagination' => [
+        'total_items' => $paginatedData->total(), // Total number of items
+        'items_per_page' => $paginatedData->perPage(), // Items per page
+        'current_page' => $paginatedData->currentPage(), // Current page number
+        'total_pages' => $paginatedData->lastPage(), // Last page number
+        'from' => $paginatedData->firstItem(), // First item on the current page
+        'to' => $paginatedData->lastItem(), // Last item on the current page
+        'first_page_url' => $paginatedData->url(1), // First page URL
+        'last_page_url' => $paginatedData->url($paginatedData->lastPage()), // Last page URL
+        'next_page_url' => $paginatedData->nextPageUrl(), // Next page URL
+        'prev_page_url' => $paginatedData->previousPageUrl(), // Previous page URL
+        'path' => $paginatedData->path(), // Base path of pagination
+    ]
+        ];
+         // Return JSON response
+        return response()->json($response, Response::HTTP_OK);
+         } catch (\Exception $e) {
+        return response()->json([
+            'success' => false,
+            'message' => 'Failed to get appointments',
+            'error' => $e->getMessage(),
+        ], Response::HTTP_INTERNAL_SERVER_ERROR);
+    }
+
+
+
     }
 
     /**

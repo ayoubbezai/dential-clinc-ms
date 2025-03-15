@@ -17,6 +17,7 @@ class PatientController extends Controller
     public function index(Request $request)
     {
         // get the query from the request
+                try{
 
         $request_query = $request->query();
 
@@ -136,8 +137,15 @@ $paginatedData->through(function ($patient) {
     ]
         ];
 
-        // Return JSON response
+        // Return success response
         return response()->json($response, Response::HTTP_OK);
+         } catch (\Exception $e) {
+        return response()->json([
+            'success' => false,
+            'message' => 'Failed to get patients',
+            'error' => $e->getMessage(),
+        ], Response::HTTP_INTERNAL_SERVER_ERROR);
+    }
 
     }
 

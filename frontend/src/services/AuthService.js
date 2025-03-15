@@ -10,6 +10,7 @@ export const AuthService = {
       if (response.data.token) {
         //if token exict put it in localstorge
         localStorage.setItem("token", response.data.token);
+
         api.defaults.headers.Authorization = `Bearer ${response.data.token}`;
 
         //success response

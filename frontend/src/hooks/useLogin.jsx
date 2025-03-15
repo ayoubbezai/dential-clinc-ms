@@ -13,6 +13,12 @@ export const useLogin = () => {
     const [loading, setLoading] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
     const [isLoggedIn, setIsLoggedIn] = useState(false);
+    useEffect(() => {
+        if (role?.role) {
+            console.log("Navigating after login:", role.role);
+            navigate(navigateToDashboard(role.role));
+        }
+    }, [role, navigate]);
 
     const handleSubmitLogin = async (e) => {
         e.preventDefault();
@@ -36,12 +42,6 @@ export const useLogin = () => {
         }
     };
 
-    useEffect(() => {
-        if (role?.role) {
-            console.log("Navigating after login:", role.role);
-            navigate(navigateToDashboard(role.role));
-        }
-    }, [role, navigate]);
 
     return {
         emailRef,

@@ -43,6 +43,7 @@ export const AuthProvider = ({ children }) => {
     setLoading(true);
 
     const { user, error, message } = await AuthService.login(email, password);
+    console.log(user)
 
     setError(error);
     setMessage(message);
