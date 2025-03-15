@@ -28,6 +28,10 @@ class Folder extends Model
         return $this->hasMany(FolderVisit::class);
     }
 
+    public function appointments()
+    {
+        return $this->hasMany(Appointment::class);
+    }
     // public function notes()
     // {
     //     return $this->hasMany(Note::class);
@@ -38,10 +42,6 @@ class Folder extends Model
     //     return $this->hasMany(File::class);
     // }
 
-    // public function appointments()
-    // {
-    //     return $this->hasMany(Appointment::class);
-    // }
 
     // public function payments()
     // {

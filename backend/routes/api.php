@@ -5,6 +5,8 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\PatientController;
 use App\Http\Controllers\FolderController;
+use App\Http\Controllers\AppointmentController;
+use App\Models\Appointment;
 use Illuminate\Support\Facades\Route;
 
 $auth = 'auth:sanctum';
@@ -27,9 +29,11 @@ Route::middleware([$auth, 'role:dentist'])->group(function () {
     Route::post('users/receptionist', [UserController::class, 'createReceptionist']);
     Route::post('patients/{id}/createUser', [PatientController::class, 'createUser']);
     Route::get('patients/{id}/folders', [FolderController::class, 'getFoldersOfPatient']);
+    Route::get('folders/{id}/appointments', [AppointmentController::class, 'getAppointmentsOfFolder']);
     Route::apiResources(['/users' => UserController::class,]);
     Route::apiResources(['/patients' => PatientController::class,]);
     Route::apiResources(['/folders' => FolderController::class,]);
+    Route::apiResources(['/appointments' => AppointmentController::class,]);
 });
 
 
