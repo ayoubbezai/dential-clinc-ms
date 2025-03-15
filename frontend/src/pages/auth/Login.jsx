@@ -1,4 +1,4 @@
-import LoginImage from "../../assets/images/auth/ozkan-guner-kEbwxfC33qY-unsplash.jpg"
+import LoginImage from "../../assets/images/auth/473812939_988438703349267_4731828135405535889_n.jpg"
 import logo from "../../assets/logos/logo_2-removebg-preview.png"
 import { useLogin } from "../../hooks/useLogin";
 import LoadingButton from "@/components/small/LoadingButton";

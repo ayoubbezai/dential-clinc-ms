@@ -259,9 +259,6 @@ public function store(Request $request)
         ]);
         //keep a copy on decrypted data
         $decryptedData =$data;
-
-   
-
         
         if (!empty($data['phone'])) {
             $data['phone'] = Crypt::encryptString($data['phone']);

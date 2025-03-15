@@ -26,6 +26,7 @@ Route::middleware($auth)->prefix('auth')->group(function () {
 Route::middleware([$auth, 'role:dentist'])->group(function () {
     Route::post('users/receptionist', [UserController::class, 'createReceptionist']);
     Route::post('patients/{id}/createUser', [PatientController::class, 'createUser']);
+    Route::get('patients/{id}/folders', [FolderController::class, 'getFoldersOfPatient']);
     Route::apiResources(['/users' => UserController::class,]);
     Route::apiResources(['/patients' => PatientController::class,]);
     Route::apiResources(['/folders' => FolderController::class,]);
@@ -33,6 +34,6 @@ Route::middleware([$auth, 'role:dentist'])->group(function () {
 
 
 
-Route::get('/sanctum/csrf-cookie', function (Request $request) {
+Route::get('/sanctum/csrf-cookie', function () {
     return response()->json(['message' => 'CSRF cookie set']);
 });

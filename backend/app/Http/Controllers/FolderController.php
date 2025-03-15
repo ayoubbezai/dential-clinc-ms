@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\DB;
 use App\Models\Folder;
+use App\Models\Patient;
 use App\Models\FolderVisit;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -18,7 +19,8 @@ class FolderController extends Controller
      */
     public function index()
     {
-        //
+        //get all folders (no need for now )
+        
     }
 
     /**
@@ -210,6 +212,14 @@ public function update(Request $request, string $id)
 
         // Handle visits update
         if (!empty($data["visits"])) {
+
+            //get the ids of visits provided in the request
+            $visitIdsFormRequest = collect($data["visits"])->pluck("id")->filter()->toArray();
+
+            //delte visits that are not in the request
+            $folder->visits()->whereNotIn("id",$visitIdsFormRequest)->delete();
+
+            //update or create visits from the request 
             foreach ($data["visits"] as $visitData) {
                 $folder->visits()->updateOrCreate(
                     ["id" => $visitData["id"] ?? null],
@@ -265,5 +275,41 @@ public function update(Request $request, string $id)
                 'error' => $e->getMessage(),
             ], Response::HTTP_INTERNAL_SERVER_ERROR); // 500 Internal Server Error
         }
+    }
+
+    public function getFoldersOfPatient(string $id){//the id of the patient
+        //get the patient we are looking for
+        $patient = Patient::with("folders")->findOrFail($id);
+        try{
+            // Check if the patient has folders
+        $hasFolders = optional($patient->folders)->isNotEmpty();
+
+        // Conditional message
+        $message = $hasFolders
+            ? 'This patient has folders.'
+            : 'This patient has no folders.';
+
+            return response()->json([
+                'success' => true,
+                'message' => $message,
+                 'data' => [
+                'patient' => [
+                    'id' => $patient->id,
+                    'patient_name' => $patient->patient_name,
+                ],
+                'folders' => $patient->folders, // empty if has none
+            ],
+
+            ], Response::HTTP_OK);
+                }catch(\Exception $e){
+              return response()->json([
+                'success' => false,
+            'message' => 'Failed to retrieve folders for the patient.',
+                'error' => $e->getMessage(),
+            ], Response::HTTP_INTERNAL_SERVER_ERROR); // 500 Internal Server Error
+        }
+
+        
+
     }
 }

@@ -24,4 +24,8 @@ class Patient extends Model
     {
         return $this->belongsTo(User::class);
     }
+    public function folders()
+    {
+        return $this->hasMany(Folder::class);
+    }
 }
