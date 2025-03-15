@@ -73,7 +73,7 @@ public function store(Request $request)
 
         return response()->json([
             "success" => true,
-            "message" => "Appointment created successfully",
+            "message" => "Appointment retrived successfully",
             "data" => $appointment
         ], Response::HTTP_OK);
 
@@ -94,7 +94,36 @@ public function store(Request $request)
     public function update(Request $request, string $id)
     {
         //update appointmens
-      
+        
+        //find that appoinment
+        $appointment = Appointment::findOrFail($id);
+
+        //valideate data before update
+        $data = $request->validate([
+        "date" => "nullable|date",
+        "status" => ["nullable", Rule::in(['not_yet', 'done', 'cancelled', 'rescheduled'])],
+        "title" => "nullable|string|max:255",
+        "content" => "nullable|string",
+        "folder_id" => "nullable|integer|exists:folders,id"
+    ]);
+
+    //update the user
+    try{
+        $appointment->update($data);
+        return response()->json([
+            "success" => true,
+            "message" => "Appointment updated successfully",
+            "data" => $appointment
+        ], Response::HTTP_OK);
+
+
+    }catch (\Exception $e) {
+        return response()->json([
+            'success' => false,
+            'message' => 'Failed to update the appointment',
+            'error' => $e->getMessage(),
+        ], Response::HTTP_INTERNAL_SERVER_ERROR);
+    }      
     
     }
 
@@ -132,7 +161,7 @@ public function store(Request $request)
 
         return response()->json([
             "success" => true,
-            "message" => "Appointment created successfully",
+            "message" => "Appointment retrived successfully",
             "data" => [
                 "folder_id" => $folder->id,
                 "folder_name" => $folder->folder_name,

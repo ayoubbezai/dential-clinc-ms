@@ -12,19 +12,19 @@ const RoleBasedRoute = ({ allowedRoles }) => {
     useEffect(() => {
         const timer = setTimeout(() => {
             setIsWaiting(false);
-        }, 2000); // Max wait of 2 seconds
+        }, 2000); // max wait of 2 seconds
 
         if (role) {
             setFinalRole(role);
             setIsWaiting(false);
-            clearTimeout(timer); // Stop waiting if role is found early
+            clearTimeout(timer); // stop waiting if role found
         }
 
         return () => clearTimeout(timer);
     }, [role]);
 
     if (loading || isWaiting) {
-        return <div>Loading...</div>; // Show loading while waiting
+        return <div>Loading...</div>; // show loading when waiting
     }
 
     console.log("RoleBasedRoute: Role =", finalRole, "AllowedRoles =", allowedRoles);
