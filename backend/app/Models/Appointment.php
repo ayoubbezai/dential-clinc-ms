@@ -18,3 +18,5 @@ class Appointment extends Model
         return $this->belongsTo(Folder::class);
     }
 }
+
+
