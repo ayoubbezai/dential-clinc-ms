@@ -9,6 +9,7 @@ import { createEventsServicePlugin } from '@schedule-x/events-service';
 import '@schedule-x/theme-default/dist/index.css';
 import { useEffect, useState } from 'react';
 import { FaClock, FaMapMarkerAlt, FaUsers, FaEdit, FaTrash } from 'react-icons/fa'; // Icons
+import { Button } from '@/components/ui/button';
 
 
 function CalendarApp() {
@@ -128,7 +129,7 @@ function CalendarApp() {
             gridHeight: 2500, // Height of the week grid
             nDays: 7, // Number of days to display in week view
             eventWidth: 95, // Width of events in the week grid
-            timeAxisFormatOptions: { hour: '2-digit', minute: '2-digit' }, 
+            timeAxisFormatOptions: { hour: '2-digit', minute: '2-digit' },
             eventOverlap: false,
 
 
@@ -236,7 +237,10 @@ function CalendarApp() {
 
             {/* Events List */}
             <div className='w-1/4 bg-white p-4 rounded-lg shadow-md overflow-y-auto'>
-                <h2 className='text-lg font-bold mb-4'>Events List</h2>
+                <div className='flex  justify-between my-3 mb-5 items-center'>
+                    <h2 className='text-lg font-bold '>Events List</h2>
+                    <Button size={"sm"} className="text-xs p-2 bg-blue-500 text-white ">Add an event</Button>
+                </div>
                 {events2.map((event, index) => (
                     <div
                         key={index}
@@ -247,27 +251,27 @@ function CalendarApp() {
                                 <button
                                     className='p-1 text-blue-600 hover:text-blue-800'
                                 >
-                                    <FaEdit />
+                                    <FaEdit size={14} />
                                 </button>
                                 <button
                                     className='p-1 text-red-600 hover:text-red-800'
                                 >
-                                    <FaTrash />
+                                    <FaTrash size={14} />
                                 </button>
                             </div>
-                            <h3 className='text-md mb-2 font-semibold text-blue-900'>
+                            <h3 className='text-xs mb-2 font-semibold text-blue-900'>
                                 {event.title}
                             </h3></div>
-                        <p className='text-xs flex items-center text-blue-600'>
+                        <p className='text-[10px] flex items-center text-blue-600'>
                             <FaClock className='mr-2' /> {event.start}
                         </p>
-                        <p className='text-xs flex items-center text-blue-600'>
+                        <p className='text-[10px] flex items-center text-blue-600'>
                             <FaClock className='mr-2' /> {event.end}
                         </p>
-                        <p className='text-xs flex items-center text-blue-600'>
+                        <p className='text-[10px] flex items-center text-blue-600'>
                             <FaMapMarkerAlt className='mr-2' /> {event.location}
                         </p>
-                        <p className='text-xs flex items-center text-blue-600'>
+                        <p className='text-[10px] flex items-center text-blue-600'>
                             <FaUsers className='mr-2' /> {event.people.join(', ')}
                         </p>
 
