@@ -128,7 +128,7 @@ function CalendarApp() {
             gridHeight: 2500, // Height of the week grid
             nDays: 7, // Number of days to display in week view
             eventWidth: 95, // Width of events in the week grid
-            timeAxisFormatOptions: { hour: '2-digit', minute: '2-digit' }, // Time format
+            timeAxisFormatOptions: { hour: '2-digit', minute: '2-digit' }, 
             eventOverlap: false,
 
 
