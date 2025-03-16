@@ -2,16 +2,16 @@
 @plugin "tailwindcss-animate";
 
 :root {
-  --color-background: #F0F8FA;
-  --color-foreground: #0F172A;
-  --color-primary: #00ABC6;
-  --color-primary-foreground: #FFFFFF;
-  --color-secondary: #2F3375;
-  --color-secondary-foreground: #FFFFFF;
-  --color-supporting-1: #66C9D9;
-  --color-supporting-2: #007C8F;
-  --color-complementary-1: #C66400;
-  --color-complementary-2: #C69000;
+  --color-background: #f0f8fa;
+  --color-foreground: #0f172a;
+  --color-primary: #00abc6;
+  --color-primary-foreground: #ffffff;
+  --color-secondary: #2f3375;
+  --color-secondary-foreground: #ffffff;
+  --color-supporting-1: #66c9d9;
+  --color-supporting-2: #007c8f;
+  --color-complementary-1: #c66400;
+  --color-complementary-2: #c69000;
 }
 
 @layer base {
@@ -20,4 +20,19 @@
   body {
     @apply bg-[var(--color-background)] text-[var(--color-foreground)];
   }
+}
+
+.sx-react-calendar-wrapper {
+  /* width: 1200px;
+  max-width: 90vw; */
+  height: 800px;
+  max-height: 95vh;
+}
+/* Custom CSS to ensure events are displayed under each other in month, day, and week views */
+.sx-calendar-month-grid-day-events,
+.sx-calendar-day-view-events,
+.sx-calendar-week-view-events {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
 }

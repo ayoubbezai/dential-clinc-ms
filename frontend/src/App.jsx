@@ -1,4 +1,5 @@
 import Login from "./pages/auth/Login";
+import Schedule from "./pages/commen/Schedule";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import AuthProvider from "./context/AuthContext";
 import ProtectedRoute from "./routes/ProtectedRoute";
@@ -15,6 +16,7 @@ function App() {
         <Routes>
           {/* this route are for anyone */}
           <Route path="/login" element={<Login />} />
+          <Route path="/" element={<Schedule />} />
 
           {/* this rout should be a user */}
           <Route element={<ProtectedRoute />}>
