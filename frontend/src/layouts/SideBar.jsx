@@ -15,10 +15,10 @@ const SideBar = () => {
                 </button>
                 {isOpen && (
                     <>
-                        <h1 className='uppercase text-black font-semibold text-lg my-4'>
+                        <h1 className='uppercase text-black font-semibold text-lg mt-3 mb-2'>
                             <span className='text-[#3E7EA1]'>Dr</span> chabani
                         </h1>
-                        <img src={LogoImg} alt="logo" className='w-20 mb-3' />
+                        <img src={LogoImg} alt="logo" className='w-20 mb-2' />
                         <SideBarLinks />
                     </>
                 )}

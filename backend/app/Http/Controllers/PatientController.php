@@ -87,6 +87,10 @@ class PatientController extends Controller
         // We need to have start and end date as today if not exist
         $startDate = $request_query['start_date'] ?? null;
         $endDate = $request_query['end_date'] ?? now()->toDateString(); // Defaults to today if not provided
+        if ($startDate > $endDate) {
+    // Swap the dates if startDate is greater than endDate
+    [$startDate, $endDate] = [$endDate, $startDate];
+}
 
         if ($startDate && $endDate) {
     $data->whereBetween('patients.created_at', [$startDate, $endDate]);

@@ -18,6 +18,7 @@
     "@fullcalendar/react": "^6.1.15",
     "@fullcalendar/timegrid": "^6.1.15",
     "@radix-ui/react-label": "^2.1.2",
+    "@radix-ui/react-select": "^2.1.6",
     "@radix-ui/react-slot": "^1.1.2",
     "@schedule-x/calendar": "^2.22.0",
     "@schedule-x/drag-and-drop": "^2.22.0",

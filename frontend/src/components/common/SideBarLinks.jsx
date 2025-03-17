@@ -19,7 +19,7 @@ const SideBarLinks = () => {
             </div>
             <SideBarComp text={"Lists"} />
             {sideBar?.lists.map((list, index) => (
-                <div key={index} className='my-2'>
+                <div key={index} className='my-[6px]'>
                     <Link to={list.link} className={`text-sm  ${location.pathname === list.link ? "text-blue-500" : ""} `}>
                         {list.name}
                     </Link>
@@ -27,7 +27,7 @@ const SideBarLinks = () => {
             ))}
             <SideBarComp text={"Pages"} />
             {sideBar?.pages.map((page, index) => (
-                <div key={index} className='my-2'>
+                <div key={index} className='my-[6px]'>
                     <Link to={page.link} className={`text-sm  ${location.pathname === page.link ? "text-blue-500" : ""} `}>
                         {page.name}
                     </Link>

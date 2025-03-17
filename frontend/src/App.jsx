@@ -5,12 +5,12 @@ import RoleBasedRoute from "./routes/RoleBasedRoute";
 import DentistDashboard from "./pages/dentist/DentistDashboard";
 import ClientDashboard from "./pages/client/ClientDashboard";
 import ReceptionistDashboard from "./pages/receptionist/ReceptionistDashboard";
-import Schedule from "./pages/commen/Schedule";
+import Schedule from "./pages/shared/Schedule";
 import Login from "./pages/auth/Login";
 import SideBarDentist from "./layouts/SideBar";
-import UsersList from "./pages/commen/UsersList";
-import PatientsList from "./pages/commen/PatientsList";
-import AppointmentList from "./pages/commen/AppointmentList";
+import UsersList from "./pages/shared/UsersList";
+import PatientsList from "./pages/shared/PatientsList";
+import AppointmentList from "./pages/shared/AppointmentList";
 import "./style/index.css";
 
 // Layout Component to Wrap Sidebar
