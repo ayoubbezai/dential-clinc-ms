@@ -13,6 +13,11 @@ return new class extends Migration
     {
         Schema::create('payments', function (Blueprint $table) {
             $table->id();
+            $table->integer("amount");
+            $table->unsignedBigInteger("folder_id")->nullable();
+            $table->foreign("folder_id")->references('id')->on('folders')->onDelete('cascade');
+            $table->enum("type",["in","out"]);
+            $table->text("note")->nullable();
             $table->timestamps();
         });
     }

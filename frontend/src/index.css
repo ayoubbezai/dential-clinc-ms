@@ -23,10 +23,11 @@
 }
 
 .sx-react-calendar-wrapper {
-  /* width: 1200px;
-  max-width: 90vw; */
+  width: 1200px;
+  max-width: 62vw;
   height: 800px;
   max-height: 95vh;
+  margin-right:12px ;
 }
 /* Custom CSS to ensure events are displayed under each other in month, day, and week views */
 .sx-calendar-month-grid-day-events,
