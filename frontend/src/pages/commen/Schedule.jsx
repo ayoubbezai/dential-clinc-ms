@@ -3,7 +3,6 @@ import { ScheduleXCalendar } from '@schedule-x/react';
 import '@schedule-x/theme-default/dist/index.css';
 import Eventlist from '../../components/common/Eventlist';
 import useCalendar from '@/hooks/useCalendar';
-import SideBar from '@/layouts/SideBar';
 
 
 function Schedule() {
@@ -12,12 +11,10 @@ function Schedule() {
 
     return (
 
-        <div className='flex w-full justify-center flex-col-reverse lg:flex-row gap-4 mt-4 bg-gray-100 lg:max-h-screen'>
+        <div className='flex w-full justify-center flex-col-reverse lg:flex-row gap-4 mt-4  lg:max-h-screen'>
 
 
             <Eventlist events={events} />
-
-
             <ScheduleXCalendar calendarApp={calander} />
         </div>
 

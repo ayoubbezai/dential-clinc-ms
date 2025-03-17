@@ -7,13 +7,16 @@ import ClientDashboard from "./pages/client/ClientDashboard";
 import ReceptionistDashboard from "./pages/receptionist/ReceptionistDashboard";
 import Schedule from "./pages/commen/Schedule";
 import Login from "./pages/auth/Login";
-import SideBarDentist from "./layouts/SideBar";  // Import Sidebar
+import SideBarDentist from "./layouts/SideBar";
+import UsersList from "./pages/commen/UsersList";
+import PatientsList from "./pages/commen/PatientsList";
+import AppointmentList from "./pages/commen/AppointmentList";
 import "./style/index.css";
 
 // Layout Component to Wrap Sidebar
 const DashboardLayout = ({ children }) => {
   const location = useLocation();
-  const showSidebar = ["/dentist/dashboard", "/schedule", "/receptionist/dashboard"].includes(location.pathname);
+  const showSidebar = ["/dentist/dashboard", "/schedule", "/receptionist/dashboard", "/users_list", "/patients_list", "/appointments_list"].includes(location.pathname);
 
   return (
     <div className="flex">
@@ -42,6 +45,9 @@ function App() {
               {/* Shared Route for Dentist & Receptionist */}
               <Route element={<RoleBasedRoute allowedRoles={["dentist", "receptionist"]} />}>
                 <Route path="/schedule" element={<Schedule />} />
+                <Route path="/users_list" element={<UsersList />} />
+                <Route path="/patients_list" element={<PatientsList />} />
+                <Route path="/appointments_list" element={<AppointmentList />} />
               </Route>
 
               {/* Receptionist Routes */}
