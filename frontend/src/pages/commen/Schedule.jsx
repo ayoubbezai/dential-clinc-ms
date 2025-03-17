@@ -11,17 +11,15 @@ function Schedule() {
     const { events, calander } = useCalendar()
 
     return (
-        <section className='flex gap-4'>
-            <SideBar />
-            <div className='flex w-full justify-center  gap-4 mt-4 bg-gray-100 max-h-screen'>
+
+        <div className='flex w-full justify-center flex-col-reverse lg:flex-row gap-4 mt-4 bg-gray-100 lg:max-h-screen'>
 
 
-                <Eventlist events={events} />
+            <Eventlist events={events} />
 
 
-                <ScheduleXCalendar calendarApp={calander} />
-            </div>
-        </section>
+            <ScheduleXCalendar calendarApp={calander} />
+        </div>
 
     );
 }

@@ -1,54 +1,64 @@
-import Login from "./pages/auth/Login";
-import Schedule from "./pages/commen/Schedule";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, useLocation } from "react-router-dom";
 import AuthProvider from "./context/AuthContext";
 import ProtectedRoute from "./routes/ProtectedRoute";
 import RoleBasedRoute from "./routes/RoleBasedRoute";
 import DentistDashboard from "./pages/dentist/DentistDashboard";
 import ClientDashboard from "./pages/client/ClientDashboard";
 import ReceptionistDashboard from "./pages/receptionist/ReceptionistDashboard";
-import "./index.css"
-import SideBar from "./layouts/SideBar";
-function App() {
+import Schedule from "./pages/commen/Schedule";
+import Login from "./pages/auth/Login";
+import SideBarDentist from "./layouts/SideBar";  // Import Sidebar
+import "./style/index.css";
 
+// Layout Component to Wrap Sidebar
+const DashboardLayout = ({ children }) => {
+  const location = useLocation();
+  const showSidebar = ["/dentist/dashboard", "/schedule", "/receptionist/dashboard"].includes(location.pathname);
+
+  return (
+    <div className="flex">
+      {showSidebar && <SideBarDentist />}
+      <div className="flex-grow  w-1/2 ">{children}</div>
+    </div>
+  );
+};
+
+function App() {
   return (
     <AuthProvider>
       <Router>
-        <Routes>
-          {/* this route are for anyone */}
-          <Route path="/login" element={<Login />} />
-          <Route path="/" element={<SideBar />} />
+        <DashboardLayout>
+          <Routes>
+            {/* Public Route */}
+            <Route path="/login" element={<Login />} />
 
-          {/* this rout should be a user */}
-          <Route element={<ProtectedRoute />}>
+            {/* Protected Routes */}
+            <Route element={<ProtectedRoute />}>
+              {/* Dentist Routes */}
+              <Route element={<RoleBasedRoute allowedRoles={["dentist"]} />}>
+                <Route path="/dentist/dashboard" element={<DentistDashboard />} />
+              </Route>
 
-            {/* this qre for dentist  */}
-          </Route>
+              {/* Shared Route for Dentist & Receptionist */}
+              <Route element={<RoleBasedRoute allowedRoles={["dentist", "receptionist"]} />}>
+                <Route path="/schedule" element={<Schedule />} />
+              </Route>
 
-          <Route element={<RoleBasedRoute allowedRoles={["dentist"]} />}>
-            <Route path="/dentist/dashboard" element={<DentistDashboard />} />
-          </Route>
-          <Route element={<RoleBasedRoute allowedRoles={["dentist", "receptionist"]} />}>
-            <Route path="/schedule" element={<Schedule />} />
-          </Route>
+              {/* Receptionist Routes */}
+              <Route element={<RoleBasedRoute allowedRoles={["receptionist"]} />}>
+                <Route path="/receptionist/dashboard" element={<ReceptionistDashboard />} />
+              </Route>
 
-          {/* these are for receptionist */}
-          <Route element={<RoleBasedRoute allowedRoles={["receptionist"]} />}>
-            <Route path="/receptionist/dashboard" element={<ReceptionistDashboard />} />
-          </Route>
-
-          {/* these are for client  */}
-          <Route element={<RoleBasedRoute allowedRoles={["client"]} />}>
-            <Route path="/client/dashboard" element={<ClientDashboard />} />
-          </Route>
-
-
-
-        </Routes>
-
+              {/* Client Routes */}
+              <Route element={<RoleBasedRoute allowedRoles={["client"]} />}>
+                <Route path="/client/dashboard" element={<ClientDashboard />} />
+              </Route>
+            </Route>
+          </Routes>
+        </DashboardLayout>
       </Router>
     </AuthProvider>
-  )
+  );
 }
 
-export default App
+export default App;
