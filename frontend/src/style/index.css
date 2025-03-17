@@ -1,10 +1,9 @@
 @import "tailwindcss";
 @plugin "tailwindcss-animate";
-
 :root {
   --color-background: #f0f8fa;
   --color-foreground: #0f172a;
-  --color-primary: #00abc6;
+  --color-primary: #1A75FF; /* Use Tailwind blue-500 */
   --color-primary-foreground: #ffffff;
   --color-secondary: #2f3375;
   --color-secondary-foreground: #ffffff;
@@ -12,6 +11,54 @@
   --color-supporting-2: #007c8f;
   --color-complementary-1: #c66400;
   --color-complementary-2: #c69000;
+}
+
+.bg-background {
+  background-color: var(--color-background);
+}
+
+.text-foreground {
+  color: var(--color-foreground);
+}
+
+.bg-primary {
+  @apply bg-blue-500; /* Tailwind Blue */
+}
+
+.text-primary {
+  color: var(--color-primary); /* Custom Primary */
+}
+
+.bg-primary-foreground {
+  background-color: var(--color-primary-foreground);
+}
+
+.bg-secondary {
+  background-color: var(--color-secondary);
+}
+
+.text-secondary {
+  color: var(--color-secondary);
+}
+
+.bg-secondary-foreground {
+  background-color: var(--color-secondary-foreground);
+}
+
+.bg-supporting-1 {
+  background-color: var(--color-supporting-1);
+}
+
+.bg-supporting-2 {
+  background-color: var(--color-supporting-2);
+}
+
+.bg-complementary-1 {
+  background-color: var(--color-complementary-1);
+}
+
+.bg-complementary-2 {
+  background-color: var(--color-complementary-2);
 }
 
 @layer base {
