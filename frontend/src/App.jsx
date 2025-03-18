@@ -12,6 +12,8 @@ import UsersList from "./pages/shared/UsersList";
 import PatientsList from "./pages/shared/PatientsList";
 import AppointmentList from "./pages/shared/AppointmentList";
 import "./style/index.css";
+import { Toaster } from 'react-hot-toast';
+
 
 // Layout Component to Wrap Sidebar
 const DashboardLayout = ({ children }) => {
@@ -29,6 +31,9 @@ const DashboardLayout = ({ children }) => {
 function App() {
   return (
     <AuthProvider>
+      <Toaster />
+
+
       <Router>
         <DashboardLayout>
           <Routes>
@@ -62,6 +67,7 @@ function App() {
             </Route>
           </Routes>
         </DashboardLayout>
+
       </Router>
     </AuthProvider>
   );

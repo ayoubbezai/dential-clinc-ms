@@ -38,7 +38,38 @@ export const PatientsService = {
     }
   },
 
-  async createPatient (){
-    
-  }
+  async createPatient(patient_name, phone, gender, age, diseases, note) {
+    try {
+      const response = await api.post("/patients", {
+        patient_name,
+        phone,
+        gender,
+        age,
+        diseases,
+        note,
+      });
+      console.log(response);
+      return { data: response.data, error: null }; // Return data and no error
+    } catch (error) {
+      console.log(error);
+      return {
+        data: null,
+        error: error.message || "Failed to create patients",
+      }; // Return error
+    }
+  },
+
+  async deletePatient(patientID) {
+    try {
+      const response = await api.delete(`/patients/${patientID}`);
+      console.log(response);
+      return { data: response.data, error: null };
+    } catch (error) {
+      console.log(error);
+      return {
+        data: null,
+        error: error.message || "Failed to delete the  patient",
+      };
+    }
+  },
 };

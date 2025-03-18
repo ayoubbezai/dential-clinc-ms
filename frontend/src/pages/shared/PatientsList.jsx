@@ -41,7 +41,7 @@ const PatientsList = () => {
   };
   useEffect(() => {
     fetchPatients(page);
-  }, [page]);
+  }, [page, perPage, search, gender, sortBy, sortDirection, startDate, endDate]);
 
   useEffect(() => {
     setPage(1);

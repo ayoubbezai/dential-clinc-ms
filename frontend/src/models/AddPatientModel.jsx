@@ -5,13 +5,17 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { selectClassName } from '@/constant/classNames';
+import { PatientsService } from '@/services/shared/PatientsService';
+import { Toaster } from 'react-hot-toast';
+import toast from 'react-hot-toast';
 
-const AddPatientModel = ({ isOpen, onClose, onSubmit }) => {
+
+const AddPatientModel = ({ isOpen, onClose }) => {
     const [formData, setFormData] = useState({
         patient_name: '',
         phone: '',
         gender: '',
-        age: '',
+        age: Number,
         diseases: '',
         note: '',
     });
@@ -31,11 +35,19 @@ const AddPatientModel = ({ isOpen, onClose, onSubmit }) => {
         });
     };
 
-    const handleSubmit = (e) => {
+    async function handleSubmit(e) {
         e.preventDefault();
-        onSubmit(formData); // Pass form data to the parent component
-        onClose(); // Close the modal after submission
-    };
+        console.log(formData)
+        const { data, error } = await PatientsService.createPatient(formData.patient_name, formData.phone, formData.gender, formData.age, formData.diseases, formData.note);
+        if (data.success) {
+            toast.success('Success! Patient created succefully');
+        } else {
+            toast.error(error.message || 'Error! Something went wrong.');
+
+        }
+        onClose();
+    }
+
 
     return (
         <Model isOpen={isOpen} onClose={onClose}>
@@ -76,7 +88,7 @@ const AddPatientModel = ({ isOpen, onClose, onSubmit }) => {
                         className={selectClassName}
                         name="gender"
                         value={formData.gender}
-                        onChange={handleSelectChange}
+                        onChange={(e) => handleSelectChange(e.target.value)}
                     >
                         <option value="">All Genders</option>
                         <option value="male">Male</option>
@@ -133,6 +145,8 @@ const AddPatientModel = ({ isOpen, onClose, onSubmit }) => {
                     </Button>
                 </div>
             </form>
+            <Toaster />
+
         </Model>
     );
 };
