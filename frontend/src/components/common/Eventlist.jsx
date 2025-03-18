@@ -3,7 +3,7 @@ import { FaClock, FaMapMarkerAlt, FaUsers, FaEdit, FaTrash } from 'react-icons/f
 import { Button } from '@/components/ui/button';
 const Eventlist = ({ events }) => {
     return (
-        <div className=' bg-white flex lg:flex-col ml-2 px-3 mb-6 lg:mb-0 rounded-lg shadow-md overflow-x-auto space-x-8 lg:space-x-0 p-5  lg:overflow-y-auto'>
+        <div className=' bg-white flex hidden  lg:flex-col ml-2  px-3 mb-6 lg:mb-0 rounded-lg shadow-md overflow-x-auto space-x-8 lg:space-x-0 p-5  lg:overflow-y-auto'>
             <div className='flex flex-col lg:flex-row   justify-between my-3 mb-5 items-center'>
                 <h2 className=' text-[1.1rem] font-bold  '>Events List</h2>
                 <Button size={"sm"} className="text-[11px] p-[5px] bg-blue-500 text-white ">Add an event</Button>

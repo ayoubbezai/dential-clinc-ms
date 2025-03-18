@@ -3,7 +3,7 @@
 :root {
   --color-background: #f0f8fa;
   --color-foreground: #0f172a;
-  --color-primary: #1A75FF; /* Use Tailwind blue-500 */
+  --color-primary: #1a75ff; /* Use Tailwind blue-500 */
   --color-primary-foreground: #ffffff;
   --color-secondary: #2f3375;
   --color-secondary-foreground: #ffffff;
@@ -71,7 +71,7 @@
 
 .sx-react-calendar-wrapper {
   width: 1200px;
-  max-width: 62vw;
+  max-width: 70vw;
   height: 800px;
   max-height: 95vh;
   margin-right: 12px;

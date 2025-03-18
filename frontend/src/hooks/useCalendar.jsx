@@ -26,7 +26,7 @@ const useCalendar = () => {
 
     events: events,
     plugins: [eventsService],
-    locale: "fr-FR", // Set language to Chinese
+    locale: "fr-FR",
     isDark: false, // Enable dark mode
 
     weekOptions: {
