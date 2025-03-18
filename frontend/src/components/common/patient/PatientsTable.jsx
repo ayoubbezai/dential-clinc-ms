@@ -9,7 +9,7 @@ import EditPatientModel from '@/models/EditPatientModel';
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 
-const PatientsTable = ({ patients, fetchPatients }) => {
+const PatientsTable = ({ patients, fetchPatients ,patientLoading }) => {
     const [loading, setLoading] = useState(false);
     const [isEditModalOpen, setIsEditModalOpen] = useState(false);
     const [currentPatient, setCurrentPatient] = useState(null);
@@ -46,7 +46,7 @@ const PatientsTable = ({ patients, fetchPatients }) => {
                     </TableRow>
                 </TableHeader>
                 <TableBody>
-                    {patients.length === 0 ? (
+                    {patientLoading ? (
                         Array.from({ length: 5 }).map((_, index) => (
                             <TableRow key={index}>
                                 <TableCell><Skeleton height={20} width={'80%'} /></TableCell>

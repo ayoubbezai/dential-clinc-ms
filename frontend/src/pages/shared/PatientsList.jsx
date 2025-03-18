@@ -61,7 +61,7 @@ const PatientsList = () => {
           </div>
         </div>
 
-        <PatientsTable patients={patients} fetchPatients={fetchPatients}  />
+        <PatientsTable patients={patients} fetchPatients={fetchPatients} patientLoading={loading} />
 
         <div className='flex justify-between items-center pb-3 px-4 mt-4'>
           <PatientPageChange page={page} setPage={setPage} total_pages={pagination.total_pages} loading={loading} />
