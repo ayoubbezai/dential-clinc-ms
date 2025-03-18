@@ -5,9 +5,9 @@ const Modal = ({ isOpen, onClose, children }) => {
 
     return (
         <div className="fixed inset-0  bg bg-gray-500/20 flex items-center justify-center z-50">
-            <div className="bg-white rounded-lg shadow-lg w-full max-w-md relative">
+            <div className="bg-white rounded-lg shadow-lg pt-3 w-full max-w-md relative">
                 <button
-                    className="absolute top-2 right-2 text-gray-500 hover:text-gray-700"
+                    className="absolute top-1 right-4  cursor-pointer text-[28px]  text-gray-500 hover:text-gray-700"
                     onClick={onClose}
                 >
                     &times;

@@ -37,4 +37,8 @@ export const PatientsService = {
       return { data: null, error: error.message || "Failed to fetch patients" }; // Return error
     }
   },
+
+  async createPatient (){
+    
+  }
 };
