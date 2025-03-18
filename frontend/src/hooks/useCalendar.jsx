@@ -3,6 +3,7 @@ import {
   createViewDay,
   createViewMonthAgenda,
   createViewMonthGrid,
+  viewMonthGrid
 } from "@schedule-x/calendar";
 import { createEventsServicePlugin } from '@schedule-x/events-service';
 import '@schedule-x/theme-default/dist/index.css';
@@ -21,6 +22,8 @@ const useCalendar = () => {
       createViewMonthGrid(),
       createViewMonthAgenda(),
     ],
+      defaultView: viewMonthGrid.name,
+
 
     events: events,
     plugins: [eventsService],

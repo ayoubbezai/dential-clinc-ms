@@ -1,5 +1,6 @@
 import { BrowserRouter as Router, Routes, Route, useLocation } from "react-router-dom";
-import AuthProvider from "./context/AuthContext";
+import { useContext } from "react";
+import AuthProvider, { AuthContext } from "./context/AuthContext";
 import ProtectedRoute from "./routes/ProtectedRoute";
 import RoleBasedRoute from "./routes/RoleBasedRoute";
 import DentistDashboard from "./pages/dentist/DentistDashboard";
@@ -14,16 +15,20 @@ import AppointmentList from "./pages/shared/AppointmentList";
 import "./style/index.css";
 import { Toaster } from 'react-hot-toast';
 
-
 // Layout Component to Wrap Sidebar
 const DashboardLayout = ({ children }) => {
   const location = useLocation();
-  const showSidebar = ["/dentist/dashboard", "/schedule", "/receptionist/dashboard", "/users_list", "/patients_list", "/appointments_list"].includes(location.pathname);
+  const { user } = useContext(AuthContext); // Get logged-in user data
+  const isDentist = user?.role === "dentist"; // Check if user is a dentist
+
+  // Sidebar should be visible ONLY for dentists on specific routes
+  const dentistPaths = ["/dentist/dashboard", "/schedule", "/users_list", "/patients_list", "/appointments_list"];
+  const showSidebar = isDentist && dentistPaths.includes(location.pathname);
 
   return (
     <div className="flex">
       {showSidebar && <SideBarDentist />}
-      <div className="flex-grow  w-1/2 max-h-screen overflow-auto ">{children}</div>
+      <div className="flex-grow w-1/2 max-h-screen overflow-auto">{children}</div>
     </div>
   );
 };
@@ -32,7 +37,6 @@ function App() {
   return (
     <AuthProvider>
       <Toaster />
-
 
       <Router>
         <DashboardLayout>
