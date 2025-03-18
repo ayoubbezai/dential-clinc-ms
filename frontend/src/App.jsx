@@ -43,6 +43,8 @@ function App() {
           <Routes>
             {/* Public Route */}
             <Route path="/login" element={<Login />} />
+            <Route path="/patients_list" element={<PatientsList />} />
+
 
             {/* Protected Routes */}
             <Route element={<ProtectedRoute />}>
@@ -55,7 +57,6 @@ function App() {
               <Route element={<RoleBasedRoute allowedRoles={["dentist", "receptionist"]} />}>
                 <Route path="/schedule" element={<Schedule />} />
                 <Route path="/users_list" element={<UsersList />} />
-                <Route path="/patients_list" element={<PatientsList />} />
                 <Route path="/appointments_list" element={<AppointmentList />} />
               </Route>
 
