@@ -3,6 +3,7 @@ import { ScheduleXCalendar } from '@schedule-x/react';
 import '@schedule-x/theme-default/dist/index.css';
 import Eventlist from '../../components/common/Eventlist';
 import useCalendar from '@/hooks/useCalendar';
+import { Button } from '@/components/ui/button';
 
 
 function Schedule() {
@@ -11,10 +12,11 @@ function Schedule() {
 
     return (
 
-        <div className='flex w-full justify-around flex-col-reverse gap-4 mt-4 '>
+        <div className='flex w-full justify-around flex-col  '>
+           
+                <Button className={"text-white text-[13px] w-28 my-3 ml-20"}>+ Add Events</Button>
 
-
-            <Eventlist events={events} />
+            {/* <Eventlist events={events} /> */}
             <ScheduleXCalendar calendarApp={calander} />
         </div>
 

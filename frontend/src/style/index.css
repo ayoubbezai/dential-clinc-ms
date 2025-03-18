@@ -12,7 +12,6 @@
   --color-complementary-1: #c66400;
   --color-complementary-2: #c69000;
 }
-
 .bg-background {
   background-color: var(--color-background);
 }
@@ -70,10 +69,10 @@
 }
 
 .sx-react-calendar-wrapper {
-  width: 1200px;
-  max-width: 70vw;
+  width: 85%;
+  max-width: 1200px;
   height: 800px;
-  max-height: 95vh;
+  max-height: 85vh;
   margin: auto;
 }
 /* Custom CSS to ensure events are displayed under each other in month, day, and week views */

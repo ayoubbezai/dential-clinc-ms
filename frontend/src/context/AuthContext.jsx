@@ -6,41 +6,41 @@ export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [message, setMessage] = useState(null);
 
-  useEffect(() => {
-    const fetchUser = async () => {
-      const token = localStorage.getItem("token");
-      if (token) {
-        api.defaults.headers.Authorization = `Bearer ${token}`;
-        try {
-          setLoading(true);
+    useEffect(() => {
+      const fetchUser = async () => {
+        setLoading(true);
+        const token = localStorage.getItem("token");
 
-          const { user, error, message } = await AuthService.getCurrentUser();
-          setError(error);
-          setUser(user);
-          setMessage(message)
-          setLoading(false);
-
-
-        } catch (err) {
-          setError(err);
-
-
+        if (token) {
+          api.defaults.headers.Authorization = `Bearer ${token}`;
+          try {
+            const { user, error, message } = await AuthService.getCurrentUser();
+            setUser(user);
+            setError(error);
+            setMessage(message);
+          } catch (err) {
+            setUser(null); // Ensure user is set to null on failure
+            setError(err);
+          }
+        } else {
+          setUser(null); // Explicitly set user to null if no token
         }
-      }
-    };
 
-    fetchUser();
+        setLoading(false); // Ensure loading is set to false in all cases
+      };
 
-  }, []);
+      fetchUser();
+    }, []);
+
 
   const login = async (email, password) => {
+    setLoading(true);
     setError(null);
     setMessage(null);
-    setLoading(true);
 
     const { user, error, message } = await AuthService.login(email, password);
     console.log(user)

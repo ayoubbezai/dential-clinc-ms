@@ -23,7 +23,7 @@ const DashboardLayout = ({ children }) => {
   return (
     <div className="flex">
       {showSidebar && <SideBarDentist />}
-      <div className="flex-grow  w-1/2 ">{children}</div>
+      <div className="flex-grow  w-1/2 max-h-screen overflow-auto ">{children}</div>
     </div>
   );
 };

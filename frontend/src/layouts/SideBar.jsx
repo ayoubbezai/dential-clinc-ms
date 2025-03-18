@@ -19,6 +19,7 @@ const SideBar = () => {
                             <span className='text-[#3E7EA1]'>Dr</span> chabani
                         </h1>
                         <img src={LogoImg} alt="logo" className='w-20 mb-2' />
+
                         <SideBarLinks />
                     </>
                 )}

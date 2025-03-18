@@ -27,6 +27,38 @@ const useCalendar = () => {
     locale: "fr-FR",
     isDark: false, // Enable dark mode
 
+    weekOptions: {
+      /**
+       * The total height in px of the week grid (week- and day views)
+       * */
+      gridHeight: 2000,
+
+      /**
+       * The number of days to display in week view
+       */
+      nDays: 5,
+
+      /**
+       * The width in percentage of the event element in the week grid
+       * Defaults to 100, but can be used to leave a small margin to the right of the event
+       */
+      eventWidth: 95,
+
+      /**
+       * Intl.DateTimeFormatOptions used to format the hour labels on the time axis
+       * Default: { hour: 'numeric' }
+       */
+      timeAxisFormatOptions: { hour: '2-digit', minute: '2-digit' },
+
+      /**
+       * Determines whether concurrent events can overlap.
+       * Defaults to true. Set to false to disable overlapping.
+       */
+      eventOverlap: true,
+    },
+
+
+
 
     monthGridOptions: {
       nEventsPerDay: 6,
