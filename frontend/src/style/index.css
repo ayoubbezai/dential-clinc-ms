@@ -74,7 +74,7 @@
   max-width: 70vw;
   height: 800px;
   max-height: 95vh;
-  margin-right: 12px;
+  margin: auto;
 }
 /* Custom CSS to ensure events are displayed under each other in month, day, and week views */
 .sx-calendar-month-grid-day-events,
@@ -83,11 +83,4 @@
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-}
-@media screen and (max-width: 1024px) {
-  .sx-react-calendar-wrapper {
-    margin: auto;
-    max-width: 95vw;
-    margin-top: 18px;
-  }
 }

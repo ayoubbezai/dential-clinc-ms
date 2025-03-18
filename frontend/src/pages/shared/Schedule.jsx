@@ -11,7 +11,7 @@ function Schedule() {
 
     return (
 
-        <div className='flex w-full justify-around flex-col-reverse lg:flex-row gap-4 mt-4  lg:max-h-screen'>
+        <div className='flex w-full justify-around flex-col-reverse gap-4 mt-4 '>
 
 
             <Eventlist events={events} />

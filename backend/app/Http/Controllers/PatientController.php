@@ -129,7 +129,7 @@ $paginatedData->through(function ($patient) {
             'pagination' => [
         'total_items' => $paginatedData->total(), // Total number of items
         'items_per_page' => $paginatedData->perPage(), // Items per page
-        'current_page' => $paginatedData->currentPage(), // Current page number
+        'current_page' => $paginatedData->currentPage() , // Current page number
         'total_pages' => $paginatedData->lastPage(), // Last page number
         'from' => $paginatedData->firstItem(), // First item on the current page
         'to' => $paginatedData->lastItem(), // Last item on the current page

@@ -1,7 +1,7 @@
 import api from "../api";
 
 export const PatientsService = {
-  // get all patients with filters and pagination
+  // Get all patients with filters and pagination
   async getPatients(
     per_page,
     search,
@@ -10,11 +10,9 @@ export const PatientsService = {
     end_date,
     sortBy,
     sortDirection,
-    
     page = 1
   ) {
     try {
-      //
       const params = new URLSearchParams();
       const appendParam = (key, value) => {
         if (value) params.append(key, value);
@@ -26,18 +24,17 @@ export const PatientsService = {
       if (start_date && end_date) {
         appendParam("start_date", start_date);
         appendParam("end_date", end_date);
-      } 
-        
+      }
       appendParam("page", page);
       appendParam("sort_by", sortBy);
       appendParam("sort_direction", sortDirection);
 
-      // api call using api
+      // API call using api
       const response = await api.get(`/patients?${params.toString()}`);
-      return response.data;
+      return { data: response.data, error: null }; // Return data and no error
     } catch (error) {
       console.error("Error fetching patients:", error);
-      throw error;
+      return { data: null, error: error.message || "Failed to fetch patients" }; // Return error
     }
   },
 };
