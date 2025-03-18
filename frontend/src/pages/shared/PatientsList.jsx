@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import usePatients from '@/hooks/usePatients';
 import { Button } from '@/components/ui/button';
 import PatientSearch from '@/components/common/patient/patientSearch';
@@ -30,10 +30,16 @@ const PatientsList = () => {
     setEndDate,
     perPage,
     setPerPage,
-    loading
+    loading,
+    fetchPatients // Add fetchPatients from usePatients
   } = usePatients();
 
   const [isModalOpen, setIsModalOpen] = useState(false);
+
+  // Fetch patients whenever any filter or sorting parameter changes
+  useEffect(() => {
+    fetchPatients(page); // Fetch patients with the current page
+  }, [page, perPage, search, gender, sortBy, sortDirection, startDate, endDate]);
 
   return (
     <>
@@ -55,7 +61,7 @@ const PatientsList = () => {
           </div>
         </div>
 
-        <PatientsTable patients={patients} />
+        <PatientsTable patients={patients} fetchPatients={fetchPatients} />
 
         <div className='flex justify-between items-center pb-3 px-4 mt-4'>
           <PatientPageChange page={page} setPage={setPage} total_pages={pagination.total_pages} loading={loading} />

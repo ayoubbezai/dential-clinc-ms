@@ -6,28 +6,23 @@ import DeleteIcon from "../../../assets/icons/delete.svg";
 import { PatientsService } from '@/services/shared/PatientsService';
 import toast from 'react-hot-toast';
 import EditPatientModel from '@/models/EditPatientModel';
-import usePatients from '@/hooks/usePatients';
 
-const PatientsTable = () => { 
+const PatientsTable = ({ patients, fetchPatients }) => {
     const [loading, setLoading] = useState(false);
     const [isEditModalOpen, setIsEditModalOpen] = useState(false);
     const [currentPatient, setCurrentPatient] = useState(null);
 
-    const { patients, fetchPatients } = usePatients();
 
     async function handleDelete(patientId) {
         setLoading(true);
-        try {
             const { data, error } = await PatientsService.deletePatient(patientId);
             if (data?.success) {
                 toast.success('Success! Patient deleted successfully');
-                fetchPatients(); // ✅ Ensure fetchPatients exists and works
+                fetchPatients(); // Refresh the list after deletion
             } else {
                 toast.error(error?.message || 'Error! Something went wrong.');
             }
-        } catch (err) {
-            toast.error('Error deleting patient');
-        }
+        
         setLoading(false);
     }
 
@@ -44,7 +39,7 @@ const PatientsTable = () => {
                         <TableHead>NAME</TableHead>
                         <TableHead>PHONE</TableHead>
                         <TableHead>EMAIL</TableHead>
-                        <TableHead>AGE</TableHead>
+                        <TableHead >AGE</TableHead>
                         <TableHead>GENDER</TableHead>
                         <TableHead>ACTIONS</TableHead>
                     </TableRow>
@@ -89,14 +84,12 @@ const PatientsTable = () => {
                 </TableBody>
             </Table>
 
-
             {isEditModalOpen && (
                 <EditPatientModel
                     isOpen={isEditModalOpen}
                     onClose={() => setIsEditModalOpen(false)}
                     currentPatient={currentPatient}
                     refreshPatients={fetchPatients}
-  
                 />
             )}
         </>

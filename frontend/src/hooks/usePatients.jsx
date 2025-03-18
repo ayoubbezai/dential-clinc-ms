@@ -22,6 +22,7 @@ const usePatients = () => {
         if (data?.success) {
             setPatients(data.data);
             setPagination(data.pagination);
+            console.log(patients)
         } else {
             setError(error);
         }
