@@ -58,6 +58,26 @@ export const PatientsService = {
       }; // Return error
     }
   },
+  async updatePatient(patient_id,patient_name, phone, gender, age, diseases, note) {
+    try {
+      const response = await api.put(`/patients/${patient_id}`, {
+        patient_name,
+        phone,
+        gender,
+        age,
+        diseases,
+        note,
+      });
+      console.log(response);
+      return { data: response.data, error: null }; // Return data and no error
+    } catch (error) {
+      console.log(error);
+      return {
+        data: null,
+        error: error.message || "Failed to update patients",
+      }; // Return error
+    }
+  },
 
   async deletePatient(patientID) {
     try {
