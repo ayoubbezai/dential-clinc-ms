@@ -54,7 +54,7 @@ const AddPatientModel = ({ isOpen, onClose }) => {
             <form onSubmit={handleSubmit} className="space-y-4">
                 {/* Patient Name */}
                 <div>
-                    <Label htmlFor="patient_name">Patient Name</Label>
+                    <Label htmlFor="patient_name" className={"mb-1"}>Patient Name</Label>
                     <Input
                         type="text"
                         id="patient_name"
@@ -68,7 +68,7 @@ const AddPatientModel = ({ isOpen, onClose }) => {
 
                 {/* Phone */}
                 <div>
-                    <Label htmlFor="phone">Phone</Label>
+                    <Label className={"mb-1"} htmlFor="phone">Phone</Label>
                     <Input
                         type="tel"
                         id="phone"
@@ -83,7 +83,7 @@ const AddPatientModel = ({ isOpen, onClose }) => {
 
                 {/* Gender */}
                 <div>
-                    <Label htmlFor="gender">Gender</Label>
+                    <Label className={"mb-1"} htmlFor="gender">Gender</Label>
                     <select
                         className={selectClassName}
                         name="gender"
@@ -98,7 +98,7 @@ const AddPatientModel = ({ isOpen, onClose }) => {
 
                 {/* Age */}
                 <div>
-                    <Label htmlFor="age">Age</Label>
+                    <Label className={"mb-1"}  htmlFor="age">Age</Label>
                     <Input
                         className={selectClassName}
 
@@ -113,7 +113,7 @@ const AddPatientModel = ({ isOpen, onClose }) => {
 
                 {/* Diseases (Optional) */}
                 <div>
-                    <Label htmlFor="diseases">Diseases</Label>
+                    <Label className={"mb-1"} htmlFor="diseases">Diseases</Label>
                     <Input
                         className={selectClassName}
 
@@ -127,7 +127,7 @@ const AddPatientModel = ({ isOpen, onClose }) => {
 
                 {/* Note (Optional) */}
                 <div>
-                    <Label htmlFor="note">Note</Label>
+                    <Label className={"mb-1"} htmlFor="note">Note</Label>
                     <Textarea
                         className={`p-2 border border-gray-300 rounded-lg w-full focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all text-xs`}
 
