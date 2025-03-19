@@ -2,12 +2,15 @@ import React, { useState } from 'react';
 import { MdMenu, MdMenuOpen } from "react-icons/md";
 import LogoImg from '../assets/logos/logo_1-removebg-preview.png';
 import SideBarLinks from '@/components/common/SideBarLinks';
+import { Button } from '@/components/ui/button';
+import { useAuth } from '@/hooks/useAuth';
 
 const SideBar = () => {
     const [isOpen, setIsOpen] = useState(true);
+    const { logout } = useAuth();
 
     return (
-        <div className={`${isOpen ? "w-56 lg:bg-white bg-white/95" : "w-8"} z-50 min-h-screen transition-all duration-300 lg:relative absolute`}>
+        <div className={`${isOpen ? "w-56 lg:bg-white bg-white/95" : "w-8"} z-50 min-h-screen flex flex-col justify-between transition-all duration-300 lg:relative absolute`}>
             <div className='flex justify-center flex-col items-center relative'>
                 <button
                     className={`absolute top-2 ${!isOpen ? "-right-1" : "right-2"}`}
@@ -27,7 +30,10 @@ const SideBar = () => {
                         <SideBarLinks />
                     </>
                 )}
+
+
             </div>
+            <Button className={"text-white w-1/2 mb-3 mx-auto "} onClick={logout}>logout</Button>
         </div>
     );
 };

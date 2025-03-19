@@ -1,6 +1,7 @@
 import { createContext, useEffect, useState } from "react";
 import { AuthService } from "../services/AuthService";
 import api from "../services/api";
+import toast from "react-hot-toast";
 
 export const AuthContext = createContext();
 
@@ -10,31 +11,32 @@ export const AuthProvider = ({ children }) => {
   const [error, setError] = useState(null);
   const [message, setMessage] = useState(null);
 
-    useEffect(() => {
-      const fetchUser = async () => {
-        setLoading(true);
-        const token = localStorage.getItem("token");
 
-        if (token) {
-          api.defaults.headers.Authorization = `Bearer ${token}`;
-          try {
-            const { user, error, message } = await AuthService.getCurrentUser();
-            setUser(user);
-            setError(error);
-            setMessage(message);
-          } catch (err) {
-            setUser(null); // Ensure user is set to null on failure
-            setError(err);
-          }
-        } else {
-          setUser(null); // Explicitly set user to null if no token
+  useEffect(() => {
+    const fetchUser = async () => {
+      setLoading(true);
+      const token = localStorage.getItem("token");
+
+      if (token) {
+        api.defaults.headers.Authorization = `Bearer ${token}`;
+        try {
+          const { user, error, message } = await AuthService.getCurrentUser();
+          setUser(user);
+          setError(error);
+          setMessage(message);
+        } catch (err) {
+          setUser(null); // Ensure user is set to null on failure
+          setError(err);
         }
+      } else {
+        setUser(null); // Explicitly set user to null if no token
+      }
 
-        setLoading(false); // Ensure loading is set to false in all cases
-      };
+      setLoading(false); // Ensure loading is set to false in all cases
+    };
 
-      fetchUser();
-    }, []);
+    fetchUser();
+  }, []);
 
 
   const login = async (email, password) => {
@@ -51,8 +53,21 @@ export const AuthProvider = ({ children }) => {
     setLoading(false);
   };
 
+  const logout = async () => {
+    setLoading(true);
+    setError(null);
+    setMessage(null);
+    const { error, message } = await AuthService.logout();
+    setError(error);
+    setMessage(message);
+    setLoading(false);
+    toast.success("logout successfully")
+    window.location.href = "/";
+
+  }
+
   return (
-    <AuthContext.Provider value={{ user, login, loading, error, message }}>
+    <AuthContext.Provider value={{ user, login, loading, error, message, logout }}>
       {children}
     </AuthContext.Provider>
   );

@@ -43,6 +43,13 @@ const PatientsList = () => {
 
   return (
     <>
+      <div className='flex justify-between w-5/6 mt-10 mx-auto items-center'>
+        <div className='flex flex-col'>
+          <h3 className='text-[#223354] font-bold text-xl'>Patients list</h3>
+          <p className='text-[#223354] font-semibold mt-1'>This is patients list admin panel</p>
+        </div>
+        <Button className={"text-white text-[13px]"} onClick={() => setIsModalOpen(true)}>+ Add Patient</Button>
+      </div>
 
       <div className='w-5/6 bg-white mx-auto px-4'>
         <div className='flex flex-wrap items-center justify-between gap-4 py-4 mt-4'>
