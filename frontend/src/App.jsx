@@ -43,7 +43,6 @@ function App() {
           <Routes>
             {/* Public Route */}
             <Route path="/login" element={<Login />} />
-            <Route path="/patients_list" element={<PatientsList />} />
 
 
             {/* Protected Routes */}
@@ -55,6 +54,7 @@ function App() {
 
               {/* Shared Route for Dentist & Receptionist */}
               <Route element={<RoleBasedRoute allowedRoles={["dentist", "receptionist"]} />}>
+            <Route path="/patients_list" element={<PatientsList />} />
                 <Route path="/schedule" element={<Schedule />} />
                 <Route path="/users_list" element={<UsersList />} />
                 <Route path="/appointments_list" element={<AppointmentList />} />
