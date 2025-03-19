@@ -6,11 +6,13 @@ import PageChange from '@/components/small/PageChange';
 import SearchInTable from '@/components/small/SearchInTable';
 import Sort from '@/components/small/Sort';
 import DateInput from '@/components/small/DateInput';
+import SelectStatusAppointment from '@/components/small/SelectStatusAppointment';
 const AppointmentList = () => {
 
   const { appointments, loading, perPage, setPerPage, setPage, page, pagination, search,
     setSearch,
-
+    status,
+    setStatus,
     sortBy,
     setSortBy,
     sortDirection,
@@ -35,13 +37,14 @@ const AppointmentList = () => {
         <div className='flex flex-wrap items-center justify-between gap-4 py-4 mt-4'>
           <SearchInTable search={search} setSearch={setSearch} />
           <div className='flex flex-wrap items-center gap-2'>
+            <SelectStatusAppointment status={status} setStatus={setStatus} />
             <DateInput startDate={startDate} endDate={endDate} setStartDate={setStartDate} setEndDate={setEndDate} />
             <Sort sortBy={sortBy} sortDirection={sortDirection} setSortBy={setSortBy} setSortDirection={setSortDirection} />
           </div>
         </div>
 
 
-        <AppointmentsTable appointments={appointments} loading={loading} fetchAppointments={fetchAppointments} />
+        <AppointmentsTable appointments={appointments} appointmentloading={loading} fetchAppointments={fetchAppointments} />
         <div className='flex justify-between items-center pb-3 px-4 mt-4'>
           <PageChange page={page} setPage={setPage} total_pages={pagination.total_pages} loading={loading} />
           <p className='text-[#223354] text-sm '>Page <span className='font-semibold'>{pagination.current_page || 1}</span> of <span className='font-semibold'>{pagination.total_pages || 1}</span></p>

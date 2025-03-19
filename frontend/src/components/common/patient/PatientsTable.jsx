@@ -10,6 +10,7 @@ import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 
 const PatientsTable = ({ patients, fetchPatients ,patientLoading }) => {
+    
     const [loading, setLoading] = useState(false);
     const [isEditModalOpen, setIsEditModalOpen] = useState(false);
     const [currentPatient, setCurrentPatient] = useState(null);

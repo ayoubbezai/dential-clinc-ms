@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import Model from './Model'; // Ensure this path is correct
+import Model from './Model';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -60,8 +60,10 @@ const EditPatientModel = ({ isOpen, onClose, currentPatient, refreshPatients }) 
     return (
         <Model isOpen={isOpen} onClose={onClose}>
             <form onSubmit={handleSubmit}>
+                {/* name */}
+
                 <div>
-                    <Label htmlFor="patient_name">Patient Name</Label>
+                    <Label className={"mb-2 mt-3"} htmlFor="patient_name">Patient Name</Label>
                     <Input
                         type="text"
                         id="patient_name"
@@ -75,7 +77,7 @@ const EditPatientModel = ({ isOpen, onClose, currentPatient, refreshPatients }) 
 
                 {/* Phone */}
                 <div>
-                    <Label htmlFor="phone">Phone</Label>
+                    <Label className={"mb-2 mt-3"} htmlFor="phone">Phone</Label>
                     <Input
                         type="tel"
                         id="phone"
@@ -90,7 +92,7 @@ const EditPatientModel = ({ isOpen, onClose, currentPatient, refreshPatients }) 
 
                 {/* Gender */}
                 <div>
-                    <Label htmlFor="gender">Gender</Label>
+                    <Label className={"mb-2 mt-3"} htmlFor="gender">Gender</Label>
                     <select
                         className={selectClassName}
                         name="gender"
@@ -105,7 +107,7 @@ const EditPatientModel = ({ isOpen, onClose, currentPatient, refreshPatients }) 
 
                 {/* Age */}
                 <div>
-                    <Label htmlFor="age">Age</Label>
+                    <Label className={"mb-2 mt-3"} htmlFor="age">Age</Label>
                     <Input
                         className={selectClassName}
 
@@ -120,7 +122,7 @@ const EditPatientModel = ({ isOpen, onClose, currentPatient, refreshPatients }) 
 
                 {/* Diseases (Optional) */}
                 <div>
-                    <Label htmlFor="diseases">Diseases</Label>
+                    <Label className={"mb-2 mt-3"} htmlFor="diseases">Diseases</Label>
                     <Input
                         className={selectClassName}
 
@@ -134,9 +136,9 @@ const EditPatientModel = ({ isOpen, onClose, currentPatient, refreshPatients }) 
 
                 {/* Note (Optional) */}
                 <div>
-                    <Label htmlFor="note">Note</Label>
+                    <Label className={"mb-2 mt-3"} htmlFor="note">Note</Label>
                     <Textarea
-                        className={"p-2 border border-gray-300 rounded-lg w-full focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all text-xs"}
+                        className={"p-2 border border-gray-300 rounded-lg w-full focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all text-xs mb-3"}
 
                         id="note"
                         name="note"

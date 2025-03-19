@@ -69,7 +69,7 @@ export const PatientsService = {
         note,
       });
       console.log(response);
-      return { data: response.data, error: null }; // Return data and no error
+      return { data: response.data, error: null }; 
     } catch (error) {
       console.log(error);
       return {
