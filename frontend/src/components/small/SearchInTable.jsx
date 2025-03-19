@@ -4,7 +4,7 @@ import { Label } from '@/components/ui/label';
 import { Search } from "lucide-react";
 import { debounce } from 'lodash';
 
-const PatientSearch = ({ search, setSearch }) => {
+const SearchInTable = ({ search, setSearch }) => {
     
     const handleSearchChange = useCallback(
         debounce((value) => {
@@ -33,4 +33,4 @@ const PatientSearch = ({ search, setSearch }) => {
     );
 };
 
-export default PatientSearch;
+export default SearchInTable;

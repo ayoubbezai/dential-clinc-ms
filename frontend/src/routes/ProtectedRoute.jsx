@@ -10,7 +10,7 @@ const ProtectedRoute = () => {
     const location = useLocation();
 
     if (loading) {
-        if (location.pathname.startsWith("/patients_list")) {
+        if (location.pathname.startsWith("/patients_list") || location.pathname.startsWith("/appointments_list")) {
             return <div className="flex gap-8"> <SideBarSkeleton /> <ListSkeletons />  </div>
 
         } else if (location.pathname.startsWith("/schedule")) {

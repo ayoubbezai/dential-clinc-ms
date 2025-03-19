@@ -4,7 +4,8 @@ import { Table, TableHeader, TableBody, TableHead, TableCell, TableRow } from '@
 import { Badge } from '@/components/ui/badge';
 import EditIcon from "../../../assets/icons/edit.svg";
 import DeleteIcon from "../../../assets/icons/delete.svg";
-
+import Skeleton from "react-loading-skeleton";
+import "react-loading-skeleton/dist/skeleton.css";
 const AppointmentsTable = ({ appointments, loading }) => {
     return (
         <Table>
@@ -20,12 +21,16 @@ const AppointmentsTable = ({ appointments, loading }) => {
             </TableHeader>
             <TableBody>
                 {loading ? (
-                    <TableRow>
-                        <TableCell colSpan={6} className="text-center">
-                            Loading...
-                        </TableCell>
-                    </TableRow>
-                ) : (
+                    Array.from({ length: 5 }).map((_, index) => (
+                        <TableRow key={index}>
+                            <TableCell><Skeleton height={20} width={'80%'} /></TableCell>
+                            <TableCell><Skeleton height={20} width={'60%'} /></TableCell>
+                            <TableCell><Skeleton height={20} width={'70%'} /></TableCell>
+                            <TableCell><Skeleton height={20} width={'40%'} /></TableCell>
+                            <TableCell><Skeleton height={20} width={'50%'} /></TableCell>
+                            <TableCell><Skeleton height={20} width={'30%'} /></TableCell>
+                        </TableRow>
+                    ))) : (
                     appointments.map((appointment) => (
                         <TableRow key={appointment.id}>
                             <TableCell>{appointment.title}</TableCell>

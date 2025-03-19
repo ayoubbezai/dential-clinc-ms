@@ -1,7 +1,7 @@
 import React from 'react'
 import { Input } from '@/components/ui/input';
 
-const UserDateInput = ({ startDate ,endDate ,setStartDate,setEndDate}) => {
+const DateInput = ({ startDate ,endDate ,setStartDate,setEndDate}) => {
     const selectClassName = "p-2 border border-gray-300 rounded-lg w-full md:w-auto focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all text-xs"
 
   return (
@@ -26,4 +26,4 @@ const UserDateInput = ({ startDate ,endDate ,setStartDate,setEndDate}) => {
   )
 }
 
-export default UserDateInput
+export default DateInput

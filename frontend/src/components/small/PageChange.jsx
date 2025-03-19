@@ -1,7 +1,7 @@
 import React from 'react'
 import { Badge } from "@/components/ui/badge"
 
-const PatientPageChange = ({ page, setPage, total_pages, loading }) => {
+const PageChange = ({ page, setPage, total_pages, loading }) => {
     return (
         <div className='flex gap-2'>
             <button disabled={page === 1 || loading} onClick={() => setPage(page - 1)}><Badge className={"text-[17px] py-[1px] font-semibold"}>{`${"<"}`}</Badge></button>
@@ -10,4 +10,4 @@ const PatientPageChange = ({ page, setPage, total_pages, loading }) => {
     )
 }
 
-export default PatientPageChange
+export default PageChange

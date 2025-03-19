@@ -1,7 +1,7 @@
 import React from 'react'
 const selectClassName = "p-2 border border-gray-300 rounded-lg w-full md:w-auto focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all text-xs"
 
-const PatientPerPage = ({ perPage, setPerPage }) => {
+const PerPage = ({ perPage, setPerPage }) => {
 
     return (
         <div className='flex items-center'>
@@ -23,4 +23,4 @@ const PatientPerPage = ({ perPage, setPerPage }) => {
     )
 }
 
-export default PatientPerPage
+export default PerPage

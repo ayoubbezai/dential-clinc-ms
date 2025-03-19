@@ -1,15 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import usePatients from '@/hooks/usePatients';
 import { Button } from '@/components/ui/button';
-import PatientSearch from '@/components/common/patient/patientSearch';
 import SelectGender from '@/components/small/SelectGender';
 import PatientsTable from '@/components/common/patient/PatientsTable';
-import PatientDateInput from '@/components/common/patient/PatientDateInput';
-import PatientSort from '@/components/common/patient/PatientSort';
-import PatientPerPage from '@/components/common/patient/PatientPerPage';
-import PatientPageChange from '@/components/common/patient/PatientPageChange';
-import AddPatientModel from '@/models/AddPatientModel';
 
+import AddPatientModel from '@/models/AddPatientModel';
+import PerPage from '@/components/small/PerPage';
+import PageChange from '@/components/small/PageChange';
+import SearchInTable from '@/components/small/SearchInTable';
+import Sort from '@/components/small/Sort';
+import DateInput from '@/components/small/DateInput';
 const PatientsList = () => {
   const {
     patients,
@@ -31,7 +31,7 @@ const PatientsList = () => {
     perPage,
     setPerPage,
     loading,
-    fetchPatients // Add fetchPatients from usePatients
+    fetchPatients 
   } = usePatients();
 
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -53,20 +53,20 @@ const PatientsList = () => {
 
       <div className='w-5/6 bg-white mx-auto px-4'>
         <div className='flex flex-wrap items-center justify-between gap-4 py-4 mt-4'>
-          <PatientSearch search={search} setSearch={setSearch} />
+          <SearchInTable search={search} setSearch={setSearch} />
           <div className='flex flex-wrap items-center gap-2'>
             <SelectGender gender={gender} setGender={setGender} />
-            <PatientDateInput startDate={startDate} endDate={endDate} setStartDate={setStartDate} setEndDate={setEndDate} />
-            <PatientSort sortBy={sortBy} sortDirection={sortDirection} setSortBy={setSortBy} setSortDirection={setSortDirection} />
+            <DateInput startDate={startDate} endDate={endDate} setStartDate={setStartDate} setEndDate={setEndDate} />
+            <Sort sortBy={sortBy} sortDirection={sortDirection} setSortBy={setSortBy} setSortDirection={setSortDirection} />
           </div>
         </div>
 
         <PatientsTable patients={patients} fetchPatients={fetchPatients} patientLoading={loading} />
 
         <div className='flex justify-between items-center pb-3 px-4 mt-4'>
-          <PatientPageChange page={page} setPage={setPage} total_pages={pagination.total_pages} loading={loading} />
+          <PageChange page={page} setPage={setPage} total_pages={pagination.total_pages} loading={loading} />
           <p className='text-[#223354] text-sm '>Page <span className='font-semibold'>{pagination.current_page || 1}</span> of <span className='font-semibold'>{pagination.total_pages || 1}</span></p>
-          <PatientPerPage perPage={perPage} setPerPage={setPerPage} />
+          <PerPage perPage={perPage} setPerPage={setPerPage} />
         </div>
       </div>
 
