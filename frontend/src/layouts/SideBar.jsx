@@ -23,17 +23,19 @@ const SideBar = () => {
                 </button>
                 {isOpen && (
                     <>
-                        <h1 className='uppercase text-black font-semibold text-lg mt-3 mb-2'>
+                        <h1 className='uppercase text-black font-semibold text-[17px] mt-3 mb-2'>
                             <span className='text-[#3E7EA1]'>Dr</span> Chabani
                         </h1>
-                        <img src={LogoImg} alt="logo" className='w-20 mb-2' />
+                        <img src={LogoImg} alt="logo" className='w-20 mb-3' />
                         <SideBarLinks />
                     </>
                 )}
 
 
             </div>
-            <Button className={"text-white w-1/2 mb-3 mx-auto "} onClick={logout}>logout</Button>
+            {
+                isOpen && <Button className={"text-white transition-all text-[13px]  duration-300 w-5/12 mb-3 mx-auto "} onClick={logout}>logout</Button>
+            }
         </div>
     );
 };

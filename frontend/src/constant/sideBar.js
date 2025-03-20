@@ -1,7 +1,7 @@
 export const sideBar = {
   pages: [
-    { name: "messanger", link: "/" },
-    { name: "payment", link: "/" },
+    { name: "messanger", link: "/messanger" },
+    { name: "payment", link: "/payment" },
     { name: "schedule", link: "/schedule" },
   ],
   lists: [

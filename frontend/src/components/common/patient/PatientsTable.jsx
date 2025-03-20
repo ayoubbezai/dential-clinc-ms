@@ -9,8 +9,8 @@ import EditPatientModel from '@/models/EditPatientModel';
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 
-const PatientsTable = ({ patients, fetchPatients ,patientLoading }) => {
-    
+const PatientsTable = ({ patients, fetchPatients, patientLoading }) => {
+
     const [loading, setLoading] = useState(false);
     const [isEditModalOpen, setIsEditModalOpen] = useState(false);
     const [currentPatient, setCurrentPatient] = useState(null);
@@ -81,7 +81,8 @@ const PatientsTable = ({ patients, fetchPatients ,patientLoading }) => {
                                 </TableCell>
                                 <TableCell>
                                     <div className="flex gap-2">
-                                        <button className="cursor-pointer" onClick={() => handleEdit(patient)}>
+                                        <button className="cursor-pointer" onClick={() => handleEdit(patient)} disabled={loading}
+                                        >
                                             <img src={EditIcon} alt="edit" className="w-5" />
                                         </button>
                                         <button

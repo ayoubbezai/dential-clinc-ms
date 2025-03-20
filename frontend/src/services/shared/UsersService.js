@@ -1,11 +1,10 @@
 import api from "../api";
 
-export const UserService = {
-  // Get all Users with filters and pagination
+export const UsersService = {
   async getUsers(
     per_page,
     search,
-    gender,
+    role_name,
     start_date,
     end_date,
     sortBy,
@@ -20,7 +19,7 @@ export const UserService = {
 
       appendParam("per_page", per_page);
       appendParam("search", search);
-      appendParam("gender", gender);
+      appendParam("role_name", role_name);
       if (start_date && end_date) {
         appendParam("start_date", start_date);
         appendParam("end_date", end_date);
@@ -37,51 +36,26 @@ export const UserService = {
       return { data: null, error: error.message || "Failed to fetch users" }; // Return error
     }
   },
-
-  async createUser(user_name, phone, gender, age, diseases, note) {
+  async updateUser(userId, name, role_name, email) {
     try {
-      const response = await api.post("/users", {
-        user_name,
-        phone,
-        gender,
-        age,
-        diseases,
-        note,
+      const response = await api.put(`/users/${userId}`, {
+        name,
+        role_name,
+        email,
       });
       console.log(response);
-      return { data: response.data, error: null }; // Return data and no error
+      return { data: response.data, error: null };
     } catch (error) {
       console.log(error);
       return {
         data: null,
-        error: error.message || "Failed to create users",
+        error: error.message || "Failed to update user",
       }; // Return error
     }
   },
-  async updateUser(user_id,user_name, phone, gender, age, diseases, note) {
+  async deleteUser(userId) {
     try {
-      const response = await api.put(`/users/${user_id}`, {
-        user_name,
-        phone,
-        gender,
-        age,
-        diseases,
-        note,
-      });
-      console.log(response);
-      return { data: response.data, error: null }; // Return data and no error
-    } catch (error) {
-      console.log(error);
-      return {
-        data: null,
-        error: error.message || "Failed to update users",
-      }; // Return error
-    }
-  },
-
-  async deleteUser(userID) {
-    try {
-      const response = await api.delete(`/users/${patientID}`);
+      const response = await api.delete(`/users/${userId}`);
       console.log(response);
       return { data: response.data, error: null };
     } catch (error) {

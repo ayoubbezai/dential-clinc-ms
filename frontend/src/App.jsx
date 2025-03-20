@@ -12,8 +12,10 @@ import SideBarDentist from "./layouts/SideBar";
 import UsersList from "./pages/shared/UsersList";
 import PatientsList from "./pages/shared/PatientsList";
 import AppointmentList from "./pages/shared/AppointmentList";
-import "./style/index.css";
+import Messanger from "./pages/shared/Messanger";
+import Payment from "./pages/shared/Payment";
 import { Toaster } from 'react-hot-toast';
+import "./style/index.css";
 
 // Layout Component to Wrap Sidebar
 const DashboardLayout = ({ children }) => {
@@ -22,7 +24,7 @@ const DashboardLayout = ({ children }) => {
   const isDentist = user?.role === "dentist"; // Check if user is a dentist
 
   // Sidebar should be visible ONLY for dentists on specific routes
-  const dentistPaths = ["/dentist/dashboard", "/schedule", "/users_list", "/patients_list", "/appointments_list"];
+  const dentistPaths = ["/dentist/dashboard", "/schedule", "/users_list", "/patients_list", "/appointments_list", "/payment", "/messanger"];
   const showSidebar = isDentist && dentistPaths.includes(location.pathname);
 
   return (
@@ -54,10 +56,12 @@ function App() {
 
               {/* Shared Route for Dentist & Receptionist */}
               <Route element={<RoleBasedRoute allowedRoles={["dentist", "receptionist"]} />}>
-            <Route path="/patients_list" element={<PatientsList />} />
+                <Route path="/patients_list" element={<PatientsList />} />
                 <Route path="/schedule" element={<Schedule />} />
                 <Route path="/users_list" element={<UsersList />} />
                 <Route path="/appointments_list" element={<AppointmentList />} />
+                <Route path="/payment" element={<Payment />} />
+                <Route path="/messanger" element={<Messanger />} />
               </Route>
 
               {/* Receptionist Routes */}
