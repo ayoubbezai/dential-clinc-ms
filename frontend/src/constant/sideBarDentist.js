@@ -1,4 +1,4 @@
-export const sideBar = {
+export const sideBarDentist = {
   pages: [
     { name: "messanger", link: "/messanger" },
     { name: "payment", link: "/payment" },
@@ -10,5 +10,4 @@ export const sideBar = {
     { name: "appointments List", link: "/appointments_list" },
   ],
 };
-
 

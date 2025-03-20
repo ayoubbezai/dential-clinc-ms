@@ -2,7 +2,7 @@ export const navigateToDashboard = (role) => {
   const routes = {
     dentist: "/dentist/dashboard",
     receptionist: "/receptionist/dashboard",
-    client: "/client/dashboard",
+    patient: "/patient/dashboard",
   };
   return routes[role] || "/";
 };

@@ -3,7 +3,7 @@ import React from 'react'
 const ClientDashboard = () => {
   return (
     <div>
-        welcom client 
+      welcome client
     </div>
   )
 }

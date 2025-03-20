@@ -11,7 +11,7 @@ function Schedule() {
     return (
         <div className='flex flex-col w-full items-center  '>
             {/* Styled Toggle Switch */}
-            <div className="bg-gray-200 p-1 rounded-full flex shadow-md my-4">
+            <div className="bg-gray-100 p-[6px] rounded-full flex shadow-md my-4">
                 <ToggleGroup
                     type="single"
                     value={selected}
@@ -26,7 +26,7 @@ function Schedule() {
                     {/* View Events Button */}
                     <ToggleGroupItem
                         value="view"
-                        className={`w-1/2 px-5 py-2 text-sm font-medium text-center relative z-10 transition-colors duration-200
+                        className={`w-1/2 px- py-2 text-sm font-medium text-center relative z-10 transition-colors duration-200
                             ${selected === "view" ? "text-white" : "text-gray-500 hover:text-gray-700"}`}
                     >
                         View Events

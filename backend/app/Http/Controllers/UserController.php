@@ -96,7 +96,7 @@ class UserController extends Controller
         if (!empty($request_query['search'])) {
             $search = $request_query['search'];
             $data->where(function ($query) use ($search) {
-                $query->where('name', 'like', '%' . $search . '%')
+                $query->where('users.name', 'like', '%' . $search . '%')
                       ->orWhere('users.email', 'like', '%' . $search . '%')
                       ->orWhere('roles.name', 'like', '%' . $search . '%');
             });

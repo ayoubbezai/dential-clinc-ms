@@ -27,7 +27,7 @@ const SearchInTable = ({ search, setSearch }) => {
                 id="search"
                 defaultValue={search} 
                 onChange={onChange}
-                placeholder="Search patients..."
+                placeholder="Search ..."
             />
         </div>
     );

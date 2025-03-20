@@ -1,11 +1,8 @@
 
 import React, { useState, useEffect } from 'react';
-import usePatients from '@/hooks/usePatients';
 import { Button } from '@/components/ui/button';
-import PatientsTable from '@/components/common/patient/PatientsTable';
 import SelectRole from '@/components/small/SelectRole';
 
-import AddPatientModel from '@/models/AddPatientModel';
 import PerPage from '@/components/small/PerPage';
 import PageChange from '@/components/small/PageChange';
 import SearchInTable from '@/components/small/SearchInTable';
@@ -13,6 +10,7 @@ import Sort from '@/components/small/Sort';
 import DateInput from '@/components/small/DateInput';
 import UsersTable from '@/components/common/users/UsersTable';
 import useUser from '@/hooks/useUser';
+import AddReceptionistModel from '@/models/AddReceptionistModel';
 const UsersList = () => {
   const {
     users,
@@ -50,7 +48,7 @@ const UsersList = () => {
           <h3 className='text-[#223354] font-bold text-xl'>Users list</h3>
           <p className='text-[#223354] font-semibold mt-1'>This is Users list admin panel</p>
         </div>
-        <Button className={"text-white text-[13px]"} onClick={() => setIsModalOpen(true)}>+ Add Receptionist</Button>
+        <Button className={"text-white text-[13px]"} onClick={() => setIsModelOpen(true)}>+ Add Receptionist</Button>
       </div>
 
       <div className='w-5/6 bg-white mx-auto px-4'>
@@ -72,7 +70,8 @@ const UsersList = () => {
         </div>
       </div>
 
-      {/* <AddPatientModel isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} /> */}
+      <AddReceptionistModel isOpen={isModelOpen} onClose={() => setIsModelOpen(false)} />
+
     </>
   );
 };

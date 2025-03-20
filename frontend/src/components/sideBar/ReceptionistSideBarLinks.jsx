@@ -1,6 +1,6 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
-import { sideBar } from '@/constant/sideBar';
+import { sideBarReceptionist } from '@/constant/sideBarReceptionist';
 
 const SideBarComp = ({ text }) => {
     return (
@@ -11,14 +11,12 @@ const SideBarComp = ({ text }) => {
     );
 };
 
-const SideBarLinks = () => {
+const ReceptionistSideBarLinks = () => {
     return (
         <>
-            <div>
-                <Link to={"/dentist/dashboard"} className={`text-[13px]  ${location.pathname === "/dentist/dashboard" ? "text-blue-500" : ""} mt-1 `} >Overview</Link>
-            </div>
+
             <SideBarComp text={"Lists"} />
-            {sideBar?.lists.map((list, index) => (
+            {sideBarReceptionist?.lists.map((list, index) => (
                 <div key={index} className='my-[5px]'>
                     <Link to={list.link} className={`text-[13px]  ${location.pathname === list.link ? "text-blue-500" : ""} `}>
                         {list.name}
@@ -26,7 +24,7 @@ const SideBarLinks = () => {
                 </div>
             ))}
             <SideBarComp text={"Pages"} />
-            {sideBar?.pages.map((page, index) => (
+            {sideBarReceptionist?.pages.map((page, index) => (
                 <div key={index} className='my-[5px]'>
                     <Link to={page.link} className={`text-[13px]  ${location.pathname === page.link ? "text-blue-500" : ""} `}>
                         {page.name}
@@ -37,4 +35,5 @@ const SideBarLinks = () => {
     )
 }
 
-export default SideBarLinks
+
+export default ReceptionistSideBarLinks

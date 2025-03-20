@@ -66,4 +66,22 @@ export const UsersService = {
       };
     }
   },
+
+  async createReceptionist(name, email, password) {
+    try {
+      const response = await api.post("/users/receptionist", {
+        name,
+        email,
+        password,
+      });
+      console.log(response);
+      return { data: response.data, error: null }; // Return data and no error
+    } catch (error) {
+      console.log(error);
+      return {
+        data: null,
+        error: error.message || "Failed to create receptionist",
+      }; // Return error
+    }
+  },
 };

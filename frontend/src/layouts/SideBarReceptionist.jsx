@@ -1,11 +1,12 @@
+
 import React, { useState } from 'react';
 import { MdMenu, MdMenuOpen } from "react-icons/md";
 import LogoImg from '../assets/logos/logo_1-removebg-preview.png';
-import SideBarLinks from '@/components/common/SideBarLinks';
+import SideBarLinks from '@/components/sideBar/ReceptionistSideBarLinks';
 import { Button } from '@/components/ui/button';
 import { useAuth } from '@/hooks/useAuth';
 
-const SideBar = () => {
+const SideBarReceptionist = () => {
     const [isOpen, setIsOpen] = useState(true);
     const { logout } = useAuth();
 
@@ -40,4 +41,5 @@ const SideBar = () => {
     );
 };
 
-export default SideBar;
+export default SideBarReceptionist
+    ;

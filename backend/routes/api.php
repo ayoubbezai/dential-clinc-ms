@@ -27,7 +27,7 @@ Route::middleware($auth)->prefix('auth')->group(function () {
     Route::get('/me', [AuthController::class, 'currentUser']);
 });
 
-Route::middleware([$auth, 'role:dentist'])->group(function () {
+Route::middleware([$auth, 'role:dentist,receptionist'])->group(function () {
     Route::post('users/receptionist', [UserController::class, 'createReceptionist']);
     Route::post('patients/{id}/createUser', [PatientController::class, 'createUser']);
     Route::get('patients/{id}/folders', [FolderController::class, 'getFoldersOfPatient']);
