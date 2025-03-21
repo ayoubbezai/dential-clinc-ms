@@ -147,6 +147,57 @@ $event = Event::create(array_merge(["user_id" => $userId], $data));
     {
         // Implement logic to delete a specific event
     }
+public function getEvents(Request $request)
+{
+    try {
+        // Get the logged-in user's ID
+        $userId = Auth::id();
+
+        // Get query parameters from the request
+        $requestQuery = $request->only(['start', 'end']); // Fetch date filters
+
+        // Build the query
+        $query = Event::where('user_id', $userId)
+            ->select(['id','start', 'end', 'title', 'location', 'people']); // Select required columns
+
+        // Apply date filter
+        $startDate = $requestQuery['start'] ?? null;
+        $endDate = $requestQuery['end'] ?? null;
+
+        if ($startDate && $endDate) {
+            if ($startDate > $endDate) {
+                [$startDate, $endDate] = [$endDate, $startDate];
+            }
+
+            $query->where(function ($q) use ($startDate, $endDate) {
+                $q->whereBetween('start', [$startDate, $endDate])  // Start falls within range
+                  ->orWhereBetween('end', [$startDate, $endDate]); // End falls within range
+            });
+        } else {
+    return response()->json([
+        'success' => false,
+        'message' => 'Start date and end date are required',
+    ], Response::HTTP_BAD_REQUEST);
+}
+
+        // Get events
+        $events = $query->get();
+
+        // Prepare the response
+        return response()->json([
+            'success' => true,
+            'message' => 'Events retrieved successfully',
+            'data' => $events,
+        ], Response::HTTP_OK);
+    } catch (\Exception $e) {
+        return response()->json([
+            'success' => false,
+            'message' => 'Failed to retrieve events',
+            'error' => $e->getMessage(),
+        ], Response::HTTP_INTERNAL_SERVER_ERROR);
+    }
+}
+
 
     /**
      * Validate the number of items per page.
@@ -187,3 +238,5 @@ $event = Event::create(array_merge(["user_id" => $userId], $data));
         ];
     }
 }
+
+
