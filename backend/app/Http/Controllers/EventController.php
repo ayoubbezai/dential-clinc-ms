@@ -96,7 +96,7 @@ class EventController extends Controller
         return response()->json([
             "success" => true,
             "message" => "event retrived successfully",
-            "data" =>
+            "data" =>$response
 
         ], Response::HTTP_OK);    } catch (\Exception $e) {
         return response()->json([
