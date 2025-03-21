@@ -19,6 +19,7 @@ const Payment = () => {
             <div className="grid grid-cols-12 gap-4 my-4 ">
 
                 {cardData.map((card, index) => (
+
                     <div key={index} className="col-span-3">
                         <PaymentCard
                             title={card.title}
@@ -39,7 +40,7 @@ const Payment = () => {
                 </div>
 
                 <div className="col-span-4">
-                    <RecentTransactions/>
+                    <RecentTransactions />
                 </div>
             </div>
         </div>
