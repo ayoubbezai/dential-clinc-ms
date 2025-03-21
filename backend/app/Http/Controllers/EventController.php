@@ -4,10 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use Illuminate\Support\Facades\Crypt;
-use Illuminate\Contracts\Encryption\DecryptException;
-use App\Models\Event;
 use Illuminate\Support\Facades\Auth;
+use App\Models\Event;
 
 class EventController extends Controller
 {
@@ -16,104 +14,74 @@ class EventController extends Controller
      */
     public function index(Request $request)
     {
-       try {
-        //show all events
+        try {
+            // Get the logged-in user's ID
+            $userId = Auth::id();
 
-        // get the id of loged in user
-        $user = Auth::user(); 
-        $userId = $user->id;
+            // Get query parameters from the request
+            $requestQuery = $request->query();
 
-        //get the query from the request
-        $request_query = $request->query();
-        
-        //get the number of element per page
-        $perPage = filter_var($request_query["per_page"]?? 15 , FILTER_VALIDATE_INT) ?: 15;
-        $perPage = max($perPage,1);
+            // Validate and set the number of items per page
+            $perPage = $this->validatePerPage($requestQuery['per_page'] ?? 15);
 
-        //validate sorting direction and by
-        $validSortColumns = ["title","created_at","updated_at"];
-        $validSortDirection = ["asc","desc"];
+            // Validate sorting parameters
+            $sortBy = $this->validateSortBy($requestQuery['sort_by'] ?? 'created_at');
+            $sortDirection = $this->validateSortDirection($requestQuery['sort_direction'] ?? 'asc');
 
-        $sortBy = in_array($request_query["sort_by"]??"created_at",$validSortColumns)
-                  ? $request_query["sort_by"]
-                  : "created_at";
+            // Build the query
+            $query = Event::where('user_id', $userId);
 
-        $sortDirection = in_array(strtolower($request_query['sort_direction'] ?? 'asc'), $validSortDirection)
-            ? strtolower($request_query['sort_direction'])
-            : 'asc';
+            // Apply search filter
+            if (!empty($requestQuery['search'])) {
+                $query->where('title', 'like', '%' . $requestQuery['search'] . '%');
+            }
 
-        //put the query 
-        $data = Event::query();
+            // Apply date filter
+            $startDate = $requestQuery['start_date'] ?? null;
+            $endDate = $requestQuery['end_date'] ?? now()->toDateString();
 
-        //search by event title
-        if(!empty($request_query["search"])){
-            $search = $request_query["search"];
-            $data->where(function($query) use ($search) {
-                $query->where("title", "like", "%".$search."%");
-            });
-        }
+            if ($startDate && $endDate) {
+                if ($startDate > $endDate) {
+                    [$startDate, $endDate] = [$endDate, $startDate]; 
+                }
+                $query->whereBetween('created_at', [$startDate, $endDate]);
+            }
 
-        //filer by date
-        //we need start_date and end_date to filter
-        $startDate = $request_query['start_date'] ?? null;
-        $endDate = $request_query['end_date'] ?? now()->toDateString(); // Defaults to today if not provided
+            // Apply sorting
+            $query->orderBy($sortBy, $sortDirection);
 
-        if ($startDate > $endDate) {
-            // Swap the dates if startDate is greater than endDate
-            [$startDate, $endDate] = [$endDate, $startDate];
-        }
+          // Paginate the results
+$paginationData = $query->paginate($perPage);
 
-        if ($startDate && $endDate) {
-            $data->whereBetween('events.created_at', [$startDate, $endDate]);
-        }
-
-        // Apply sorting and user Id
-        $data->where("user_id", $userId)->orderBy($sortBy, $sortDirection);
-
-        $paginationData = $data->paginate($perPage);
-
-        // Prepare a structured response
-        $response = [
-            'success' => true,
-            'message' => 'Data fetched successfully',
-            'data' => $paginationData->items(), // Paginated data items
-            'pagination' => [
-                'total_items' => $paginationData->total(), // Total number of items
-                'items_per_page' => $paginationData->perPage(), // Items per page
-                'current_page' => $paginationData->currentPage(), // Current page number
-                'total_pages' => $paginationData->lastPage(), // Last page number
-                'from' => $paginationData->firstItem(), // First item on the current page
-                'to' => $paginationData->lastItem(), // Last item on the current page
-                'first_page_url' => $paginationData->url(1), // First page URL
-                'last_page_url' => $paginationData->url($paginationData->lastPage()), // Last page URL
-                'next_page_url' => $paginationData->nextPageUrl(), // Next page URL
-                'prev_page_url' => $paginationData->previousPageUrl(), // Previous page URL
-                'path' => $paginationData->path(), // Base path of pagination
-            ]
-        ];
-
-        //return sucess result
-        return response()->json([
-            "success" => true,
-            "message" => "event retrived successfully",
-            "data" =>$response
-
-        ], Response::HTTP_OK);    } catch (\Exception $e) {
-        return response()->json([
-            'success' => false,
-            'message' => 'Failed to get events',
-            'error' => $e->getMessage(),
-        ], Response::HTTP_INTERNAL_SERVER_ERROR);
+// Decode the JSON-encoded 'people' field in each event
+$decodedData = $paginationData->getCollection()->map(function ($event) {
+    if (!empty($event->people)) {
+        $event->people = json_decode($event->people, true); // Decode JSON to array
     }
+    return $event;
+});
 
+// Replace the pagination collection with the decoded data
+$paginationData->setCollection($decodedData);
 
+            
 
+            // Prepare the response
+            $response = [
+                'success' => true,
+                'message' => 'Events retrieved successfully',
+                'data' => $paginationData->items(),
+                'pagination' => $this->buildPaginationResponse($paginationData),
+            ];
 
-
-
-
-
-        
+            return response()->json($response, Response::HTTP_OK);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to retrieve events',
+                'error' => $e->getMessage(),
+            ], Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
     }
 
     /**
@@ -121,40 +89,39 @@ class EventController extends Controller
      */
     public function store(Request $request)
     {
-        //create a new event with in date
+        try {
+            // Validate the request data
+            $data = $request->validate([
+                'start' => 'required|date',
+                'end' => 'required|date|after_or_equal:start_date',
+                'location' => 'nullable|string|max:255',
+                'title' => 'nullable|string|max:255',
+                'people' => 'nullable|array',
+                'people.*' => 'nullable|string|max:255',
+            ]);
+                        // Get the logged-in user's ID
+            $userId = Auth::id();
 
-        $data = $request->validate([
-            "start_date" => "required|date",
-            "end_date" => "required|date|after_or_equal:start_date",
-            "location" => "nullable|string|max:255",
-            "title" => "nullable|string|max:255",
-            "people" => "nullable|array",
-            "people.*" =>"nullable|string|max:255",
-            "user_id" => "required|uuid"
-        ]);
-        try{
+            // Encode the 'people' array to JSON if it exists
+            if (!empty($data['people'])) {
+                $data['people'] = json_encode($data['people']);
+            }
 
-             if (!empty($data["people"])) {
-        $data["people"] = json_encode($data["people"]);
-    }
+            // Create the event
+$event = Event::create(array_merge(["user_id" => $userId], $data));
 
-
-
-            $event = Event::create($data);
-
-              return response()->json([
-            "success" => true,
-            "message" => "event created successfully",
-            "data" => $event
-        ], Response::HTTP_CREATED);
-        }catch(\Exception $e){
-              return response()->json([
+            return response()->json([
+                'success' => true,
+                'message' => 'Event created successfully',
+                'data' => $event,
+            ], Response::HTTP_CREATED);
+        } catch (\Exception $e) {
+            return response()->json([
                 'success' => false,
-                'message' => 'faild to show the event',
+                'message' => 'Failed to create event',
                 'error' => $e->getMessage(),
-            ], Response::HTTP_INTERNAL_SERVER_ERROR); 
+            ], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
-
     }
 
     /**
@@ -162,7 +129,7 @@ class EventController extends Controller
      */
     public function show(string $id)
     {
-        //
+        // Implement logic to show a specific event
     }
 
     /**
@@ -170,7 +137,7 @@ class EventController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        // Implement logic to update a specific event
     }
 
     /**
@@ -178,9 +145,45 @@ class EventController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        // Implement logic to delete a specific event
     }
 
+    /**
+     * Validate the number of items per page.
+     */
+    private function validatePerPage($perPage)
+    {
+        return max(filter_var($perPage, FILTER_VALIDATE_INT) ?: 15, 1);
+    }
 
+    /**
+     * Validate the sort column.
+     */
+    private function validateSortBy($sortBy)
+    {
+        $validSortColumns = ['title', 'created_at', 'updated_at'];
+        return in_array($sortBy, $validSortColumns) ? $sortBy : 'created_at';
+    }
 
+    /**
+     * Validate the sort direction.
+     */
+    private function validateSortDirection($sortDirection)
+    {
+        $validSortDirections = ['asc', 'desc'];
+        return in_array(strtolower($sortDirection), $validSortDirections) ? strtolower($sortDirection) : 'asc';
+    }
+
+    /**
+     * Build the pagination response.
+     */
+    private function buildPaginationResponse($paginationData)
+    {
+        return [
+            'total_items' => $paginationData->total(),
+            'items_per_page' => $paginationData->perPage(),
+            'current_page' => $paginationData->currentPage(),
+            'total_pages' => $paginationData->lastPage(),
+        ];
+    }
 }

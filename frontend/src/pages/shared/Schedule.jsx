@@ -1,51 +1,95 @@
-import { ScheduleXCalendar } from '@schedule-x/react';
+import { useState, useEffect } from 'react';
+import { ScheduleXCalendar, useCalendarApp } from '@schedule-x/react';
+import { createEventsServicePlugin } from '@schedule-x/events-service';
+import { createViewMonthGrid } from '@schedule-x/calendar';
+import { v4 as uuidv4 } from 'uuid';
+import { createEventModalPlugin } from '@schedule-x/event-modal';
 import '@schedule-x/theme-default/dist/index.css';
-import useCalendar from '@/hooks/useCalendar';
-import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
-import { useState } from 'react';
 
 function Schedule() {
-    const { calander } = useCalendar();
-    const [selected, setSelected] = useState("view");
+    const eventsServicePlugin = useState(() => createEventsServicePlugin())[0];
+    const eventModal = createEventModalPlugin();
+    const [events, setEvents] = useState([]); // State to hold events
+
+    useEffect(() => {
+        async function fetchEvents() {
+            const url = "http://localhost:8000/api/events";
+            const token = localStorage.getItem("token");
+
+            try {
+                const response = await fetch(url, {
+                    method: "GET",
+                    headers: {
+                        "Authorization": `Bearer ${token}`,
+                        "Content-Type": "application/json",
+                    },
+                });
+
+                if (!response.ok) {
+                    throw new Error(`Response status: ${response.status}`);
+                }
+
+                const json = await response.json();
+                const fetchedEvents = json.data.map(event => ({
+                    id: event.id,
+                    title: event.title,
+                    start: event.start,
+                    end: event.end,
+                    location: event.location,
+                    people: event.people || [],
+                }));
+
+                console.log("Fetched Events:", fetchedEvents);
+                setEvents(fetchedEvents); // Update state
+
+                // Add each event to the calendar one by one
+                fetchedEvents.forEach(event => {
+                    eventsServicePlugin.add(event);
+                });
+
+            } catch (error) {
+                console.error(error.message);
+            }
+        }
+
+        fetchEvents(); // Fetch events on mount
+    }, [eventsServicePlugin]);
+
+    // Initialize calendar with an empty event list
+    const calendar = useCalendarApp({
+        views: [createViewMonthGrid()],
+        events: [], // Start empty, events will be added dynamically
+        selectedDate: '2024-11-18',
+        plugins: [eventsServicePlugin],
+    });
+
+    eventModal.close();
+
+    const handleAddEvent = () => {
+        const newEvent = {
+            id: uuidv4(),
+            title: 'New Clicked Event',
+            start: '2024-11-20 08:00',
+            end: '2024-11-20 16:00',
+        };
+
+        console.log('Adding Event:', newEvent);
+        setEvents(prevEvents => [...prevEvents, newEvent]); // Add to state
+        eventsServicePlugin.add(newEvent); // Add event to calendar
+    };
 
     return (
-        <div className='flex flex-col w-full items-center  '>
-            {/* Styled Toggle Switch */}
-            <div className="bg-gray-100 p-[6px] rounded-full flex shadow-md my-4">
-                <ToggleGroup
-                    type="single"
-                    value={selected}
-                    onValueChange={(val) => val && setSelected(val)}
-                    className="flex w-64 relative"
-                >
-                    {/* Animated Background Toggle */}
-                    <div className={`absolute top-0 left-0 w-1/2 h-full bg-blue-500 rounded-full transition-transform duration-200 ease-in-out
-                        ${selected === "edit" ? "translate-x-full" : "translate-x-0"}`}
-                    ></div>
+        <div>
+            <button
+                onClick={handleAddEvent}
+                style={{ padding: '10px', marginBottom: '10px' }}
+            >
+                Add Event
+            </button>
 
-                    {/* View Events Button */}
-                    <ToggleGroupItem
-                        value="view"
-                        className={`w-1/2 px- py-2 text-sm font-medium text-center relative z-10 transition-colors duration-200
-                            ${selected === "view" ? "text-white" : "text-gray-500 hover:text-gray-700"}`}
-                    >
-                        View Events
-                    </ToggleGroupItem>
-
-                    {/* Edit Event Button */}
-                    <ToggleGroupItem
-                        value="edit"
-                        className={`w-1/2 px-5 py-2 text-sm font-medium text-center relative z-10 transition-colors duration-200
-                            ${selected === "edit" ? "text-white" : "text-gray-500 hover:text-gray-700"}`}
-                    >
-                        Edit Event
-                    </ToggleGroupItem>
-                </ToggleGroup>
+            <div style={{ width: '100vw', height: '100vh' }}>
+                <ScheduleXCalendar calendarApp={calendar} />
             </div>
-
-            {selected === "view" ? <ScheduleXCalendar calendarApp={calander} /> : "edit events"}
-
-
         </div>
     );
 }

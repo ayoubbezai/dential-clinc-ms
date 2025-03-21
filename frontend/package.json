@@ -23,7 +23,9 @@
     "@radix-ui/react-toggle": "^1.1.2",
     "@radix-ui/react-toggle-group": "^1.1.2",
     "@schedule-x/calendar": "^2.22.0",
+    "@schedule-x/current-time": "^2.21.2",
     "@schedule-x/drag-and-drop": "^2.22.0",
+    "@schedule-x/event-modal": "^2.23.0",
     "@schedule-x/events-service": "^2.22.0",
     "@schedule-x/react": "^2.22.0",
     "@schedule-x/theme-default": "^2.22.0",
@@ -44,7 +46,8 @@
     "react-toastify": "^11.0.5",
     "recharts": "^2.15.1",
     "tailwind-merge": "^3.0.2",
-    "tailwindcss-animate": "^1.0.7"
+    "tailwindcss-animate": "^1.0.7",
+    "uuid": "^11.1.0"
   },
   "devDependencies": {
     "@eslint/js": "^9.21.0",
