@@ -15,6 +15,7 @@ const COLORS = [
 ];
 
 const EventModel = ({ modalPosition, selectedEvent, handleCloseModal, eventsServicePlugin }) => {
+
     const [isEdit, setIsEdit] = useState(false);
     const [editedEvent, setEditedEvent] = useState({
         ...selectedEvent,
@@ -24,7 +25,29 @@ const EventModel = ({ modalPosition, selectedEvent, handleCloseModal, eventsServ
         endTime: selectedEvent?.end?.split(" ")[1] || "",
     });
 
+    console.log(modalPosition)
+    console.log(window.innerHeight)
+    console.log(window.innerWidth)
+
+    const adjestuedTop = () => {
+        const windowHeight = window.innerHeight;
+        if (modalPosition.y > windowHeight - 100) {
+            return modalPosition.y - 100;
+        } else {
+            return modalPosition.y
+        }
+    }
+    const adjestuedLeft = () => {
+        const windowWidth = window.innerWidth;
+        if ((windowWidth-modalPosition.x) > windowWidth - 300) {
+            return modalPosition.x + 300;
+        } else {
+            return modalPosition.x
+        }
+    }
+
     useEffect(() => {
+        console.log(modalPosition)
         if (selectedEvent) {
             setEditedEvent({
                 ...selectedEvent,
@@ -50,22 +73,40 @@ const EventModel = ({ modalPosition, selectedEvent, handleCloseModal, eventsServ
     };
 
     const handleSave = async () => {
-        // Combine date and time for start and end
-        const start = editedEvent.startDate + (editedEvent.startTime ? `T${editedEvent.startTime}` : "");
-        const end = editedEvent.endDate + (editedEvent.endTime ? `T${editedEvent.endTime}` : "");
+        // Combine startDate and startTime
+        const start = editedEvent.startDate + (editedEvent.startTime ? ` ${editedEvent.startTime}` : '');
 
-        const updatedEvent = {
-            ...editedEvent,
-            start,
-            end,
-        };
+        // Combine endDate and endTime
+        const end = editedEvent.endDate + (editedEvent.endTime ? ` ${editedEvent.endTime}` : '');
 
-        console.log("Updated event:", updatedEvent);
+        console.log("Updated event:", editedEvent);
 
         // Call the API to update the event
-        const { data, error } = await EventsService.updateEvent(updatedEvent.id, updatedEvent);
+        const { data, error } = await EventsService.updateEvent(
+            editedEvent.id,
+            editedEvent.startDate,
+            editedEvent.startTime,
+            editedEvent.endDate,
+            editedEvent.endTime,
+            editedEvent.title,
+            editedEvent.people,
+            editedEvent.calendarId
+        );
+
+        console.log(data);
         if (data.success) {
-            eventsServicePlugin.update(updatedEvent);
+            // Create the updated event object with combined start and end fields
+            const event = {
+                id: editedEvent.id,
+                start: start, // Use the combined start field
+                end: end, // Use the combined end field
+                title: editedEvent.title,
+                people: editedEvent.people,
+                calendarId: editedEvent.calendarId,
+            };
+
+            console.log(event);
+            eventsServicePlugin.update(event); // Update the event in the calendar
             toast.success("Event updated successfully!");
         } else {
             toast.error(error.message || "Failed to update event.");
@@ -88,8 +129,8 @@ const EventModel = ({ modalPosition, selectedEvent, handleCloseModal, eventsServ
         <div
             className="fixed z-50 bg-white/40 backdrop-blur-md p-3 rounded-lg shadow-xl border border-gray-200 w-[260px] text-sm text-gray-800"
             style={{
-                top: modalPosition.y,
-                left: modalPosition.x,
+                top: adjestuedTop(),
+                left: adjestuedLeft(),
                 transform: "translate(-110%, -50%)",
             }}
         >
@@ -198,11 +239,17 @@ const EventModel = ({ modalPosition, selectedEvent, handleCloseModal, eventsServ
                             <Input
                                 type="text"
                                 name="people"
-                                value={editedEvent.people.join(", ")}
-                                onChange={handleChange}
+                                value={editedEvent.people ? editedEvent.people.join(", ") : ""} // Safely handle null/undefined
+                                onChange={(e) => {
+                                    const peopleArray = e.target.value.split(",").map((person) => person.trim());
+                                    setEditedEvent((prev) => ({
+                                        ...prev,
+                                        people: peopleArray,
+                                    }));
+                                }}
                             />
                         ) : (
-                            <span>{editedEvent.people.join(", ")}</span>
+                            <span>{editedEvent.people ? editedEvent.people.join(", ") : ""}</span> // Safely handle null/undefined
                         )}
                     </p>
                 )}

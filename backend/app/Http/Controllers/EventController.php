@@ -115,13 +115,13 @@ public function store(Request $request)
         // Create the event with the user ID and separate date/time fields
         $event = Event::create([
             'user_id' => $userId,
-            'start_date' => $data['start_date'], // Store start date
-            'start_time' => $data['start_time'] ?? null, // Store start time (nullable)
-            'end_date' => $data['end_date'], // Store end date
-            'end_time' => $data['end_time'] ?? null, // Store end time (nullable)
-            'location' => $data['location'] ?? null, // Default to null if not provided
-            'title' => $data['title'] ?? null, // Default to null if not provided
-            'calendarId' => $data['calendarId'] ?? null, // Default to null if not provided
+            'start_date' => $data['start_date'],
+            'start_time' => $data['start_time'] ?? null, 
+            'end_date' => $data['end_date'],
+            'end_time' => $data['end_time'] ?? null, 
+            'location' => $data['location'] ?? null, 
+            'title' => $data['title'] ?? null, 
+            'calendarId' => $data['calendarId'] ?? null, 
             'people' => $data['people'] ?? null, // Default to null array if not provided
         ]);
 
@@ -158,15 +158,18 @@ public function store(Request $request)
         //validate data
 
         $data =$request->validate([
-                'start' => 'required|date',
-                'end' => 'required|date|after_or_equal:start',
-                'location' => 'nullable|string|max:255',
-                'title' => 'nullable|string|max:255',
-                'people' => 'nullable|array',
-                'people.*' => 'nullable|string|max:255',
+          'start_date' => 'required|date',
+            'start_time' => 'nullable|date_format:H:i', // Optional time field
+            'end_date' => 'required|date|after_or_equal:start_date',
+            'end_time' => 'nullable|date_format:H:i', // Optional time field
+            'location' => 'nullable|string|max:255',
+            'title' => 'nullable|string|max:255',
+            'calendarId' => 'nullable|string|max:255',
+            'people' => 'nullable|array',
+            'people.*' => 'nullable|string|max:255',
         ]);
 
-        try{   
+        try{
 
             // Encode the 'people' array to JSON if it exists
             if (!empty($data['people'])) {
@@ -288,7 +291,7 @@ $decodedData = $events->map(function ($event) {
     // Combine end_date and end_time (without sec)
     $event->end = $event->end_date;
     if (!empty($event->end_time)) {
-        // Remove secend from the time 
+        // Remove secend from the time
         $endTimeWithoutSecends = substr($event->end_time, 0, 5); // Extract only hours and min
         $event->end = $event->end_date . ' ' . $endTimeWithoutSecends; // Use space as a separator
     }

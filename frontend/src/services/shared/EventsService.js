@@ -97,4 +97,34 @@ export const EventsService = {
       }; // Return error
     }
   },
+  async updateEvent(
+    eventId,
+    start_date,
+    start_time,
+    end_date,
+    end_time,
+    title,
+    people,
+    calendarId
+  ) {
+    try {
+      const response = await api.put(`/events/${eventId}`, {
+        start_date,
+        start_time,
+        end_date,
+        end_time,
+        title,
+        people,
+        calendarId,
+      });
+      console.log(response);
+      return { data: response.data, error: null }; // Return data and no error
+    } catch (error) {
+      console.log(error);
+      return {
+        data: null,
+        error: error.message || "Failed to create event",
+      }; // Return error
+    }
+  },
 };

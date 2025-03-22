@@ -89,7 +89,7 @@ function Schedule() {
                 }
             </div>
 
-            <AddEventModel isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}/>
+            <AddEventModel isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} eventsServicePlugin={eventsServicePlugin}/>
 
         </>
 

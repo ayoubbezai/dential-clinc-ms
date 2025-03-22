@@ -6,6 +6,7 @@ import { selectClassName } from '@/constant/classNames';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
+import { v4 as uuidv4 } from 'uuid';
 
 const COLORS = [
     { id: "blue", label: "blue", className: "bg-blue-500" },
@@ -16,7 +17,7 @@ const COLORS = [
     { id: "orange", label: "orange", className: "bg-orange-500" },
 ];
 
-const AddEventModel = ({ isOpen, onClose }) => {
+const AddEventModel = ({ isOpen, onClose, eventsServicePlugin }) => {
     const [formData, setFormData] = useState({
         startDate: '',
         startTime: null,
@@ -50,15 +51,6 @@ const AddEventModel = ({ isOpen, onClose }) => {
         // Format people array
         const formattedPeople = formData.people.length === 0 ? null : formData.people;
 
-        console.log({
-            startDate: formData.startDate,
-            startTime: formData.startTime,
-            endDate: formData.endDate,
-            endTime: formData.endTime,
-            title: formData.title,
-            people: formattedPeople,
-            calendarId: formData.calendarId,
-        });
 
         const { data, error } = await EventsService.addEvent(
             formData.startDate,
@@ -69,9 +61,27 @@ const AddEventModel = ({ isOpen, onClose }) => {
             formattedPeople,
             formData.calendarId,
         );
+        // Combine startDate and startTime (if available)
+        const start = formData.startDate + (formData.startTime ? ` ${formData.startTime}` : '');
+
+        // Combine endDate and endTime (if available)
+        const end = formData.endDate + (formData.endTime ? ` ${formData.endTime}` : '');
+
+
+
 
         console.log(data);
         if (data.success) {
+            const event = {
+                id: data.data.id,
+                start: start,
+                end: end,
+                title: formData.title,
+                people: formattedPeople,
+                calendarId: formData.calendarId,
+            };
+            console.log(event)
+            eventsServicePlugin.add(event)
             toast.success('Event created successfully!');
         } else {
             toast.error(error.message || 'Error! Something went wrong.');
