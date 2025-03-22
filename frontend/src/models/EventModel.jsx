@@ -1,27 +1,87 @@
 import React, { useEffect, useState } from "react";
-import { MapPin, Users, Clock, X } from "lucide-react";
+import { MapPin, Users, Clock, X, Palette } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { selectClassName } from "@/constant/classNames";
+import { EventsService } from "@/services/shared/EventsService";
+import toast from "react-hot-toast";
 
-const EventModel = ({ modalPosition, selectedEvent, handleCloseModal }) => {
+const COLORS = [
+    { id: "blue", label: "blue", className: "bg-blue-500" },
+    { id: "red", label: "red", className: "bg-red-500" },
+    { id: "green", label: "green", className: "bg-green-500" },
+    { id: "yellow", label: "yellow", className: "bg-yellow-500" },
+    { id: "purple", label: "purple", className: "bg-purple-500" },
+    { id: "orange", label: "orange", className: "bg-orange-500" },
+];
+
+const EventModel = ({ modalPosition, selectedEvent, handleCloseModal, eventsServicePlugin }) => {
     const [isEdit, setIsEdit] = useState(false);
-    const [editedEvent, setEditedEvent] = useState(selectedEvent);
+    const [editedEvent, setEditedEvent] = useState({
+        ...selectedEvent,
+        startDate: selectedEvent?.start?.split(" ")[0] || "",
+        startTime: selectedEvent?.start?.split(" ")[1] || "",
+        endDate: selectedEvent?.end?.split(" ")[0] || "",
+        endTime: selectedEvent?.end?.split(" ")[1] || "",
+    });
 
     useEffect(() => {
-        setEditedEvent(selectedEvent);
+        if (selectedEvent) {
+            setEditedEvent({
+                ...selectedEvent,
+                startDate: selectedEvent.start?.split(" ")[0] || "",
+                startTime: selectedEvent.start?.split(" ")[1] || "",
+                endDate: selectedEvent.end?.split(" ")[0] || "",
+                endTime: selectedEvent.end?.split(" ")[1] || "",
+            });
+        }
 
-    }, [selectedEvent])
+    }, [selectedEvent]);
+
+    console.log(editedEvent.endTime)
 
     if (!selectedEvent) return null;
 
     const handleChange = (e) => {
         const { name, value } = e.target;
-        setEditedEvent((prev) => ({ ...prev, [name]: value }));
+        setEditedEvent((prev) => ({
+            ...prev,
+            [name]: name === "people" ? value.split(",").map((p) => p.trim()) : value,
+        }));
     };
 
-    const handleSave = () => {
-        console.log("Updated event:", editedEvent);
+    const handleSave = async () => {
+        // Combine date and time for start and end
+        const start = editedEvent.startDate + (editedEvent.startTime ? `T${editedEvent.startTime}` : "");
+        const end = editedEvent.endDate + (editedEvent.endTime ? `T${editedEvent.endTime}` : "");
+
+        const updatedEvent = {
+            ...editedEvent,
+            start,
+            end,
+        };
+
+        console.log("Updated event:", updatedEvent);
+
+        // Call the API to update the event
+        const { data, error } = await EventsService.updateEvent(updatedEvent.id, updatedEvent);
+        if (data.success) {
+            eventsServicePlugin.update(updatedEvent);
+            toast.success("Event updated successfully!");
+        } else {
+            toast.error(error.message || "Failed to update event.");
+        }
+
         setIsEdit(false);
+    };
+
+    const deleteEvent = async () => {
+        const { data, error } = await EventsService.deleteEvent(selectedEvent.id);
+        if (data.success) {
+            eventsServicePlugin.remove(selectedEvent.id);
+            toast.success(data.message);
+        } else {
+            toast.error(error.message);
+        }
     };
 
     return (
@@ -58,36 +118,61 @@ const EventModel = ({ modalPosition, selectedEvent, handleCloseModal }) => {
 
             {/* Event Details */}
             <div className="space-y-1">
+                {/* Start Date and Time */}
                 <p className="flex items-center text-gray-700">
                     <Clock className="w-4 h-4 mr-1 text-gray-500" />
                     {isEdit ? (
-                        <Input
-                            type="date"
-                            name="start"
-                            value={editedEvent.start}
-                            onChange={handleChange}
-                            className={selectClassName}
-
-                        />
+                        <div className="flex gap-2">
+                            <Input
+                                type="date"
+                                name="startDate"
+                                value={editedEvent.startDate}
+                                onChange={handleChange}
+                                className={selectClassName}
+                            />
+                            <Input
+                                type="time"
+                                name="startTime"
+                                value={editedEvent.startTime}
+                                onChange={handleChange}
+                                className={selectClassName}
+                            />
+                        </div>
                     ) : (
-                        <span>{editedEvent.start}</span>
+                        <span>
+                            {editedEvent.startDate} {editedEvent.startTime && `at ${editedEvent.startTime}`}
+                        </span>
                     )}
                 </p>
+
+                {/* End Date and Time */}
                 <p className="flex items-center text-gray-700">
                     <Clock className="w-4 h-4 mr-1 text-gray-500" />
                     {isEdit ? (
-                        <Input
-                            type="date"
-                            name="end"
-                            value={editedEvent.end}
-                            onChange={handleChange}
-                            className={selectClassName}
-
-                        />
+                        <div className="flex gap-2">
+                            <Input
+                                type="date"
+                                name="endDate"
+                                value={editedEvent.endDate}
+                                onChange={handleChange}
+                                className={selectClassName}
+                            />
+                            <Input
+                                type="time"
+                                name="endTime"
+                                value={editedEvent.endTime}
+                                onChange={handleChange}
+                                className={selectClassName}
+                            />
+                        </div>
                     ) : (
-                        <span>{editedEvent.end}</span>
+                        <span>
+                            {editedEvent.endDate} {editedEvent.endTime && `at ${editedEvent.endTime}`}
+                        </span>
                     )}
                 </p>
+
+                {/* Location */}
                 {selectedEvent.location && (
                     <p className="flex items-center text-gray-700">
                         <MapPin className="w-4 h-4 mr-1 text-gray-500" />
@@ -98,14 +183,15 @@ const EventModel = ({ modalPosition, selectedEvent, handleCloseModal }) => {
                                 value={editedEvent.location}
                                 onChange={handleChange}
                                 className={selectClassName}
-
                             />
                         ) : (
                             <span>{editedEvent.location}</span>
                         )}
                     </p>
                 )}
-                {/* {selectedEvent.people && selectedEvent.people.length > 0 && (
+
+                {/* People */}
+                {selectedEvent.people && selectedEvent.people.length > 0 && (
                     <p className="flex items-center text-gray-700 truncate">
                         <Users className="w-4 h-4 mr-1 text-gray-500" />
                         {isEdit ? (
@@ -119,7 +205,30 @@ const EventModel = ({ modalPosition, selectedEvent, handleCloseModal }) => {
                             <span>{editedEvent.people.join(", ")}</span>
                         )}
                     </p>
-                )} */}
+                )}
+
+                {/* Color Selector */}
+                <p className="flex items-center text-gray-700">
+                    <Palette className={`w-4 h-4 mr-1 ${COLORS[editedEvent.calendarId] || "text-gray-500"}`} />
+                    {isEdit ? (
+                        <select
+                            name="calendarId"
+                            value={editedEvent.calendarId}
+                            onChange={handleChange}
+                            className={selectClassName}
+                        >
+                            {COLORS.map((color) => (
+                                <option key={color.id} value={color.id}>
+                                    {color.label}
+                                </option>
+                            ))}
+                        </select>
+                    ) : (
+                        <span className={`px-1 py-[1px] rounded text-[11px] font-medium text-white ${COLORS.find(c => c.id === editedEvent.calendarId)?.className}`}>
+                            {COLORS.find(c => c.id === editedEvent.calendarId)?.label}
+                        </span>
+                    )}
+                </p>
             </div>
 
             {/* Buttons */}
@@ -141,7 +250,7 @@ const EventModel = ({ modalPosition, selectedEvent, handleCloseModal }) => {
                 )}
                 <button
                     onClick={() => {
-                        console.log("Delete event:", selectedEvent);
+                        deleteEvent();
                         handleCloseModal();
                     }}
                     className="px-2 py-1 rounded bg-red-500 text-white hover:bg-red-600 transition-all text-xs"

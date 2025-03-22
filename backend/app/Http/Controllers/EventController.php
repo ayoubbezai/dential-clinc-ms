@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Event;
+use Illuminate\Support\Facades\DB;
 
 class EventController extends Controller
 {
@@ -87,43 +88,56 @@ $paginationData->setCollection($decodedData);
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
-    {
-        try {
-            // Validate the request data
-            $data = $request->validate([
-                'start' => 'required|date',
-                'end' => 'required|date|after_or_equal:start_date',
-                'location' => 'nullable|string|max:255',
-                'title' => 'nullable|string|max:255',
-                'people' => 'nullable|array',
-                'people.*' => 'nullable|string|max:255',
-            ]);
-                        // Get the logged-in user's ID
-            $userId = Auth::id();
+public function store(Request $request)
+{
+    try {
+        // Validate the request data
+        $data = $request->validate([
+            'start_date' => 'required|date',
+            'start_time' => 'nullable|date_format:H:i', // Optional time field
+            'end_date' => 'required|date|after_or_equal:start_date',
+            'end_time' => 'nullable|date_format:H:i', // Optional time field
+            'location' => 'nullable|string|max:255',
+            'title' => 'nullable|string|max:255',
+            'calendarId' => 'nullable|string|max:255',
+            'people' => 'nullable|array',
+            'people.*' => 'nullable|string|max:255',
+        ]);
 
-            // Encode the 'people' array to JSON if it exists
-            if (!empty($data['people'])) {
-                $data['people'] = json_encode($data['people']);
-            }
+        // Get the logged-in user's ID
+        $userId = Auth::id();
 
-            // Create the event
-$event = Event::create(array_merge(["user_id" => $userId], $data));
-
-            return response()->json([
-                'success' => true,
-                'message' => 'Event created successfully',
-                'data' => $event,
-            ], Response::HTTP_CREATED);
-        } catch (\Exception $e) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Failed to create event',
-                'error' => $e->getMessage(),
-            ], Response::HTTP_INTERNAL_SERVER_ERROR);
+        // Encode the 'people' array to JSON if it exists
+        if (!empty($data['people'])) {
+            $data['people'] = json_encode($data['people']);
         }
-    }
 
+        // Create the event with the user ID and separate date/time fields
+        $event = Event::create([
+            'user_id' => $userId,
+            'start_date' => $data['start_date'], // Store start date
+            'start_time' => $data['start_time'] ?? null, // Store start time (nullable)
+            'end_date' => $data['end_date'], // Store end date
+            'end_time' => $data['end_time'] ?? null, // Store end time (nullable)
+            'location' => $data['location'] ?? null, // Default to null if not provided
+            'title' => $data['title'] ?? null, // Default to null if not provided
+            'calendarId' => $data['calendarId'] ?? null, // Default to null if not provided
+            'people' => $data['people'] ?? null, // Default to null array if not provided
+        ]);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Event created successfully',
+            'data' => $event,
+        ], Response::HTTP_CREATED);
+    } catch (\Exception $e) {
+        return response()->json([
+            'success' => false,
+            'message' => 'Failed to create event',
+            'error' => $e->getMessage(),
+        ], Response::HTTP_INTERNAL_SERVER_ERROR);
+    }
+}
     /**
      * Display the specified resource.
      */
@@ -137,7 +151,46 @@ $event = Event::create(array_merge(["user_id" => $userId], $data));
      */
     public function update(Request $request, string $id)
     {
-        // Implement logic to update a specific event
+        // update and event
+        //find the event to update and return 404 if not
+        $event = Event::findOrFail($id);
+
+        //validate data
+
+        $data =$request->validate([
+                'start' => 'required|date',
+                'end' => 'required|date|after_or_equal:start',
+                'location' => 'nullable|string|max:255',
+                'title' => 'nullable|string|max:255',
+                'people' => 'nullable|array',
+                'people.*' => 'nullable|string|max:255',
+        ]);
+
+        try{   
+
+            // Encode the 'people' array to JSON if it exists
+            if (!empty($data['people'])) {
+                $data['people'] = json_encode($data['people']);
+            }
+
+            // Create the event
+        $event->update($data);
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Event updated successfully',
+                'data' => $event,
+            ], Response::HTTP_OK);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to update event',
+                'error' => $e->getMessage(),
+            ], Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+
+
+
     }
 
     /**
@@ -145,7 +198,31 @@ $event = Event::create(array_merge(["user_id" => $userId], $data));
      */
     public function destroy(string $id)
     {
-        // Implement logic to delete a specific event
+        // delete an event
+
+                $event = Event::findOrFail($id);
+        try{
+
+
+            // Create the event
+        $event->delete();
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Event deleted successfully',
+                'data' => [],
+            ], Response::HTTP_OK);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to delete event',
+                'error' => $e->getMessage(),
+            ], Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+
+
+
+        
     }
 public function getEvents(Request $request)
 {
@@ -158,7 +235,17 @@ public function getEvents(Request $request)
 
         // Build the query
         $query = Event::where('user_id', $userId)
-            ->select(['id','start', 'end', 'title', 'location', 'people']); // Select required columns
+            ->select([
+                'id',
+                'start_date',
+                'start_time',
+                'end_date',
+                'end_time',
+                'title',
+                'location',
+                'people',
+                'calendarId'
+            ]);
 
         // Apply date filter
         $startDate = $requestQuery['start'] ?? null;
@@ -170,34 +257,60 @@ public function getEvents(Request $request)
             }
 
             $query->where(function ($q) use ($startDate, $endDate) {
-                $q->whereBetween('start', [$startDate, $endDate])  // Start falls within range
-                  ->orWhereBetween('end', [$startDate, $endDate]); // End falls within range
+                $q->whereBetween('start_date', [$startDate, $endDate])  // Start falls within range
+                  ->orWhereBetween('end_date', [$startDate, $endDate]); // End falls within range
             });
         } else {
-    return response()->json([
-        'success' => false,
-        'message' => 'Start date and end date are required',
-    ], Response::HTTP_BAD_REQUEST);
-}
+            return response()->json([
+                'success' => false,
+                'message' => 'Start date and end date are required',
+            ], Response::HTTP_BAD_REQUEST);
+        }
 
         // Get events
         $events = $query->get();
 
-        // Prepare the response
+        // Decode JSON and combine date/time fields
+$decodedData = $events->map(function ($event) {
+    // Decode the 'people' field if it exists
+    if (!empty($event->people)) {
+        $event->people = json_decode($event->people, true); // Decode JSON to array
+    }
+
+    // Combine start_date and start_time (without minutes)
+    $event->start = $event->start_date;
+    if (!empty($event->start_time)) {
+        // Remove sec from the time
+        $startTimeWithoutSecends = substr($event->start_time, 0, 5); // Extract only hours and min
+        $event->start = $event->start_date . ' ' . $startTimeWithoutSecends; // Use space as a separator
+    }
+
+    // Combine end_date and end_time (without sec)
+    $event->end = $event->end_date;
+    if (!empty($event->end_time)) {
+        // Remove secend from the time 
+        $endTimeWithoutSecends = substr($event->end_time, 0, 5); // Extract only hours and min
+        $event->end = $event->end_date . ' ' . $endTimeWithoutSecends; // Use space as a separator
+    }
+
+    // Remove unnecessary fields
+    unset($event->start_date, $event->start_time, $event->end_date, $event->end_time);
+
+    return $event;
+});
+
         return response()->json([
             'success' => true,
-            'message' => 'Events retrieved successfully',
-            'data' => $events,
+            'data' => $decodedData,
         ], Response::HTTP_OK);
     } catch (\Exception $e) {
         return response()->json([
             'success' => false,
-            'message' => 'Failed to retrieve events',
+            'message' => 'Failed to fetch events',
             'error' => $e->getMessage(),
         ], Response::HTTP_INTERNAL_SERVER_ERROR);
     }
 }
-
 
     /**
      * Validate the number of items per page.

@@ -53,4 +53,48 @@ export const EventsService = {
       }; // Return error message
     }
   },
+
+  async deleteEvent(EventId) {
+    try {
+      const response = await api.delete(`/events/${EventId}`);
+      console.log(response);
+      return { data: response.data, error: null };
+    } catch (error) {
+      console.log(error);
+      return {
+        data: null,
+        error: error.message || "Failed to delete the  the event",
+      };
+    }
+  },
+
+  async addEvent(
+    start_date,
+    start_time,
+    end_date,
+    end_time,
+    title,
+    people,
+    calendarId
+  ) {
+    try {
+      const response = await api.post("/events", {
+        start_date,
+        start_time,
+        end_date,
+        end_time,
+        title,
+        people,
+        calendarId,
+      });
+      console.log(response);
+      return { data: response.data, error: null }; // Return data and no error
+    } catch (error) {
+      console.log(error);
+      return {
+        data: null,
+        error: error.message || "Failed to create event",
+      }; // Return error
+    }
+  },
 };
