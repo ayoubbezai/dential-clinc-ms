@@ -29,6 +29,7 @@
     "@schedule-x/events-service": "^2.22.0",
     "@schedule-x/react": "^2.22.0",
     "@schedule-x/theme-default": "^2.22.0",
+    "@schedule-x/theme-shadcn": "^2.23.0",
     "@tailwindcss/vite": "^4.0.14",
     "axios": "^1.8.3",
     "class-variance-authority": "^0.7.1",

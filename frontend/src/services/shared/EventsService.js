@@ -37,4 +37,20 @@ export const EventsService = {
       }; // Return error message
     }
   },
+
+  async scheduleEvents(start, end) {
+    try {
+      // API call using api
+      const response = await api.get(`/schedule?start=${start}&end=${end}`);
+      console.log(response.data);
+      console.log(response.data.data);
+      return { data: response.data.data, error: null }; // Return data and no error
+    } catch (error) {
+      console.error("Error fetching events:", error);
+      return {
+        data: null,
+        error: error.message || "Failed to fetch events",
+      }; // Return error message
+    }
+  },
 };
