@@ -1,5 +1,5 @@
 import React from 'react'
-import { Badge } from "@/components/ui/badge"
+import { Badge } from "@/components/designSystem/badge"
 
 const PageChange = ({ page, setPage, total_pages, loading }) => {
     return (

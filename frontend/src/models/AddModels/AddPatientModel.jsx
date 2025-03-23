@@ -1,41 +1,33 @@
 import React, { useState } from 'react';
-import Model from './Model';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Textarea } from '@/components/ui/textarea';
+import Model from '../other/Model';
+import { Button } from '@/components/designSystem/button';
+import { Input } from '@/components/designSystem/input';
+import { Label } from '@/components/designSystem/label';
+import { Textarea } from '@/components/designSystem/textarea';
 import { selectClassName } from '@/constant/classNames';
 import { PatientsService } from '@/services/shared/PatientsService';
-import { useEffect } from 'react';
+import { Toaster } from 'react-hot-toast';
 import toast from 'react-hot-toast';
 
 
-const EditPatientModel = ({ isOpen, onClose, currentPatient, refreshPatients }) => {
+const AddPatientModel = ({ isOpen, onClose }) => {
     const [formData, setFormData] = useState({
         patient_name: '',
         phone: '',
         gender: '',
-        age: '',
+        age: Number,
         diseases: '',
         note: '',
     });
-    useEffect(() => {
-        if (currentPatient) {
-            setFormData({
-                patient_name: currentPatient.patient_name || '',
-                phone: currentPatient.phone || '',
-                gender: currentPatient.gender || '',
-                age: currentPatient.age || '',
-                diseases: currentPatient.diseases || '',
-                note: currentPatient.note || '',
-            });
-        }
-    }, [currentPatient]);
 
     const handleChange = (e) => {
         const { name, value } = e.target;
-        setFormData({ ...formData, [name]: value });
+        setFormData({
+            ...formData,
+            [name]: value,
+        });
     };
+
     const handleSelectChange = (value) => {
         setFormData({
             ...formData,
@@ -43,27 +35,26 @@ const EditPatientModel = ({ isOpen, onClose, currentPatient, refreshPatients }) 
         });
     };
 
-
     async function handleSubmit(e) {
         e.preventDefault();
-        console.log("Submitting:", formData);
-        const { data, error } = await PatientsService.updatePatient(currentPatient.id, formData.patient_name, formData.phone, formData.gender, formData.age, formData.diseases, formData.note);
-        if (data?.success) {
-            toast.success('Success! Patient updated successfully');
-            onClose(); // Close modal after successful update
-            refreshPatients()
+        console.log(formData)
+        const { data, error } = await PatientsService.createPatient(formData.patient_name, formData.phone, formData.gender, formData.age, formData.diseases, formData.note);
+        if (data.success) {
+            toast.success('Success! Patient created succefully');
         } else {
-            toast.error(error?.message || 'Error! Something went wrong.');
+            toast.error(error.message || 'Error! Something went wrong.');
+
         }
+        onClose();
     }
+
 
     return (
         <Model isOpen={isOpen} onClose={onClose}>
-            <form onSubmit={handleSubmit}>
-                {/* name */}
-
+            <form onSubmit={handleSubmit} className="space-y-4">
+                {/* Patient Name */}
                 <div>
-                    <Label className={"mb-2 mt-3"} htmlFor="patient_name">Patient Name</Label>
+                    <Label htmlFor="patient_name" className={"mb-1"}>Patient Name</Label>
                     <Input
                         type="text"
                         id="patient_name"
@@ -77,7 +68,7 @@ const EditPatientModel = ({ isOpen, onClose, currentPatient, refreshPatients }) 
 
                 {/* Phone */}
                 <div>
-                    <Label className={"mb-2 mt-3"} htmlFor="phone">Phone</Label>
+                    <Label className={"mb-1"} htmlFor="phone">Phone</Label>
                     <Input
                         type="tel"
                         id="phone"
@@ -92,7 +83,7 @@ const EditPatientModel = ({ isOpen, onClose, currentPatient, refreshPatients }) 
 
                 {/* Gender */}
                 <div>
-                    <Label className={"mb-2 mt-3"} htmlFor="gender">Gender</Label>
+                    <Label className={"mb-1"} htmlFor="gender">Gender</Label>
                     <select
                         className={selectClassName}
                         name="gender"
@@ -107,7 +98,7 @@ const EditPatientModel = ({ isOpen, onClose, currentPatient, refreshPatients }) 
 
                 {/* Age */}
                 <div>
-                    <Label className={"mb-2 mt-3"} htmlFor="age">Age</Label>
+                    <Label className={"mb-1"} htmlFor="age">Age</Label>
                     <Input
                         className={selectClassName}
 
@@ -122,7 +113,7 @@ const EditPatientModel = ({ isOpen, onClose, currentPatient, refreshPatients }) 
 
                 {/* Diseases (Optional) */}
                 <div>
-                    <Label className={"mb-2 mt-3"} htmlFor="diseases">Diseases</Label>
+                    <Label className={"mb-1"} htmlFor="diseases">Diseases</Label>
                     <Input
                         className={selectClassName}
 
@@ -136,9 +127,9 @@ const EditPatientModel = ({ isOpen, onClose, currentPatient, refreshPatients }) 
 
                 {/* Note (Optional) */}
                 <div>
-                    <Label className={"mb-2 mt-3"} htmlFor="note">Note</Label>
+                    <Label className={"mb-1"} htmlFor="note">Note</Label>
                     <Textarea
-                        className={"p-2 border border-gray-300 rounded-lg w-full focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all text-xs mb-3"}
+                        className={`p-2 border border-gray-300 rounded-lg w-full focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all text-xs`}
 
                         id="note"
                         name="note"
@@ -154,8 +145,10 @@ const EditPatientModel = ({ isOpen, onClose, currentPatient, refreshPatients }) 
                     </Button>
                 </div>
             </form>
+            <Toaster />
+
         </Model>
     );
 };
 
-export default EditPatientModel;
+export default AddPatientModel;

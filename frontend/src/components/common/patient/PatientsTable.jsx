@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
-import { Table, TableHeader, TableBody, TableHead, TableCell, TableRow } from '@/components/ui/table';
-import { Badge } from '../../ui/badge';
+import { Table, TableHeader, TableBody, TableHead, TableCell, TableRow } from '@/components/designSystem/table';
+import { Badge } from '../../designSystem/badge';
 import EditIcon from "../../../assets/icons/edit.svg";
 import DeleteIcon from "../../../assets/icons/delete.svg";
 import { PatientsService } from '@/services/shared/PatientsService';
 import toast from 'react-hot-toast';
-import EditPatientModel from '@/models/EditPatientModel';
+import EditPatientModel from '@/models/EditModels/EditPatientModel';
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 

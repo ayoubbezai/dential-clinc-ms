@@ -1,6 +1,6 @@
 
 import React, { useState, useEffect } from 'react';
-import { Button } from '@/components/ui/button';
+import { Button } from '@/components/designSystem/button';
 import SelectRole from '@/components/small/SelectRole';
 
 import PerPage from '@/components/small/PerPage';
@@ -9,8 +9,8 @@ import SearchInTable from '@/components/small/SearchInTable';
 import Sort from '@/components/small/Sort';
 import DateInput from '@/components/small/DateInput';
 import UsersTable from '@/components/common/users/UsersTable';
-import useUser from '@/hooks/useUser';
-import AddReceptionistModel from '@/models/AddReceptionistModel';
+import useUser from '@/hooks/lists/useUser';
+import AddReceptionistModel from '@/models/AddModels/AddReceptionistModel';
 const UsersList = () => {
   const {
     users,

@@ -1,5 +1,5 @@
 
-import useAppointment from '@/hooks/useAppointment';
+import useAppointment from '@/hooks/lists/useAppointment';
 import AppointmentsTable from '@/components/common/appointments/AppointmentsTable';
 import PerPage from '@/components/small/PerPage';
 import PageChange from '@/components/small/PageChange';

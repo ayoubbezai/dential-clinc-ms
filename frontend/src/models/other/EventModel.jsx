@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { MapPin, Users, Clock, X, Palette } from "lucide-react";
-import { Input } from "@/components/ui/input";
+import { Input } from "@/components/designSystem/input";
 import { selectClassName } from "@/constant/classNames";
 import { EventsService } from "@/services/shared/EventsService";
 import toast from "react-hot-toast";
@@ -39,7 +39,7 @@ const EventModel = ({ modalPosition, selectedEvent, handleCloseModal, eventsServ
     }
     const adjestuedLeft = () => {
         const windowWidth = window.innerWidth;
-        if ((windowWidth-modalPosition.x) > windowWidth - 300) {
+        if ((windowWidth - modalPosition.x) > windowWidth - 300) {
             return modalPosition.x + 300;
         } else {
             return modalPosition.x

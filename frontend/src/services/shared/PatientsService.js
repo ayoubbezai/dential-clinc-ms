@@ -1,4 +1,4 @@
-import api from "../api";
+import api from "../other/api";
 
 export const PatientsService = {
   // Get all patients with filters and pagination
@@ -58,7 +58,15 @@ export const PatientsService = {
       }; // Return error
     }
   },
-  async updatePatient(patient_id,patient_name, phone, gender, age, diseases, note) {
+  async updatePatient(
+    patient_id,
+    patient_name,
+    phone,
+    gender,
+    age,
+    diseases,
+    note
+  ) {
     try {
       const response = await api.put(`/patients/${patient_id}`, {
         patient_name,
@@ -69,7 +77,7 @@ export const PatientsService = {
         note,
       });
       console.log(response);
-      return { data: response.data, error: null }; 
+      return { data: response.data, error: null };
     } catch (error) {
       console.log(error);
       return {

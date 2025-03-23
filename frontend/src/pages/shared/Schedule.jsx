@@ -4,21 +4,18 @@ import { createEventsServicePlugin } from '@schedule-x/events-service';
 import { createViewMonthGrid, createViewDay } from '@schedule-x/calendar';
 import '@schedule-x/theme-default/dist/index.css';
 import UseSchedule from '@/hooks/UseSchedule';
-import EventModel from '@/models/EventModel';
+import EventModel from '@/models/other/EventModel';
 import "../../style/index.css"
 import { Eventscolors } from '@/utils/EventsColor';
-import { Button } from '@/components/ui/button';
-import AddEventModel from '@/models/AddEventModel';
+import { Button } from '@/components/designSystem/button';
+import AddEventModel from '@/models/AddModels/AddEventModel';
 function Schedule() {
     const eventsServicePlugin = useState(() => createEventsServicePlugin())[0];
-    const { events, setStart, setEnd, start, end } = UseSchedule();
+    const { events, setStart, setEnd } = UseSchedule();
     const [prevEvents, setPrevEvents] = useState([]);
     const [selectedEvent, setSelectedEvent] = useState(null);
     const [modalPosition, setModalPosition] = useState({ x: 0, y: 0 });
     const [isModalOpen, setIsModalOpen] = useState(false)
-
-
-
 
     function DateUpdate(newStart, newEnd) {
         setStart(newStart);
@@ -60,7 +57,6 @@ function Schedule() {
         const newEvents = events.filter(event => !prevEvents.some(prev => prev.id === event.id));
         if (newEvents.length > 0) {
             newEvents.forEach(event => eventsServicePlugin.add(event));
-
         }
 
         const deletedEvents = prevEvents.filter(prev => !events.some(event => event.id === prev.id));
@@ -89,7 +85,7 @@ function Schedule() {
                 }
             </div>
 
-            <AddEventModel isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} eventsServicePlugin={eventsServicePlugin}/>
+            <AddEventModel isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} eventsServicePlugin={eventsServicePlugin} />
 
         </>
 

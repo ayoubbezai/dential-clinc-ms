@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import Model from './Model'; // Ensure this path is correct
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
+import Model from '../other/Model'; // Ensure this path is correct
+import { Button } from '@/components/designSystem/button';
+import { Input } from '@/components/designSystem/input';
+import { Label } from '@/components/designSystem/label';
 import { Toaster } from 'react-hot-toast';
 import toast from 'react-hot-toast';
 import { UsersService } from '@/services/shared/UsersService';

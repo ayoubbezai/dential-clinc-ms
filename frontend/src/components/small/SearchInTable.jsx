@@ -1,15 +1,15 @@
 import React, { useCallback } from 'react';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
+import { Input } from '@/components/designSystem/input';
+import { Label } from '@/components/designSystem/label';
 import { Search } from "lucide-react";
 import { debounce } from 'lodash';
 
 const SearchInTable = ({ search, setSearch }) => {
-    
+
     const handleSearchChange = useCallback(
         debounce((value) => {
             setSearch(value);
-        }, 500), 
+        }, 500),
         []
     );
 
@@ -25,7 +25,7 @@ const SearchInTable = ({ search, setSearch }) => {
             <Input
                 className="pl-8 border border-gray-300 rounded-lg w-full focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
                 id="search"
-                defaultValue={search} 
+                defaultValue={search}
                 onChange={onChange}
                 placeholder="Search ..."
             />

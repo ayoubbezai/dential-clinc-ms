@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import usePatients from '@/hooks/usePatients';
-import { Button } from '@/components/ui/button';
+import usePatients from '@/hooks/lists/usePatients';
+import { Button } from '@/components/designSystem/button';
 import SelectGender from '@/components/small/SelectGender';
 import PatientsTable from '@/components/common/patient/PatientsTable';
 
-import AddPatientModel from '@/models/AddPatientModel';
+import AddPatientModel from '@/models/AddModels/AddPatientModel';
 import PerPage from '@/components/small/PerPage';
 import PageChange from '@/components/small/PageChange';
 import SearchInTable from '@/components/small/SearchInTable';
@@ -31,7 +31,7 @@ const PatientsList = () => {
     perPage,
     setPerPage,
     loading,
-    fetchPatients 
+    fetchPatients
   } = usePatients();
 
   const [isModalOpen, setIsModalOpen] = useState(false);

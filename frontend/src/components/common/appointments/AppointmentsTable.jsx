@@ -1,14 +1,14 @@
 import React, { useState } from 'react'
 
-import { Table, TableHeader, TableBody, TableHead, TableCell, TableRow } from '@/components/ui/table';
-import { Badge } from '@/components/ui/badge';
+import { Table, TableHeader, TableBody, TableHead, TableCell, TableRow } from '@/components/designSystem/table';
+import { Badge } from '@/components/designSystem/badge';
 import EditIcon from "../../../assets/icons/edit.svg";
 import DeleteIcon from "../../../assets/icons/delete.svg";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 import { AppointmentService } from '@/services/shared/AppointmentsService';
 import toast from 'react-hot-toast';
-import EditAppointmentModel from '@/models/EditAppointmentModel';
+import EditAppointmentModel from '@/models/EditModels/EditAppointmentModel';
 import { getStatusClasses } from '@/utils/getStatusClasses';
 
 const AppointmentsTable = ({ appointments, appointmentloading, fetchAppointments }) => {

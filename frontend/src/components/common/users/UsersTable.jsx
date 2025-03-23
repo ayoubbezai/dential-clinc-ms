@@ -1,5 +1,5 @@
-import { Table, TableHeader, TableBody, TableHead, TableCell, TableRow } from '@/components/ui/table';
-import { Badge } from '../../ui/badge';
+import { Table, TableHeader, TableBody, TableHead, TableCell, TableRow } from '@/components/designSystem/table';
+import { Badge } from '../../designSystem/badge';
 import EditIcon from "../../../assets/icons/edit.svg";
 import DeleteIcon from "../../../assets/icons/delete.svg";
 import Skeleton from "react-loading-skeleton";
@@ -8,7 +8,7 @@ import { getRoleClasses } from '@/utils/getRoleClasses';
 import { UsersService } from '@/services/shared/UsersService';
 import { useState } from 'react';
 import toast from 'react-hot-toast';
-import EditUserModel from '@/models/EditUserModel';
+import EditUserModel from '@/models/EditModels/EditUserModel';
 
 const UsersTable = ({ users, fetchUsers, userLoading }) => {
 

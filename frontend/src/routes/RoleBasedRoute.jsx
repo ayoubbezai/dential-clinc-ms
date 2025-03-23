@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { Navigate, Outlet } from "react-router-dom";
-import { useRole } from "@/hooks/useRole";
-import { useAuth } from "@/hooks/useAuth";
+import { useRole } from "@/hooks/Auth/useRole";
+import { useAuth } from "@/hooks/Auth/useAuth";
 
 const RoleBasedRoute = ({ allowedRoles }) => {
     const { role } = useRole();

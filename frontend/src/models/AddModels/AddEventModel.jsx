@@ -1,12 +1,11 @@
 import React, { useState } from 'react';
-import Model from './Model';
+import Model from '../other/Model';
 import { EventsService } from '@/services/shared/EventsService';
 import { toast, Toaster } from 'react-hot-toast';
 import { selectClassName } from '@/constant/classNames';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Button } from '@/components/ui/button';
-import { v4 as uuidv4 } from 'uuid';
+import { Input } from '@/components/designSystem/input';
+import { Label } from '@/components/designSystem/label';
+import { Button } from '@/components/designSystem/button';
 
 const COLORS = [
     { id: "blue", label: "blue", className: "bg-blue-500" },

@@ -3,8 +3,8 @@ import React, { useState } from 'react';
 import { MdMenu, MdMenuOpen } from "react-icons/md";
 import LogoImg from '../assets/logos/logo_1-removebg-preview.png';
 import SideBarLinks from '@/components/sideBar/ReceptionistSideBarLinks';
-import { Button } from '@/components/ui/button';
-import { useAuth } from '@/hooks/useAuth';
+import { Button } from '@/components/designSystem/button';
+import { useAuth } from '@/hooks/Auth/useAuth';
 
 const SideBarReceptionist = () => {
     const [isOpen, setIsOpen] = useState(true);

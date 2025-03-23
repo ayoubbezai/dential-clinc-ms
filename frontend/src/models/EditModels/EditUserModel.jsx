@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import Model from './Model';
+import Model from '../other/Model';
 import { AppointmentService } from '@/services/shared/AppointmentsService';
 import toast from 'react-hot-toast';
 import { selectClassName } from '@/constant/classNames';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
+import { Button } from '@/components/designSystem/button';
+import { Input } from '@/components/designSystem/input';
+import { Label } from '@/components/designSystem/label';
 import { UsersService } from '@/services/shared/UsersService';
 
 const EditUserModel = ({ isOpen, onClose, currentUser, refreshUsers }) => {

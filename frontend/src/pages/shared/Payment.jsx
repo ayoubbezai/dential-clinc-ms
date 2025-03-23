@@ -1,6 +1,6 @@
 import React from 'react'
 import PaymentChart from '@/components/charts/PaymentChart'
-import { Card } from '@/components/ui/card'
+import { Card } from '@/components/designSystem/card'
 import PaymentCard from '@/components/small/PaymentCard'
 import RecentTransactions from '@/components/small/RecentTransactions'
 

@@ -1,4 +1,4 @@
-import api from "../api";
+import api from "../other/api";
 export const EventsService = {
   async getEvents(
     per_page,

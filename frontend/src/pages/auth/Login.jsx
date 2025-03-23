@@ -1,10 +1,10 @@
 import LoginImage from "../../assets/images/auth/ozkan-guner-kEbwxfC33qY-unsplash.jpg"
 import logo from "../../assets/logos/logo_2-removebg-preview.png"
-import { useLogin } from "../../hooks/useLogin";
+import { useLogin } from "../../hooks/Auth/useLogin";
 import LoadingButton from "@/components/small/LoadingButton";
 import { PasswordInput } from "@/components/small/PasswordInput";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+import { Input } from "@/components/designSystem/input";
+import { Label } from "@/components/designSystem/label";
 const Login = () => {
     const {
         emailRef,
