@@ -8,6 +8,7 @@ import toast from 'react-hot-toast';
 import EditPatientModel from '@/models/EditModels/EditPatientModel';
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
+import { Link } from 'react-router-dom';
 
 const PatientsTable = ({ patients, fetchPatients, patientLoading }) => {
 
@@ -61,7 +62,7 @@ const PatientsTable = ({ patients, fetchPatients, patientLoading }) => {
                     ) : (
                         patients.map((patient) => (
                             <TableRow key={patient.id}>
-                                <TableCell>{patient.patient_name}</TableCell>
+                                <TableCell><Link to={`/patient/${patient.id}`}>{patient.patient_name}</Link></TableCell>
                                 <TableCell>{patient.phone}</TableCell>
                                 <TableCell className="text-primary">
                                     {patient?.user?.email || "No Account"}

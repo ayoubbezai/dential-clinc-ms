@@ -17,10 +17,11 @@ const DashboardLayout = ({ children }) => {
         "/appointments_list",
         "/payment",
         "/messanger",
+        "/patient/"
     ];
 
-    const showSidebar = sidebarPaths.includes(location.pathname);
-
+    const showSidebar = sidebarPaths.includes(location.pathname) ||
+        location.pathname.startsWith("/patient/");
     const renderSidebar = () => {
         if (user?.role === "dentist") {
             return <SideBarDentist />;

@@ -11,6 +11,7 @@ import PatientsList from "../pages/shared/PatientsList";
 import AppointmentList from "../pages/shared/AppointmentList";
 import Messanger from "../pages/shared/Messanger";
 import Payment from "../pages/shared/Payment";
+import PatientDetails from "@/pages/dentist/PatientDetails";
 
 const AppRoutes = () => {
     return (
@@ -28,6 +29,7 @@ const AppRoutes = () => {
                 {/* Shared Routes for Dentist & Receptionist */}
                 <Route element={<RoleBasedRoute allowedRoles={["dentist", "receptionist"]} />}>
                     <Route path="/patients_list" element={<PatientsList />} />
+                    <Route path="/patient/:id" element={<PatientDetails />} />
                     <Route path="/schedule" element={<Schedule />} />
                     <Route path="/users_list" element={<UsersList />} />
                     <Route path="/appointments_list" element={<AppointmentList />} />
