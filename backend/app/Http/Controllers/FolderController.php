@@ -194,7 +194,8 @@ public function update(Request $request, string $id)
             "folder_name" => "required|string|max:255",
             "patient_id" => "required|integer|exists:patients,id",
             "price" => "required|integer|min:0",
-            "status" => ["nullable", Rule::in(['working_on_it', 'completed', 'pending'])],
+            "status" => "nullable|string|in:working_on_it,completed","pending",
+
             "visits" => "nullable|array",
             "visits.*.id" => "nullable|integer|exists:folder_visits,id",
             "visits.*.dent" => "nullable|integer",
