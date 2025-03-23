@@ -4,7 +4,7 @@ import EditIcon from "../../../assets/icons/edit.svg";
 import DeleteIcon from "../../../assets/icons/delete.svg";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
-import { getRoleClasses } from '@/utils/getRoleClasses';
+import { getRoleClasses } from '@/utils/classes/getRoleClasses';
 import { UsersService } from '@/services/shared/UsersService';
 import { useState } from 'react';
 import toast from 'react-hot-toast';

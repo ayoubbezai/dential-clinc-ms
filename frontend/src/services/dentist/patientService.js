@@ -10,4 +10,5 @@ export const patientService = {
       return { data: null, error: err.message };
     }
   },
+
 };

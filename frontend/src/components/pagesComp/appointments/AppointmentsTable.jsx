@@ -9,7 +9,7 @@ import "react-loading-skeleton/dist/skeleton.css";
 import { AppointmentService } from '@/services/shared/AppointmentsService';
 import toast from 'react-hot-toast';
 import EditAppointmentModel from '@/models/EditModels/EditAppointmentModel';
-import { getStatusClasses } from '@/utils/getStatusClasses';
+import { getStatusClasses } from '@/utils/classes/getStatusClasses';
 
 const AppointmentsTable = ({ appointments, appointmentloading, fetchAppointments }) => {
 
