@@ -3,38 +3,37 @@ import React, { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/designSystem/button';
-import { FaStickyNote, FaRegStickyNote, FaUserInjured, FaChevronRight } from 'react-icons/fa';
+import { FaStickyNote, FaRegStickyNote, FaUserInjured, FaTh, FaList, FaPlus } from 'react-icons/fa';
 import { HiArrowNarrowRight } from 'react-icons/hi';
 import { Table, TableBody, TableCell, TableRow, TableHead, TableHeader } from '@/components/designSystem/table';
 import { Badge } from '@/components/designSystem/badge';
-import FolderIcon from "../../assets/icons/folder.svg"
+import FolderIcon from "../../assets/icons/folder2.svg";
 import EditIcon from "../../assets/icons/edit.svg";
 import DeleteIcon from "../../assets/icons/delete.svg";
+import SearchInTable from '@/components/small/SearchInTable';
+import Sort from '@/components/small/Sort';
+import Skeleton from 'react-loading-skeleton';
+import PerPage from '@/components/small/PerPage';
+import PageChange from '@/components/small/PageChange';
 const PatientDetails = () => {
   const { id } = useParams();
   const { error, patient, loading, folders } = usePatient(id);
   const [isNoteOpen, setIsNoteOpen] = useState(false);
+  const [view, setView] = useState("list");
 
-  console.log(patient);
-  console.log("folders", folders);
-  console.log("folders", folders?.data?.folders);
-  console.log(id);
-
-  if (loading) return <p>Loading...</p>;
   if (error) return <p className="text-red-500">Error: {error}</p>;
 
   return (
     <div className="w-full px-8 bg-background py-5">
       <p className="flex items-center gap-2 text-gray-700">
-        <FaUserInjured className="text-blue-600" /> {/* Patient icon */}
+        {/* <FaUserInjured className="text-blue-600" /> */}
         <Link to="/patients_list" className="text-blue-600 font-semibold">Patients</Link>
-        <HiArrowNarrowRight className="text-gray-500 mt-1" /> {/* Arrow icon */}
+        <HiArrowNarrowRight className="text-gray-500 mt-1" />
         <span className="text-gray-500">{patient?.patient_name}</span>
       </p>
       <div className="grid grid-cols-12 gap-4 my-4">
-        {/* Patient Details Section */}
-        <div className="col-span-4 bg-white p-3 py-4 shadow-md rounded-lg py-5 ">
-          <h1 className="text-xl font-semibold mb-[2px] text-[#1E1E1E]">{patient?.patient_name}</h1>
+        <div className="col-span-4 bg-white p-3 py-4 shadow-md rounded-lg">
+          <h1 className="text-xl font-semibold mb-2 text-[#1E1E1E]">{patient?.patient_name}</h1>
           <p className='text-sm ml-1'>{patient?.user?.email || "No account available"}</p>
 
           <div className="flex relative flex-col justify-center gap-2 mt-6">
@@ -47,7 +46,6 @@ const PatientDetails = () => {
                 <span className="mx-auto">{isNoteOpen ? "Hide Note" : "See Note"}</span>
                 {isNoteOpen ? <FaStickyNote /> : <FaRegStickyNote />}
               </Button>
-
               {isNoteOpen && (
                 <div className="ml-3 bg-blur-xs bg-white/90 absolute self-center text-center p-2 shadow-md z-50 rounded">
                   <div className="bg-[#F5F5FD] p-2">
@@ -59,70 +57,100 @@ const PatientDetails = () => {
           </div>
         </div>
 
-        <div className="col-span-8 bg-white px-3 pt-4 pb-5 space-y-1 shadow-md rounded-lg">
-          <div className='w-5/6 bg-white mx-auto px-4'>
-            <div className='flex flex-wrap items-center justify-between gap-4 py-4 mt-4'>
-              <SearchInTable search={search} setSearch={setSearch} />
-              <div className='flex flex-wrap items-center gap-2'>
-                <SelectGender gender={gender} setGender={setGender} />
-                <DateInput startDate={startDate} endDate={endDate} setStartDate={setStartDate} setEndDate={setEndDate} />
-                <Sort sortBy={sortBy} sortDirection={sortDirection} setSortBy={setSortBy} setSortDirection={setSortDirection} />
+        <div className="col-span-8 bg-white p-4 shadow-md rounded-lg">
+          <h1 className="text-xl font-semibold text-[#1E1E1E] mb-2">Patient Details</h1>
+          <hr className='mb-5 text-gray-400' />
+          <div className="grid grid-cols-2 gap-5 text-sm text-[#4A4A4A]">
+            <p><strong>Full Name:</strong> {patient?.patient_name || "N/A"}</p>
+            <p><strong>Phone:</strong> {patient?.phone || "N/A"}</p>
+            <p><strong>Age:</strong> {patient?.age || "N/A"}</p>
+            <p><strong>Gender:</strong> {patient?.gender || "N/A"}</p>
+            <p><strong>Patient ID:</strong> {patient?.id || "N/A"}</p>
+            <p><strong>Diseases:</strong> {patient?.diseases || "No known diseases"}</p>
+          </div>
+        </div>
+
+        <div className="col-span-12 relative bg-white p-3 px-4 shadow-md rounded-lg">
+          <div className='flex items-center justify-between pb-0 px-2'>
+            <SearchInTable />
+            <div className='flex items-center gap-2'>
+
+              <div className="flex  rounded-lg   p-1 transition-all  duration-300    ">
+                <button
+                  className={`px-4 py-2 rounded-l-lg transition-colors duration-300 ${view === "list" ? "bg-blue-600/90 text-white" : "bg-gray-200 text-gray-600"}`}
+                  onClick={() => setView("list")}>
+                  <FaList />
+                </button>
+                <button
+                  className={`px-4 py-2 rounded-r-lg transition-colors duration-300 ${view === "grid" ? "bg-blue-600/90 text-white" : "bg-gray-200 text-gray-600"}`}
+                  onClick={() => setView("grid")}>
+                  <FaTh />
+                </button>
               </div>
+              <Button size={"sm"} className="bg-blue-600 text-white mx-2  rounded-lg" onClick={() => alert('Add Folder Clicked')}><FaPlus size={12} /></Button>
             </div>
-          <h1 className="text-xl font-semibold text-[#1E1E1E]  mb-2">Patient Details</h1>
-          <hr className='mb-4 text-gray-400' />
-          <div className="grid grid-cols-2 pl-2 gap-4 text-[#4A4A4A] text-sm">
-            <p><strong className="text-[#1E1E1E]">Full Name:</strong> {patient?.patient_name || "N/A"}</p>
-            <p><strong className="text-[#1E1E1E]">Phone:</strong> {patient?.phone || "N/A"}</p>
-            <p><strong className="text-[#1E1E1E]">Age:</strong> {patient?.age || "N/A"}</p>
-            <p><strong className="text-[#1E1E1E]">Gender:</strong> {patient?.gender || "N/A"}</p>
-            <p><strong className="text-[#1E1E1E]">Patient ID:</strong> {patient?.id || "N/A"}</p>
-            <p><strong className="text-[#1E1E1E]">Diseases: </strong>{patient?.diseases || "No known diseases"}</p>
-          </div>
+
           </div>
 
+          <div className=" pt-4">
+            {view === "list" ? (
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>Folder Name</TableHead>
+                    <TableHead>Price</TableHead>
+                    <TableHead>Status</TableHead>
+                    <TableHead>Actions</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {loading ? (
+                    Array.from({ length: 5 }).map((_, index) => (
+                      <TableRow key={index}>
+                        <TableCell><Skeleton height={20} width={'70%'} /></TableCell>
+                        <TableCell><Skeleton height={20} width={'40%'} /></TableCell>
+                        <TableCell><Skeleton height={20} width={'50%'} /></TableCell>
+                        <TableCell><Skeleton height={20} width={'30%'} /></TableCell>
+                      </TableRow>
+                    ))) : (
+
+                    folders?.data?.folders?.map((folder, index) => (
+                      <TableRow key={index}>
+                        <TableCell className="flex items-center gap-3">
+                          <img src={FolderIcon} alt="folder" className='w-10 h-8' />
+                          <span>{folder.folder_name}</span>
+                        </TableCell>
+                        <TableCell>${folder.price}</TableCell>
+                        <TableCell>
+                          <Badge variant="default">{folder.status}</Badge>
+                        </TableCell>
+                        <TableCell className="flex gap-2">
+                          <button disabled={loading}><img src={EditIcon} alt="edit" className="w-5" /></button>
+                          <button disabled={loading}><img src={DeleteIcon} alt="delete" className="w-5" /></button>
+                        </TableCell>
+                      </TableRow>
+                    )))}
+                </TableBody>
+              </Table>
+            ) : (
+              <div className="grid grid-cols-4 gap-4 px-2 pb-2 max-h-[350px] overflow-y-auto">
+                {folders?.data?.folders?.map((folder, index) => (
+                  <div key={index} className="p-4 shadow-md rounded-lg bg-gray-50 text-center">
+                    <img src={FolderIcon} alt="folder" className='w-12 h-12 mx-auto' />
+                    <p className="font-semibold mt-2">{folder.folder_name}</p>
+                    <p className="text-sm">${folder.price}</p>
+                    <p className="text-xs text-gray-500">{folder.status}</p>
+                  </div>
+                ))}
+              </div>
+            )}
+            <div className='flex justify-between items-center pb-3 px-4 mt-4'>
+              <PageChange />
+              <p className='text-[#223354] text-sm '>Page <span className='font-semibold'></span> of 1</p>
+              <PerPage />
+            </div>
+          </div>
         </div>
-        {/* row two */}
-        <div className="col-span-12 bg-white p-3 shadow-md rounded-lg">
-
-
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>Folder Name</TableHead>
-                <TableHead>Price</TableHead>
-                <TableHead>Status</TableHead>
-                <TableHead>ACTIONS</TableHead>
-
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {folders?.data?.folders?.map((folder, index) => (
-                <TableRow key={index}>
-                  <TableCell className={"flex items-center gap-3"}><img src={FolderIcon} alt="folder" className='w-10 h-8' /><span>{folder.folder_name}</span></TableCell>
-                  <TableCell>${folder.price}</TableCell>
-                  <TableCell>
-                    <Badge variant="default">
-                      {folder.status}
-                    </Badge>
-                  </TableCell>
-                  <TableCell>
-                    <div className="flex gap-2">
-                      <button className="cursor-pointer"  disabled={loading}
-                      >
-                        <img src={EditIcon} alt="edit" className="w-5" />
-                      </button>
-                      <button className="cursor-pointer" disabled={loading}>
-                        <img src={DeleteIcon} alt="delete" className="w-5" />
-                      </button>
-                    </div>
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </div>
-
       </div>
     </div>
   );
