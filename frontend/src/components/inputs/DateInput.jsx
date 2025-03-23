@@ -7,7 +7,7 @@ const DateInput = ({ startDate, endDate, setStartDate, setEndDate }) => {
   return (
     <>
       <Input
-        className={selectClassName}
+        className={`${selectClassName} `}
 
         type="date"
         value={startDate}

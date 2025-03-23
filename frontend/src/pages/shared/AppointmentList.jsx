@@ -5,7 +5,7 @@ import PerPage from '@/components/small/PerPage';
 import PageChange from '@/components/small/PageChange';
 import SearchInTable from '@/components/small/SearchInTable';
 import Sort from '@/components/small/Sort';
-import DateInput from '@/components/small/DateInput';
+import DateInput from '@/components/inputs/DateInput';
 import SelectStatusAppointment from '@/components/small/SelectStatusAppointment';
 const AppointmentList = () => {
 

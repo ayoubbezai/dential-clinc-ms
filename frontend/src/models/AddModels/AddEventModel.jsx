@@ -3,25 +3,23 @@ import Model from "../other/Model";
 import { EventsService } from "@/services/shared/EventsService";
 import { toast, Toaster } from "react-hot-toast";
 import { Button } from "@/components/designSystem/button";
-import TitleInput from "@/components/inputs/TitleInput";
 import DateInput from "@/components/inputs/DateInput";
 import TimeInput from "@/components/inputs/TimeInput";
-import PeopleInput from "@/components/inputs/PeopleInput";
-import EventColorSelect from "@/components/inputs/EventColorSelect";
+import SelectInput from "@/components/inputs/SelectInput";
 import { handleInputChange } from "@/utils/inputChange";
-import { initializeFormData,handlePeopleChange } from "@/utils/models/addEventModel";
-
-export const formattedPeople =(formData)=>{
-    return formData.people.length ? formData.people : null;
-}
+import { initializeFormData } from "@/utils/models/addEventModel";
+import TextInput from "@/components/inputs/TextInput";
+import { COLORS } from "@/constant/EventsColor";
+import { Input } from "@/components/designSystem/input";
+import { Label } from "@/components/designSystem/label";
+import { selectClassName } from "@/constant/classNames";
 const AddEventModel = ({ isOpen, onClose, eventsServicePlugin }) => {
     const [formData, setFormData] = useState(initializeFormData());
 
+    const formattedPeople = formData.people.length ? formData.people : null;
 
-    const formattedPeople = formattedPeople(formData)
     const handleSubmit = async (e) => {
         e.preventDefault();
-
 
         const { data, error } = await EventsService.addEvent(
             formData.startDate,
@@ -52,21 +50,82 @@ const AddEventModel = ({ isOpen, onClose, eventsServicePlugin }) => {
     return (
         <Model isOpen={isOpen} onClose={onClose}>
             <form onSubmit={handleSubmit} className="space-y-4">
-                <TitleInput value={formData.title}onChange={handleInputChange(setFormData)}/>
+                <TextInput
+
+                    id="title"
+                    label="Title"
+                    value={formData.title}
+                    onChange={(e) => handleInputChange(e, setFormData)}
+                    required
+                />
 
                 <div className="flex">
-                    <DateInput label="Start Date" name="startDate" value={formData.startDate}onChange={handleInputChange(setFormData)}/>
-                    <TimeInput label="Start Time (Optional)" name="startTime" value={formData.startTime}onChange={handleInputChange(setFormData)}className="ml-10" />
+                    <Input
+                        type="date"                        label="Start Date"
+                        name="startDate"
+                        value={formData.startDate}
+                        onChange={(e) => handleInputChange(e, setFormData)}
+                        className={selectClassName}
+
+                    />
+                    <Input
+                    
+                        type="time"
+                        label="Start Time (Optional)"
+                        name="startTime"
+                        value={formData.startTime}
+                        onChange={(e) => handleInputChange(e, setFormData)}
+                        className={`${selectClassName} ml-10"`}
+                    />
                 </div>
 
                 <div className="flex">
-                    <DateInput label="End Date" name="endDate" value={formData.endDate}onChange={handleInputChange(setFormData)}/>
-                    <TimeInput label="End Time (Optional)" name="endTime" value={formData.endTime}onChange={handleInputChange(setFormData)}className="ml-10" />
+                    <Input
+                        className={selectClassName}
+
+                        type="date"
+
+                        label="End Date"
+                        name="endDate"
+                        value={formData.endDate}
+                        onChange={(e) => handleInputChange(e, setFormData)}                    />
+                    <Input
+                        type="time"
+                        className={`${selectClassName} ml-10"`}
+
+                        label="End Time (Optional)"
+                        name="endTime"
+                        value={formData.endTime}
+                        onChange={(e) => handleInputChange(e, setFormData)}
+                    />
                 </div>
 
-                <EventColorSelect value={formData.calendarId}onChange={handleInputChange(setFormData)}/>
+                <SelectInput
+                    className={selectClassName}
 
-                <PeopleInput value={formData.people.join(", ")} onChange={handlePeopleChange(setFormData)} />
+                    id="calendarId"
+                    label="Event Color"
+                    value={formData.calendarId}
+                    options={COLORS.map((color) => ({
+                        value: color.value,
+                        label: color.label,
+                    }))}
+                    onChange={(value) => setFormData({ ...formData, calendarId: value })}
+                />
+                <Label>people</Label>
+                <Input
+                className={selectClassName}
+                    type="text"
+                    name="people"
+                    value={formData.people ? formData.people.join(", ") : ""}
+                    onChange={(e) => {
+                        const peopleArray = e.target.value.split(",").map((person) => person.trim());
+                        setFormData((prev) => ({
+                            ...prev,
+                            people: peopleArray,
+                        }));
+                    }}
+                />
 
                 <div>
                     <Button type="submit" className="w-full text-white">

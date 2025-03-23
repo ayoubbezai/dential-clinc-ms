@@ -5,7 +5,7 @@ import { selectClassName } from "@/constant/classNames";
 
 const PasswordInput = ({ value, onChange, id, label, placeholder }) => {
     return (
-        <div className="my-4">
+        <div className="">
             <Label htmlFor={id} className="mb-2 mt-3">{label}</Label>
             <Input
                 type="password"

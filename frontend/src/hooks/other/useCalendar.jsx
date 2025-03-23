@@ -5,8 +5,8 @@ import { createViewMonthGrid, createViewDay } from '@schedule-x/calendar';
 import '@schedule-x/theme-default/dist/index.css';
 import UseSchedule from '@/hooks/other/UseSchedule';
 import "../../style/index.css";
-import { Eventscolors } from '@/utils/EventsColor';
-import { syncEvents,DateUpdate } from '@/utils/ScheduleHelp';
+import { Eventscolors } from '@/constant/EventsColor';
+import { syncEvents, DateUpdate } from '@/utils/ScheduleHelp';
 
 
 

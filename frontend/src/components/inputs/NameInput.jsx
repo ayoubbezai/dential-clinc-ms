@@ -5,8 +5,8 @@ import { selectClassName } from "@/constant/classNames";
 
 const NameInput = ({ value, onChange }) => {
     return (
-        <div className="my-4">
-            <Label htmlFor="name" className="mb-2 mt-3">Name</Label>
+        <div className="">
+            <Label htmlFor="name" className="mb-2 mt-2">Name</Label>
             <Input
                 type="text"
                 id="name"
@@ -15,6 +15,8 @@ const NameInput = ({ value, onChange }) => {
                 value={value}
                 onChange={onChange}
                 required
+                placeholder={`Enter name...`}
+
             />
         </div>
     );

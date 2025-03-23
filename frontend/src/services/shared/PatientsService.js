@@ -68,6 +68,7 @@ export const PatientsService = {
     note
   ) {
     try {
+      console.log(patient_name);
       const response = await api.put(`/patients/${patient_id}`, {
         patient_name,
         phone,

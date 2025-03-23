@@ -20,10 +20,17 @@ const handleSubmit = async (
 ) => {
   e.preventDefault();
   console.log("Submitting:", formData);
+const { patient_name, phone, gender, age, diseases, note } = formData;
+  
 
   const { data, error } = await PatientsService.updatePatient(
     currentPatient.id,
-    formData
+    patient_name,
+    phone,
+    gender,
+    age,
+    diseases,
+    note
   );
 
   if (data?.success) {

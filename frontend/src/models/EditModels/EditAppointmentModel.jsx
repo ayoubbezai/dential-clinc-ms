@@ -26,7 +26,7 @@ const EditAppointmentModel = ({ isOpen, onClose, currentAppointment, refreshAppo
                     id="status"
                     label="Status"
                     value={formData.status}
-                    onChange={(e) => handleInputChange(e, setFormData)}
+                    onChange={(value) => setFormData({ ...formData, status: value })}
                     options={[
                         { value: "pending", label: "Pending" },
                         { value: "completed", label: "Completed" },
@@ -34,6 +34,8 @@ const EditAppointmentModel = ({ isOpen, onClose, currentAppointment, refreshAppo
                         { value: "cancelled", label: "Cancelled" },
                     ]}
                 />
+
+
                 <TextAreaInput id="content" label="Content" value={formData.content} onChange={(e) => handleInputChange(e, setFormData)} />
                 <div>
                     <Button type="submit" className="w-full text-white">Submit</Button>

@@ -12,19 +12,19 @@ const AddReceptionistModel = ({ isOpen, onClose }) => {
 
     return (
         <Model isOpen={isOpen} onClose={onClose}>
-            <form onSubmit={(e) => handleSubmit(e, formData, onClose)} className="space-y-6 flex flex-col">
+            <form onSubmit={(e) => handleSubmit(e, formData, onClose)} className="space-y-0 flex flex-col">
                 {/* Name Input */}
-                <NameInput value={formData.name} onChange={handleInputChange(setFormData)} />
+                <NameInput value={formData.name} onChange={(e) => handleInputChange(e, setFormData)} />
 
                 {/* Email Input */}
-                <EmailInput value={formData.email} onChange={handleInputChange(setFormData)} />
+                <EmailInput value={formData.email} onChange={(e) => handleInputChange(e, setFormData)} />
 
                 {/* Password Input */}
                 <PasswordInput
                     id="password"
                     label="Password"
                     value={formData.password}
-                    onChange={handleInputChange(setFormData)}
+                    onChange={(e) => handleInputChange(e, setFormData)}
                     placeholder="Enter your password"
                     required
                     minLength={6}
@@ -32,7 +32,7 @@ const AddReceptionistModel = ({ isOpen, onClose }) => {
 
                 {/* Submit Button */}
                 <div className="w-full self-center text-center mt-4">
-                    <Button type="submit" className="w-1/2 mx-auto text-white">
+                    <Button type="submit" className="w-1/2 mx-auto text-white mt-1">
                         Submit
                     </Button>
                 </div>

@@ -5,7 +5,7 @@ import { selectClassName } from "@/constant/classNames";
 
 const EmailInput = ({ value, onChange }) => {
     return (
-        <div className="my-4">
+        <div className="">
             <Label htmlFor="email" className="mb-2 mt-3">Email</Label>
             <Input
                 type="email"
@@ -15,6 +15,8 @@ const EmailInput = ({ value, onChange }) => {
                 value={value}
                 onChange={onChange}
                 required
+                placeholder={`Enter email ...`}
+
             />
         </div>
     );

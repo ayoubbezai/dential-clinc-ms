@@ -26,12 +26,11 @@ const EditPatientModel = ({ isOpen, onClose, currentPatient, refreshPatients }) 
                     id="gender"
                     label="Gender"
                     value={formData.gender}
-                    onChange={(e) => handleInputChange(e, setFormData)}
                     options={[
-                        { value: "", label: "All Genders" },
                         { value: "male", label: "Male" },
                         { value: "female", label: "Female" }
                     ]}
+                    onChange={(value) => setFormData({ ...formData, gender: value })}
                 />
 
                 <TextInput id="age" label="Age" type="number" value={formData.age} onChange={(e) => handleInputChange(e, setFormData)} required />

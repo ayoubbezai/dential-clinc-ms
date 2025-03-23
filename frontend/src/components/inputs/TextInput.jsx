@@ -5,15 +5,17 @@ import { selectClassName } from "@/constant/classNames";
 
 const TextInput = ({ id, label, value, onChange, type = "text", required = false }) => (
     <div>
-        <Label htmlFor={id}>{label}</Label>
+        <Label className={"mb-2 mt-3"} htmlFor={id}>{label}</Label>
         <Input
+            className={selectClassName}
+        
             type={type}
             id={id}
             name={id}
-            className={selectClassName}
             value={value}
             onChange={onChange}
             required={required}
+            placeholder={`Enter ${id}...`}
         />
     </div>
 );
