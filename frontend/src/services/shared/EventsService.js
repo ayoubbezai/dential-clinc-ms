@@ -105,6 +105,7 @@ export const EventsService = {
     end_time,
     title,
     people,
+    location,
     calendarId
   ) {
     try {
@@ -115,6 +116,7 @@ export const EventsService = {
         end_time,
         title,
         people,
+        location,
         calendarId,
       });
       console.log(response);

@@ -1,18 +1,62 @@
 import React, { useEffect, useState } from 'react';
 import Model from '../other/Model';
-import { AppointmentService } from '@/services/shared/AppointmentsService';
+import { UsersService } from '@/services/shared/UsersService';
 import toast from 'react-hot-toast';
 import { selectClassName } from '@/constant/classNames';
 import { Button } from '@/components/designSystem/button';
 import { Input } from '@/components/designSystem/input';
 import { Label } from '@/components/designSystem/label';
-import { UsersService } from '@/services/shared/UsersService';
+
+const handleChange = (setFormData) => (e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({
+        ...prev,
+        [name]: value,
+    }));
+};
+
+const handleSubmit = async ({ e, formData, currentUser, onClose, refreshUsers }) => {
+    e.preventDefault();
+
+    // If password fields are filled, ensure they match
+    if (formData.password && formData.password !== formData.password_confirmation) {
+        toast.error("Passwords do not match.");
+        return;
+    }
+
+    console.log("Submitting:", formData);
+
+    // Create payload with only the fields that need updating
+    const payload = {
+        name: formData.name,
+        role_name: formData.role_name,
+        email: formData.email,
+    };
+
+    // Include password fields only if the user provided a new password
+    if (formData.password) {
+        payload.password = formData.password;
+        payload.password_confirmation = formData.password_confirmation;
+    }
+
+    const { data, error } = await UsersService.updateUser(currentUser.id, payload);
+
+    if (data?.success) {
+        toast.success('Success! User details updated successfully');
+        onClose();
+        refreshUsers();
+    } else {
+        toast.error(error?.message || 'Error! Something went wrong.');
+    }
+};
 
 const EditUserModel = ({ isOpen, onClose, currentUser, refreshUsers }) => {
     const [formData, setFormData] = useState({
         email: "",
         role_name: "",
-        name: ""
+        name: "",
+        password: "",
+        password_confirmation: ""
     });
 
     useEffect(() => {
@@ -20,43 +64,16 @@ const EditUserModel = ({ isOpen, onClose, currentUser, refreshUsers }) => {
             setFormData({
                 email: currentUser.email || '',
                 role_name: currentUser.role_name || '',
-                name: currentUser.name || ''
+                name: currentUser.name || '',
+                password: "",
+                password_confirmation: ""
             });
         }
     }, [currentUser]);
 
-    const handleChange = (e) => {
-        const { name, value } = e.target;
-        setFormData({ ...formData, [name]: value });
-    };
-    const handleSelectChange = (value) => {
-        setFormData({
-            ...formData,
-            role_name: value,
-        });
-    };
-
-    async function handleSubmit(e) {
-        e.preventDefault();
-        console.log("Submitting:", formData);
-        const { data, error } = await UsersService.updateUser(
-            currentUser.id,
-            formData.name,
-            formData.role_name,
-            formData.email,
-        );
-        if (data?.success) {
-            toast.success('Success! User details updated successfully');
-            onClose();
-            refreshUsers();
-        } else {
-            toast.error(error?.message || 'Error! Something went wrong.');
-        }
-    }
-
     return (
         <Model isOpen={isOpen} onClose={onClose}>
-            <form onSubmit={handleSubmit}>
+            <form onSubmit={(e) => handleSubmit({ e, formData, currentUser, onClose, refreshUsers })}>
                 {/* Email */}
                 <div className='my-4'>
                     <Label htmlFor="email" className={"mb-2 mt-3"}>Email</Label>
@@ -66,24 +83,9 @@ const EditUserModel = ({ isOpen, onClose, currentUser, refreshUsers }) => {
                         name="email"
                         className={selectClassName}
                         value={formData.email}
-                        onChange={handleChange}
+                        onChange={handleChange(setFormData)}
                         required
                     />
-                </div>
-
-                {/* Role */}
-                <div>
-                    <Label htmlFor="role_name" className={"mb-2 mt-3"}>Role</Label>
-                    <select
-                        className={selectClassName}
-                        name="role_name"
-                        value={formData.role_name}
-                        onChange={(e) => handleSelectChange(e.target.value)}
-                    >
-                        <option value="dentist">dentist</option>
-                        <option value="patient">patient</option>
-                        <option value="receptionist">receptionist</option>
-                    </select>
                 </div>
 
                 {/* Name */}
@@ -95,8 +97,36 @@ const EditUserModel = ({ isOpen, onClose, currentUser, refreshUsers }) => {
                         name="name"
                         className={selectClassName}
                         value={formData.name}
-                        onChange={handleChange}
+                        onChange={handleChange(setFormData)}
                         required
+                    />
+                </div>
+
+                {/* New Password */}
+                <div className='my-4'>
+                    <Label htmlFor="password" className={"mb-2 mt-3"}>New Password</Label>
+                    <Input
+                        type="password"
+                        id="password"
+                        name="password"
+                        className={selectClassName}
+                        value={formData.password}
+                        onChange={handleChange(setFormData)}
+                        placeholder="Enter new password (optional)"
+                    />
+                </div>
+
+                {/* Confirm New Password */}
+                <div className='my-4'>
+                    <Label htmlFor="password_confirmation" className={"mb-2 mt-3"}>Confirm Password</Label>
+                    <Input
+                        type="password"
+                        id="password_confirmation"
+                        name="password_confirmation"
+                        className={selectClassName}
+                        value={formData.password_confirmation}
+                        onChange={handleChange(setFormData)}
+                        placeholder="Re-enter new password (optional)"
                     />
                 </div>
 

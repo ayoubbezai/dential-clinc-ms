@@ -36,12 +36,11 @@ export const UsersService = {
       return { data: null, error: error.message || "Failed to fetch users" }; // Return error
     }
   },
-  async updateUser(userId, name, role_name, email) {
+  async updateUser(userId, payload) {
     try {
+      console.log("payload", payload);
       const response = await api.put(`/users/${userId}`, {
-        name,
-        role_name,
-        email,
+        ...payload,
       });
       console.log(response);
       return { data: response.data, error: null };

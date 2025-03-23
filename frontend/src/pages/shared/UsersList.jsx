@@ -8,7 +8,7 @@ import PageChange from '@/components/small/PageChange';
 import SearchInTable from '@/components/small/SearchInTable';
 import Sort from '@/components/small/Sort';
 import DateInput from '@/components/small/DateInput';
-import UsersTable from '@/components/common/users/UsersTable';
+import UsersTable from '@/components/pagesComp/users/UsersTable';
 import useUser from '@/hooks/lists/useUser';
 import AddReceptionistModel from '@/models/AddModels/AddReceptionistModel';
 const UsersList = () => {

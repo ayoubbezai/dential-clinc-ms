@@ -78,3 +78,13 @@ export const Eventscolors = {
     },
   },
 };
+
+
+export const COLORS = [
+    { id: "blue", label: "blue", className: "bg-blue-500" },
+    { id: "red", label: "red", className: "bg-red-500" },
+    { id: "green", label: "green", className: "bg-green-500" },
+    { id: "yellow", label: "yellow", className: "bg-yellow-500" },
+    { id: "purple", label: "purple", className: "bg-purple-500" },
+    { id: "orange", label: "orange", className: "bg-orange-500" },
+];

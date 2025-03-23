@@ -1,6 +1,6 @@
 
 import useAppointment from '@/hooks/lists/useAppointment';
-import AppointmentsTable from '@/components/common/appointments/AppointmentsTable';
+import AppointmentsTable from '@/components/pagesComp/appointments/AppointmentsTable';
 import PerPage from '@/components/small/PerPage';
 import PageChange from '@/components/small/PageChange';
 import SearchInTable from '@/components/small/SearchInTable';

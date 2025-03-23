@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import usePatients from '@/hooks/lists/usePatients';
 import { Button } from '@/components/designSystem/button';
 import SelectGender from '@/components/small/SelectGender';
-import PatientsTable from '@/components/common/patient/PatientsTable';
+import PatientsTable from '@/components/pagesComp/patient/PatientsTable';
 
 import AddPatientModel from '@/models/AddModels/AddPatientModel';
 import PerPage from '@/components/small/PerPage';
