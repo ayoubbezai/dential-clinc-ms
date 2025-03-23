@@ -1,81 +1,50 @@
-import React, { useState } from 'react';
-import Model from '../other/Model';
-import { EventsService } from '@/services/shared/EventsService';
-import { toast, Toaster } from 'react-hot-toast';
-import { selectClassName } from '@/constant/classNames';
-import { Input } from '@/components/designSystem/input';
-import { Label } from '@/components/designSystem/label';
-import { Button } from '@/components/designSystem/button';
-import { COLORS } from "@/utils/EventsColor";
+import React, { useState } from "react";
+import Model from "../other/Model";
+import { EventsService } from "@/services/shared/EventsService";
+import { toast, Toaster } from "react-hot-toast";
+import { Button } from "@/components/designSystem/button";
+import TitleInput from "@/components/inputs/TitleInput";
+import DateInput from "@/components/inputs/DateInput";
+import TimeInput from "@/components/inputs/TimeInput";
+import PeopleInput from "@/components/inputs/PeopleInput";
+import EventColorSelect from "@/components/inputs/EventColorSelect";
+import { handleInputChange } from "@/utils/inputChange";
+import { initializeFormData,handlePeopleChange } from "@/utils/models/addEventModel";
 
+export const formattedPeople =(formData)=>{
+    return formData.people.length ? formData.people : null;
+}
 const AddEventModel = ({ isOpen, onClose, eventsServicePlugin }) => {
-    const [formData, setFormData] = useState({
-        startDate: '',
-        startTime: null,
-        endDate: '',
-        endTime: null,
-        title: '',
-        people: [],
-        calendarId: '',
-    });
+    const [formData, setFormData] = useState(initializeFormData());
 
-    const handleChange = (e) => {
-        const { name, value } = e.target;
-        setFormData({
-            ...formData,
-            [name]: value,
-        });
-    };
 
-    const handleSelectChange = (value) => {
-        setFormData({
-            ...formData,
-            calendarId: value,
-        });
-    };
-
+    const formattedPeople = formattedPeople(formData)
     const handleSubmit = async (e) => {
         e.preventDefault();
 
 
-
-        // Format people array
-        const formattedPeople = formData.people.length === 0 ? null : formData.people;
-
-
         const { data, error } = await EventsService.addEvent(
             formData.startDate,
-            formData.startTime,
+            formData.startTime || null,
             formData.endDate,
-            formData.endTime,
+            formData.endTime || null,
             formData.title,
             formattedPeople,
-            formData.calendarId,
+            formData.calendarId
         );
-        // Combine startDate and startTime (if available)
-        const start = formData.startDate + (formData.startTime ? ` ${formData.startTime}` : '');
 
-        // Combine endDate and endTime (if available)
-        const end = formData.endDate + (formData.endTime ? ` ${formData.endTime}` : '');
-
-
-
-
-        console.log(data);
-        if (data.success) {
-            const event = {
+        if (data?.success) {
+            eventsServicePlugin.add({
                 id: data.data.id,
-                start: start,
-                end: end,
+                start: `${formData.startDate} ${formData.startTime || ""}`.trim(),
+                end: `${formData.endDate} ${formData.endTime || ""}`.trim(),
                 title: formData.title,
                 people: formattedPeople,
                 calendarId: formData.calendarId,
-            };
-            console.log(event)
-            eventsServicePlugin.add(event)
-            toast.success('Event created successfully!');
+            });
+            toast.success("Event created successfully!");
         } else {
-            toast.error(error.message || 'Error! Something went wrong.');
+            toast.error(error?.message || "Error! Something went wrong.");
         }
         onClose();
     };
@@ -83,120 +52,28 @@ const AddEventModel = ({ isOpen, onClose, eventsServicePlugin }) => {
     return (
         <Model isOpen={isOpen} onClose={onClose}>
             <form onSubmit={handleSubmit} className="space-y-4">
-                {/* Event Title */}
-                <div>
-                    <Label htmlFor="title" className={"mb-2"}>Event Title</Label>
-                    <Input
-                        type="text"
-                        id="title"
-                        name="title"
-                        className={selectClassName}
-                        value={formData.title}
-                        onChange={handleChange}
-                        required
-                    />
+                <TitleInput value={formData.title}onChange={handleInputChange(setFormData)}/>
+
+                <div className="flex">
+                    <DateInput label="Start Date" name="startDate" value={formData.startDate}onChange={handleInputChange(setFormData)}/>
+                    <TimeInput label="Start Time (Optional)" name="startTime" value={formData.startTime}onChange={handleInputChange(setFormData)}className="ml-10" />
                 </div>
 
-                <div className='flex '>
-                    {/* Start Date */}
-                    <div>
-                        <Label htmlFor="startDate" className={"mb-2"}>Start Date</Label>
-                        <Input
-                            type="date"
-                            id="startDate"
-                            name="startDate"
-                            className={selectClassName}
-                            value={formData.startDate}
-                            onChange={handleChange}
-                            required
-                        />
-                    </div>
-
-                    {/* Start Time (Optional) */}
-                    <div className='ml-10'>
-                        <Label htmlFor="startTime" className={"mb-2 "}>Start Time (Optional)</Label>
-                        <Input
-                            type="time"
-                            id="startTime"
-                            name="startTime"
-                            className={selectClassName}
-                            value={formData.startTime}
-                            onChange={handleChange}
-                        />
-                    </div>
-                </div>
-                <div className='flex '>
-
-
-                    {/* End Date */}
-                    <div>
-                        <Label htmlFor="endDate" className={"mb-2"}>End Date</Label>
-                        <Input
-                            type="date"
-                            id="endDate"
-                            name="endDate"
-                            className={selectClassName}
-                            value={formData.endDate}
-                            onChange={handleChange}
-                            required
-                        />
-                    </div>
-
-                    {/* End Time (Optional) */}
-                    <div className='ml-10'>
-                        <Label htmlFor="endTime" className={"mb-2"}>End Time (Optional)</Label>
-                        <Input
-                            type="time"
-                            id="endTime"
-                            name="endTime"
-                            className={selectClassName}
-                            value={formData.endTime}
-                            onChange={handleChange}
-                        />
-                    </div>
-
+                <div className="flex">
+                    <DateInput label="End Date" name="endDate" value={formData.endDate}onChange={handleInputChange(setFormData)}/>
+                    <TimeInput label="End Time (Optional)" name="endTime" value={formData.endTime}onChange={handleInputChange(setFormData)}className="ml-10" />
                 </div>
 
-                {/* Event Color */}
-                <div>
-                    <Label htmlFor="calendarId" className={"mb-2"}>Event Color</Label>
-                    <select
-                        name="calendarId"
-                        value={formData.calendarId}
-                        onChange={(e) => handleSelectChange(e.target.value)}
-                        className={selectClassName}
-                        required
-                    >
-                        <option value="">Select a color</option>
-                        {COLORS.map((color) => (
-                            <option key={color.id} value={color.id}>
-                                {color.label}
-                            </option>
-                        ))}
-                    </select>
-                </div>
+                <EventColorSelect value={formData.calendarId}onChange={handleInputChange(setFormData)}/>
 
-                {/* People (Optional) */}
-                <div>
-                    <Label htmlFor="people" className={"mb-2"}>People (Comma Separated)</Label>
-                    <Input
-                        type="text"
-                        id="people"
-                        name="people"
-                        className={selectClassName}
-                        value={formData.people.join(',')}
-                        onChange={(e) => setFormData({ ...formData, people: e.target.value.split(',') })}
-                    />
-                </div>
+                <PeopleInput value={formData.people.join(", ")} onChange={handlePeopleChange(setFormData)} />
 
-                {/* Submit Button */}
                 <div>
                     <Button type="submit" className="w-full text-white">
                         Submit
                     </Button>
                 </div>
             </form>
-            <Toaster />
         </Model>
     );
 };
