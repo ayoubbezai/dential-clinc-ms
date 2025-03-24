@@ -1,43 +1,52 @@
-import { createContext, useEffect, useState } from "react";
+import { createContext, useEffect, useState, useCallback, useMemo } from "react";
 import { AuthService } from "../services/other/AuthService";
 import api from "../services/other/api";
 import toast from "react-hot-toast";
+import _ from "lodash"; // Import Lodash for debouncing
 
 export const AuthContext = createContext();
-
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [message, setMessage] = useState(null);
 
+const dbounceFetchUser = useMemo(()=>{
+  return _.debounce(async ()=>{
+    setLoading(true);
+    const token = localStorage.getItem("token");
 
-  useEffect(() => {
-    const fetchUser = async () => {
-      setLoading(true);
-      const token = localStorage.getItem("token");
-
-      if (token) {
-        api.defaults.headers.Authorization = `Bearer ${token}`;
-        try {
-          const { user, error, message } = await AuthService.getCurrentUser();
-          setUser(user);
-          setError(error);
-          setMessage(message);
-        } catch (err) {
-          setUser(null); // Ensure user is set to null on failure
-          setError(err);
-        }
-      } else {
-        setUser(null); // Explicitly set user to null if no token
+    if (token) {
+      api.defaults.headers.Authorization = `Bearer ${token}`;
+      try {
+        const { user, error, message } = await AuthService.getCurrentUser();
+        if (user !== null) setUser(user);
+        if (error !== null) setError(error);
+        if (message !== null) setMessage(message);
+      } catch (err) {
+        setUser(null);
+        setError(err);
+        toast.error("Failed to fetch user data");
       }
+    } else {
+      setUser(null);
+    }
 
-      setLoading(false); // Ensure loading is set to false in all cases
-    };
+    setLoading(false);
 
+
+  }, 100);
+}, [localStorage.getItem("token")])
+ const fetchUser = useCallback(()=>{
+   dbounceFetchUser();
+
+
+ }, [dbounceFetchUser])
+
+
+  useEffect(() => {     
     fetchUser();
-  }, []);
-
+  }, [localStorage.getItem("token")]); 
 
   const login = async (email, password) => {
     setLoading(true);

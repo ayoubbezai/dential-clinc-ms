@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import usePatients from '@/hooks/lists/usePatients';
 import { Button } from '@/components/designSystem/button';
 import SelectGender from '@/components/small/SelectGender';
