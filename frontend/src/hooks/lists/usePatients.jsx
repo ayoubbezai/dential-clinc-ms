@@ -1,5 +1,6 @@
-import { useEffect, useState } from 'react';
-import { PatientsService } from '@/services/shared/PatientsService';
+import { useEffect, useState, useCallback } from "react";
+import { PatientsService } from "@/services/shared/PatientsService";
+import _ from "lodash"; // Import Lodash for debouncing
 
 const usePatients = () => {
     const [patients, setPatients] = useState([]);
@@ -15,28 +16,49 @@ const usePatients = () => {
     const [error, setError] = useState(null);
     const [loading, setLoading] = useState(false);
 
-    const fetchPatients = async (page = 1) => {
-        setLoading(true);
-        const { data, error } = await PatientsService.getPatients(perPage, search, gender, startDate, endDate, sortBy, sortDirection, page);
 
-        if (data?.success) {
-            setPatients(data.data);
-            setPagination(data.pagination);
-            console.log(patients)
-        } else {
-            setError(error);
+    //memorize the function with callback to prevent recreate it when rerender
+
+    const fetchPatients = useCallback(
+        //use Debounce to prevent send api if data still change it wait 300 ms to send api request
+        _.debounce(async (currentPage) => {
+            setLoading(true);
+            try {
+                const { data, error } = await PatientsService.getPatients(
+                    perPage,
+                    search,
+                    gender,
+                    startDate,
+                    endDate,
+                    sortBy,
+                    sortDirection,
+                    currentPage
+                );
+
+                if (data?.success) {
+                    setPatients(data.data);
+                    setPagination(data.pagination);
+                } else {
+                    setError(error);
+                }
+            } catch (err) {
+                setError(err.message);
+            }
+            setLoading(false);
         }
+            , 300), [perPage, search, gender, startDate, endDate, sortBy, sortDirection])
 
-        setLoading(false);
-    };
 
     useEffect(() => {
         fetchPatients(page);
-    }, [page, perPage, search, gender, sortBy, sortDirection, startDate, endDate]);
+    }, [page, fetchPatients]); //fetch new page if page change or one of the quires 
 
     useEffect(() => {
         setPage(1);
     }, [perPage, search, gender, sortBy, sortDirection, startDate, endDate]);
+
+    //rest the page one if somthing change not page
+
 
     return {
         patients,
@@ -58,7 +80,8 @@ const usePatients = () => {
         perPage,
         setPerPage,
         loading,
-        error, fetchPatients
+        error,
+        fetchPatients,
     };
 };
 

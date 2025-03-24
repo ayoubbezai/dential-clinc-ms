@@ -50,10 +50,6 @@ class PatientController extends Controller
         'patients.phone',
         'patients.gender',
         'patients.age',
-        'patients.notes',
-        'patients.diseases',
-        'patients.created_at',
-        'patients.updated_at',
         'patients.user_id',
     ])
     ->with([
@@ -106,8 +102,7 @@ class PatientController extends Controller
 $paginatedData->through(function ($patient) {
     try {
         $patient->phone = $patient->phone ? Crypt::decryptString($patient->phone) : null;
-        $patient->notes = $patient->notes ? Crypt::decryptString($patient->notes) : null;
-        $patient->diseases = $patient->diseases ? Crypt::decryptString($patient->diseases) : null;
+
     } catch (DecryptException $e) {
 
          //if somthing went wrong with decryption

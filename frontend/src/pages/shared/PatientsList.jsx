@@ -36,10 +36,6 @@ const PatientsList = () => {
 
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  // Fetch patients whenever any filter or sorting parameter changes
-  useEffect(() => {
-    fetchPatients(page); // Fetch patients with the current page
-  }, [page, perPage, search, gender, sortBy, sortDirection, startDate, endDate]);
 
   return (
     <>
