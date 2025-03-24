@@ -3,6 +3,8 @@ const selectClassName = "p-2 border border-gray-300 rounded-lg w-full md:w-auto 
 
 const PerPage = ({ perPage, setPerPage }) => {
 
+    console.log(perPage)
+
     return (
         <div className='flex items-center'>
             <p className='text-[#223354]/50 text-sm'>Row per Page</p>

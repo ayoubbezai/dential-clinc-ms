@@ -1,13 +1,28 @@
 import api from "../other/api";
 
-export const folderSevice = {
-  async getPatientFolders(patientId) {
+export const folderService = {
+  async getPatientFolders(patientId, perPage, search, page=1) {
     try {
-      const responce = await api.get(`patients/${patientId}/folders`);
-      console.log(responce);
-      return { folders: responce.data };
-    } catch {
-      console.log("err");
+      const params = new URLSearchParams();
+      const appendParam = (key, value) => {
+        if (value) params.append(key, value);
+      };
+
+      appendParam("per_page", perPage);
+      appendParam("search", search);
+      appendParam("page", page);
+      console.log("patientId", patientId);
+      console.log("page", page);
+      console.log("perPage", perPage);
+      console.log("params", params);
+
+      const responce = await api.get(
+        `patients/${patientId}/folders?${params.toString()}`
+      );
+      console.log(responce.data.data);
+      return { data: responce?.data?.data };
+    } catch (error) {
+      console.log("err", error);
     }
   },
 
@@ -23,9 +38,37 @@ export const folderSevice = {
         visits,
       });
       console.log(response);
-      return {data:response.data};
-    } catch (err){
-      console.log("err",err);
+      return { data: response.data };
+    } catch (err) {
+      console.log("err", err);
+    }
+  },
+
+  async deleteFolder(folderId) {
+    try {
+      console.log("id", folderId);
+      const response = await api.delete(`/folders/${folderId}`);
+      console.log(response);
+      return response.data;
+    } catch (err) {
+      console.log("err", err);
+    }
+  },
+
+  async editFolder(folderId, formData, visits) {
+    try {
+      const { folder_name, price, status } = formData;
+      console.log(status);
+      const response = await api.put(`/folders/${folderId}`, {
+        folder_name,
+        price,
+        status,
+        visits,
+      });
+      console.log(response);
+      return { data: response.data };
+    } catch (err) {
+      console.log("err", err);
     }
   },
 };

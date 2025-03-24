@@ -104,16 +104,7 @@ class FolderController extends Controller
             return response()->json([
                 "success" => true,
                 "message" => $message,
-                "data" => [
-                    "folder_id" => $folder->id,
-                    "folder_name" => $folder->folder_name,
-                    "price" => $folder->price,
-                    "status" => $folder->status,
-                    "patient_id" => $folder->patient_id,
-                    "created_at" => $folder->created_at,
-                    "updated_at" => $folder->updated_at,
-                    "visits" => $originalData
-                ]
+                "data" => []
             ], Response::HTTP_CREATED);
         
         }catch(\Exception $e){
@@ -192,10 +183,8 @@ public function update(Request $request, string $id)
         // Validate request data
         $data = $request->validate([
             "folder_name" => "required|string|max:255",
-            "patient_id" => "required|integer|exists:patients,id",
             "price" => "required|integer|min:0",
-            "status" => "nullable|string|in:working_on_it,completed","pending",
-
+            "status" => "nullable|string|in:working_on_it,completed,pending",
             "visits" => "nullable|array",
             "visits.*.id" => "nullable|integer|exists:folder_visits,id",
             "visits.*.dent" => "nullable|integer",
@@ -206,7 +195,6 @@ public function update(Request $request, string $id)
         // Update folder details
         $folder->update([
             "folder_name" => $data["folder_name"],
-            "patient_id" => $data["patient_id"],
             "price" => $data["price"],
             "status" => isset($data["status"])? $data["status"] : "working_on_it",
         ]);
@@ -278,39 +266,70 @@ public function update(Request $request, string $id)
         }
     }
 
-    public function getFoldersOfPatient(string $id){//the id of the patient
-        //get the patient we are looking for
-        $patient = Patient::with("folders")->findOrFail($id);
-        try{
-            // Check if the patient has folders
-        $hasFolders = optional($patient->folders)->isNotEmpty();
+public function getFoldersOfPatient(Request $request, string $id)
+{
+    try {
+        $patient = Patient::with('folders')->findOrFail($id);
 
-        // Conditional message
-        $message = $hasFolders
-            ? 'This patient has folders.'
-            : 'This patient has no folders.';
+        $perPage = max(filter_var($request->query('per_page', 15), FILTER_VALIDATE_INT) ?: 15, 1);
+        $search = $request->query('search', null);
 
-            return response()->json([
-                'success' => true,
-                'message' => $message,
-                 'data' => [
-                'patient' => [
-                    'id' => $patient->id,
-                    'patient_name' => $patient->patient_name,
-                ],
-                'folders' => $patient->folders, // empty if has none
-            ],
+        $foldersQuery = Folder::where('patient_id', $patient->id)->with('visits');
 
-            ], Response::HTTP_OK);
-                }catch(\Exception $e){
-              return response()->json([
-                'success' => false,
-            'message' => 'Failed to retrieve folders for the patient.',
-                'error' => $e->getMessage(),
-            ], Response::HTTP_INTERNAL_SERVER_ERROR); // 500 Internal Server Error
+        if (!empty($search)) {
+            $foldersQuery->where('folder_name', 'like', "%{$search}%");
         }
 
-        
+        $folders = $foldersQuery->paginate($perPage);
 
+        $formattedFolders = $folders->map(function ($folder) {
+            return [
+                'id' => $folder->id,
+                'folder_name' => $folder->folder_name,
+                'price' => $folder->price,
+                'status' => $folder->status,
+                'visits' => $folder->visits->map(function ($visit) {
+                    try {
+                        return [
+                            'id' => $visit->id,
+                            'dent' => $visit->dent ? Crypt::decryptString($visit->dent) : null,
+                            'reason_of_visit' => $visit->reason_of_visit ? Crypt::decryptString($visit->reason_of_visit) : null,
+                            'treatment_details' => $visit->treatment_details ? Crypt::decryptString($visit->treatment_details) : null,
+                        ];
+                    } catch (DecryptException $e) {
+                        return [
+                            'id' => $visit->id,
+                            'dent' => null,
+                            'reason_of_visit' => null,
+                            'treatment_details' => null,
+                            'error' => 'Decryption failed'
+                        ];
+                    }
+                }),
+            ];
+        });
+
+        return response()->json([
+            'success' => true,
+            'message' => $folders->isEmpty() ? 'This patient has no folders.' : 'Folders retrieved successfully.',
+            'data' => [
+                'folders' => $formattedFolders,
+                'pagination' => [
+                    'current_page' => $folders->currentPage(),
+                    'total_pages' => $folders->lastPage(),
+                    'total_items' => $folders->total(),
+                    'per_page' => $folders->perPage(),
+                ],
+            ],
+        ], Response::HTTP_OK);
+
+    } catch (\Exception $e) {
+        return response()->json([
+            "success" => false,
+            "message" => "Failed to retrieve folders for the patient.",
+            "error" => $e->getMessage(),
+        ], Response::HTTP_INTERNAL_SERVER_ERROR);
     }
+}
+
 }

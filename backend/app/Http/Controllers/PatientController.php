@@ -53,7 +53,7 @@ class PatientController extends Controller
         'patients.user_id',
     ])
     ->with([
-        'user:id,name,email' // Load only selected user fields
+        'user:id,name,email' 
     ]);
 
 

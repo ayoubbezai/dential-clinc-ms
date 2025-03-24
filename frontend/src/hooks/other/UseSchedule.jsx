@@ -32,7 +32,7 @@ const UseSchedule = () => {
         },0)
     },[start,end])
 
-    const fetchEventsByDate = useCallback((start,end)=>{
+    const fetchEventsByDate = useCallback(()=>{
         dbounceFetchEvents(start,end)
     }, [dbounceFetchEvents])
 
