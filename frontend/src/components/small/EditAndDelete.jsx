@@ -1,6 +1,6 @@
 import React from 'react'
-import EditIcon from "../../../assets/icons/edit.svg";
-import DeleteIcon from "../../../assets/icons/delete.svg";
+import EditIcon from "../../assets/icons/edit.svg";
+import DeleteIcon from "../../assets/icons/delete.svg";
 const EditAndDelete = ({ element, loading, handleEdit, handleDelete }) => {
     return (
         <div className="flex gap-2">
