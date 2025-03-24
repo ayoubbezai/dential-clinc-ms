@@ -1,4 +1,5 @@
 import api from "../other/api";
+
 export const patientService = {
   async getPatientDetails(patientId) {
     try {
@@ -10,5 +11,15 @@ export const patientService = {
       return { data: null, error: err.message };
     }
   },
+  async createPatientAccount(patientId,email,password){
+    try{
+      const response = await api.post(`patients/${patientId}/createUser`,{email,password});
+
+      return {data:response.data ,error :null}
+
+    }catch (err) {
+      return { data: null, error: err.message };
+  }
+}
 
 };

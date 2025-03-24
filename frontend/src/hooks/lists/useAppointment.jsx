@@ -1,5 +1,6 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { AppointmentService } from '@/services/shared/AppointmentsService';
+import _ from 'lodash';
 
 const useAppointment = () => {
     const [appointments, setAppointments] = useState([]);
@@ -15,32 +16,40 @@ const useAppointment = () => {
     const [error, setError] = useState(null);
     const [loading, setLoading] = useState(false);
 
-    const fetchAppointments = async (page = 1) => {
-        setLoading(true);
-        const { data, error } = await AppointmentService.getAppointments(
-            perPage,
-            search,
-            status,
-            startDate,
-            endDate,
-            sortBy,
-            sortDirection,
-            page
-        );
+    const debounceFetchAppointment = useMemo(() => {
+        return _.debounce(async (page) => {
+            setLoading(true);
+            const { data, error } = await AppointmentService.getAppointments(
+                perPage,
+                search,
+                status,
+                startDate,
+                endDate,
+                sortBy,
+                sortDirection,
+                page
+            );
 
-        if (data?.success) {
-            setAppointments(data.data);
-            setPagination(data.pagination);
-        } else {
-            setError(error);
-        }
+            if (data?.success) {
+                setAppointments(data.data);
+                setPagination(data.pagination);
+            } else {
+                setError(error);
+            }
 
-        setLoading(false);
-    };
+            setLoading(false);
 
+        }, 0);
+
+    }, [page, perPage, search, status, sortBy, sortDirection, startDate, endDate])
+
+
+    const fetchAppointments = useCallback((page) => {
+        debounceFetchAppointment(page)
+    }, [debounceFetchAppointment])
     useEffect(() => {
         fetchAppointments(page);
-    }, [page, perPage, search, status, sortBy, sortDirection, startDate, endDate]);
+    }, [page, fetchAppointments]);
 
     useEffect(() => {
         setPage(1);

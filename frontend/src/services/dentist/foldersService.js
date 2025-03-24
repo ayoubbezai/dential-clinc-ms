@@ -23,7 +23,7 @@ export const folderSevice = {
         visits,
       });
       console.log(response);
-      return response.data;
+      return {data:response.data};
     } catch (err){
       console.log("err",err);
     }

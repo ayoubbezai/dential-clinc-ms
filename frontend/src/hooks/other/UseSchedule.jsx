@@ -1,5 +1,6 @@
 import { EventsService } from "@/services/shared/EventsService";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
+import _ from "lodash";
 
 const UseSchedule = () => {
     const [start, setStart] = useState("");
@@ -8,25 +9,32 @@ const UseSchedule = () => {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
 
-    const fetchEventsByDate = async (start, end) => {
-        if (!start || !end) {
-            setError("Start date and end date are required");
-            return;
-        }
+    const dbounceFetchEvents = useMemo(()=>{
+        return _.debounce(async(start,end)=>{
+            if (!start || !end) {
+                setError("Start date and end date are required");
+                return;
+            }
 
-        setLoading(true);
-        setError(null);
+            setLoading(true);
+            setError(null);
 
-        try {
-            const { data } = await EventsService.scheduleEvents(start, end);
-            console.log(data)
-            setEvents(data);
-        } catch (err) {
-            setError("Failed to fetch events", err);
-        } finally {
-            setLoading(false);
-        }
-    };
+            try {
+                const { data } = await EventsService.scheduleEvents(start, end);
+                console.log(data)
+                setEvents(data);
+            } catch (err) {
+                setError("Failed to fetch events", err);
+            } finally {
+                setLoading(false);
+            }
+
+        },0)
+    },[start,end])
+
+    const fetchEventsByDate = useCallback((start,end)=>{
+        dbounceFetchEvents(start,end)
+    }, [dbounceFetchEvents])
 
     useEffect(() => {
         if (start && end) {

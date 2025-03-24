@@ -15,7 +15,6 @@ const dbounceFetchUser = useMemo(()=>{
   return _.debounce(async ()=>{
     setLoading(true);
     const token = localStorage.getItem("token");
-
     if (token) {
       api.defaults.headers.Authorization = `Bearer ${token}`;
       try {
@@ -35,12 +34,10 @@ const dbounceFetchUser = useMemo(()=>{
     setLoading(false);
 
 
-  }, 100);
+  },0);
 }, [localStorage.getItem("token")])
  const fetchUser = useCallback(()=>{
    dbounceFetchUser();
-
-
  }, [dbounceFetchUser])
 
 

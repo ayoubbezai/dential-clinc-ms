@@ -32,7 +32,7 @@ const useUser = () => {
 
         }
 
-            , 100), [page, perPage, search, role, sortBy, sortDirection, startDate, endDate])
+            , 0), [page, perPage, search, role, sortBy, sortDirection, startDate, endDate])
 
 
     useEffect(() => {

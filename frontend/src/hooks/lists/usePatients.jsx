@@ -42,17 +42,20 @@ const usePatients = () => {
                 setError(err.message);
             }
             setLoading(false);
-        }, 100); // 100ms debounce delay
+        }, 0); // 0ms debounce dont means it dont delay
     }, [perPage, search, gender, startDate, endDate, sortBy, sortDirection]);
 
     // Memoize the fetchPatients function
     const fetchPatients = useCallback((currentPage) => {
         debouncedFetchPatients(currentPage);
+        
     }, [debouncedFetchPatients]);
 
     // Fetch patients when page or fetchPatients changes
     useEffect(() => {
         fetchPatients(page);
+        
+        
     }, [page, fetchPatients]);
 
     // Reset page to 1 when filters change

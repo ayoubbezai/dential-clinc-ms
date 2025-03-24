@@ -4,7 +4,7 @@ import { Badge } from '../../designSystem/badge';
 import { Link } from 'react-router-dom';
 import PatientTableHeader from './PatientTableHeader';
 import TableSkeleton from '@/Skeletons/TableSkeleton';
-import EditAndDelete from '@/components/pagesComp/Events/EditAndDelete';
+import EditAndDelete from '@/components/small/EditAndDelete';
 const PatientTableComp = ({ handleEdit, handleDelete, patientLoading, loading, patients }) => {
     return (
         <Table>
