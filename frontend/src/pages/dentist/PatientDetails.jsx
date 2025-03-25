@@ -55,7 +55,7 @@ const PatientDetails = () => {
                 <FolderTableHead />
                 <FolderTableBody loading={loading} folders={folders} handleDelete={handleDelete} isEditFolderOpen={isEditFolderOpen} setIsEditFolderOpen={setIsEditFolderOpen} refetchFolders={refetchFolders} />
               </Table>
-            ) : <FolderGridTable folders={folders} />
+            ) : <FolderGridTable loading={loading} folders={folders} handleDelete={handleDelete} isEditFolderOpen={isEditFolderOpen} setIsEditFolderOpen={setIsEditFolderOpen} refetchFolders={refetchFolders} />
             }
             <FolderTableFooter perPage={perPage} setPerPage={setPerPage} page={page} setPage={setPage} pagination={pagination} />
           </div>
