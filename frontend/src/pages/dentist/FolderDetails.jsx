@@ -3,7 +3,7 @@ import React from 'react'
 import { HiArrowNarrowRight } from 'react-icons/hi';
 import { Link, useParams } from 'react-router-dom'
 import { AiOutlineFilePdf } from 'react-icons/ai';
-
+import { Table, TableRow ,TableBody,TableHeader,TableHead, TableCell } from '@/components/designSystem/table';
 const FolderDetails = () => {
     const { patientId, folderId } = useParams();
     const { loading, folderDetails, folderDetailsError, folderNotes, folderNotesError, folderPayments, folderAppointments } = useFolder(folderId);
@@ -33,7 +33,7 @@ const FolderDetails = () => {
             </p>
 
             <div className="grid grid-cols-12 gap-4 my-4">
-                <div className="col-span-4 bg-white p-3 pb-4 shadow-sm rounded-md border  border-gray-200  text-sm">
+                <div className="col-span-6 bg-white p-3 pb-4 shadow-sm rounded-md border  border-gray-200  text-sm">
                     <h3 className="text-[#223354] font-bold text-lg pb-3">Folder Details</h3>
                     <p className="text-gray-600 font-medium">Title: <span className="text-[#223354]">{folderDetails?.folder_name || 'N/A'}</span></p>
                     <p className="text-gray-600 font-medium">Price: <span className="text-gray-800">{folderDetails?.price || 'N/A'}</span></p>
@@ -63,7 +63,7 @@ const FolderDetails = () => {
                 </div>
 
 
-                <div className="col-span-4 bg-white p-3 pb-5 shadow-sm rounded-md border border-gray-200 text-sm">
+                <div className="col-span-6 bg-white p-3 pb-5 shadow-sm rounded-md border border-gray-200 text-sm">
                     <h3 className="text-[#223354] font-bold text-lg pb-1">Notes</h3>
 
                     <div className="max-h-60 overflow-y-auto flex flex-col gap-2 py-2">
@@ -81,7 +81,7 @@ const FolderDetails = () => {
                 </div>
 
                 <div className="col-span-4 bg-white p-3 pb-5 shadow-sm rounded-md border border-gray-200 text-sm">
-                    <h3 className="text-[#223354] font-bold text-lg pb-1">PDF Documents</h3>
+                    <h3 className="text-[#223354] font-bold text-lg pb-1">Documents</h3>
 
                     <div className="max-h-60 overflow-y-auto flex flex-col gap-2 py-2">
                         {pdfFiles.map((pdf, index) => (
@@ -95,6 +95,69 @@ const FolderDetails = () => {
                         ))}
                     </div>
                 </div>
+
+                <div className="col-span-4 bg-white p-3 pb-5 shadow-sm rounded-md border border-gray-200 text-sm">
+                    <h3 className="text-[#223354] font-bold text-lg pb-3">Payment Details</h3>
+
+
+
+
+                </div>
+                <div className="col-span-4 bg-white p-3 pb-5 shadow-sm rounded-md border border-gray-200 text-sm">
+                    <h3 className="text-[#223354] font-bold text-lg pb-3">Prescription Details</h3>
+
+
+
+
+                </div>
+
+                <div className="col-span-12 bg-white p-3 pb-5 shadow-sm rounded-md border border-gray-200 text-sm">
+                    <Table>
+                        <TableHeader>
+                            <TableRow>
+                                <TableHead>Date</TableHead>
+                                <TableHead>Title</TableHead>
+                                <TableHead>Status</TableHead>
+                                <TableHead>Content</TableHead>
+                                <TableHead>Actions</TableHead>
+                            </TableRow>
+                        </TableHeader>
+                        <TableBody>
+                            {folderAppointments?.length > 0 ? (
+                                folderAppointments.map((appointment) => (
+                                    <TableRow key={appointment.id}>
+                                        <TableCell>{appointment.date}</TableCell>
+                                        <TableCell>{appointment.title}</TableCell>
+                                        <TableCell>
+                                            <span className={`px-2 py-1 rounded-full text-xs ${appointment.status === 'cancelled'
+                                                    ? 'bg-red-100 text-red-800'
+                                                    : appointment.status === 'completed'
+                                                        ? 'bg-green-100 text-green-800'
+                                                        : 'bg-blue-100 text-blue-800'
+                                                }`}>
+                                                {appointment.status}
+                                            </span>
+                                        </TableCell>
+                                        <TableCell className="max-w-xs truncate">{appointment.content}</TableCell>
+                                        <TableCell>
+                                            <button className="text-blue-600 hover:text-blue-800 text-sm font-medium">
+                                                View
+                                            </button>
+                                        </TableCell>
+                                    </TableRow>
+                                ))
+                            ) : (
+                                <TableRow>
+                                    <TableCell colSpan={5} className="text-center text-gray-500 py-4">
+                                        No appointments found
+                                    </TableCell>
+                                </TableRow>
+                            )}
+                        </TableBody>
+                    </Table>
+                </div>
+
+
 
 
 

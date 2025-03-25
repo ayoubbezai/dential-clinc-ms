@@ -87,7 +87,7 @@ const useFolder = (folderId) => {
             try {
                 const response = await folderDetailsService.getFolderAppointments(folderId);
                 console.log("Folder Appointments:", response);
-                setFolderAppointments(response.data.data);
+                setFolderAppointments(response.data.data.appointments);
             } catch (error) {
                 setFolderAppointmentsError(error);
             } finally {
