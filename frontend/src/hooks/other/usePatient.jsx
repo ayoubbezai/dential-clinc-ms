@@ -17,59 +17,56 @@ const usePatient = (patientId) => {
     const [page, setPage] = useState(1);
     const [pagination, setPagination] = useState(null);
 
-    // Fetch Folders Data (Move this up before fetchPatient)
+    // Fetch Patient Data (only patient, no folders)
+    const fetchPatient = useCallback(
+        _.debounce(async (id) => {
+            if (!id) return;
+            setLoadingPatient(true);
+            setErrorPatient(null);
+
+            try {
+                const { data } = await patientService.getPatientDetails(id);
+                setPatient(data);
+            } catch (err) {
+                setErrorPatient(err.message || "Failed to fetch patient data");
+            } finally {
+                setLoadingPatient(false);
+            }
+        },0),
+        [patientId]
+    );
+
+    // Fetch Folders Data (separate from patient)
     const fetchFolders = useCallback(
         _.debounce(async (id, perPage, search, page) => {
             if (!id) return;
             setLoadingFolders(true);
             setLoading(true);
             setErrorFolders(null);
-            console.log("Fetching folders:", { id, perPage, search, page });
-
 
             try {
                 const data = await folderService.getPatientFolders(id, perPage, search, page);
-                console.log(data.data);
                 setFolders(data?.data?.folders || []);
-                setPagination(data?.data.pagination || {});
+                setPagination(data?.data?.pagination || {});
             } catch (err) {
                 setErrorFolders(err.message || "Failed to fetch folders");
-            }
-
-            setLoadingFolders(false);
-            setLoading(false);
-        }, 300), [perPage, search, page] // Now properly updates when filters change
-    );
-
-    // Fetch Patient Data
-    const fetchPatient = useCallback(
-        _.debounce(async (id) => {
-            if (!id) return;
-            setLoadingPatient(true);
-            setLoading(true);
-            setErrorPatient(null);
-
-            try {
-                const { data } = await patientService.getPatientDetails(id);
-                setPatient(data);
-                setLoadingPatient(false);
-
-                // Fetch folders only after fetching patient
-                fetchFolders(id, perPage, search, page);
-            } catch (err) {
-                setErrorPatient(err.message || "Failed to fetch patient data");
-                setLoadingPatient(false);
+            } finally {
+                setLoadingFolders(false);
                 setLoading(false);
             }
-        }, 300), [patientId]
+        }, 0),
+        [perPage, search, page]
     );
 
     useEffect(() => {
         fetchPatient(patientId);
     }, [patientId, fetchPatient]);
+
     useEffect(() => {
-        fetchFolders(patientId,perPage,search,page);
-    }, [patientId, perPage, search, page]);
+        if (patientId) {
+            fetchFolders(patientId, perPage, search, page);
+        }
+    }, [patientId, perPage, search, page, fetchFolders]);
 
     return {
         patient,

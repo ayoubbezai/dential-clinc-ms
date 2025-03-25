@@ -46,7 +46,7 @@ const PatientDetails = () => {
       <div className="grid grid-cols-12 gap-4 my-4">
         <PatientInfo1 patient={patient} />
         <PatientInfo2 patient={patient} refetchPatient={refetchPatient} />
-        <div className="col-span-12 relative bg-white p-3 px-4 shadow-md rounded-lg">
+        <div className="col-span-12 relative bg-[#fff] p-3 px-4 shadow-md rounded-lg">
           <FolderTableHeader view={view} setView={setView} id={id} search={search} setSearch={setSearch} refetchFolders={refetchFolders} />
 
           <div className="pt-4">
