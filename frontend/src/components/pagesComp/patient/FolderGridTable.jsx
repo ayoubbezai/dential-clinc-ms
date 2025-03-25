@@ -1,33 +1,31 @@
-import React, { useState } from 'react'
-import FolderIcon from "../../../assets/icons/folder2.svg";
+import React, { useState, lazy, Suspense } from 'react';
+import { Link } from 'react-router-dom';
+import FolderIcon from '../../../assets/icons/folder2.svg';
 import { FaEllipsisV } from 'react-icons/fa';
-import EditFolderModel from '@/models/EditModels/EditFolderModel';
+
+// Lazy load the EditFolderModel
+const EditFolderModel = lazy(() => import('@/models/EditModels/EditFolderModel'));
 
 const FolderGridTable = ({ loading, folders, handleDelete, isEditFolderOpen, setIsEditFolderOpen, refetchFolders }) => {
-
     const [isMenuOpen, setIsMenuOpen] = useState(false);
-    const [currentFolder, setCurrentFolder] = useState();
+    const [currentFolder, setCurrentFolder] = useState(null);
+
     const handleMenu = (folder) => {
         setCurrentFolder(folder);
-        if ((folder === currentFolder) && isMenuOpen) {
-            setIsMenuOpen(false);
-        } else {
+        setIsMenuOpen((prev) => (folder === currentFolder ? !prev : true));
+    };
 
-            setIsMenuOpen(true);
-        }
-    }
-
-    const handleDelteFolder = (id) => {
+    const handleDeleteFolder = (id) => {
         handleDelete(id);
         refetchFolders();
         setIsMenuOpen(false);
-
-    }
+    };
 
     const handleEditFolder = () => {
         setIsEditFolderOpen(true);
-        setIsMenuOpen(false)
-    }
+        setIsMenuOpen(false);
+    };
+
     return (
         <>
             <div className="grid grid-cols-4 gap-4 px-2 pb-2 max-h-[350px] overflow-y-auto">
@@ -36,34 +34,41 @@ const FolderGridTable = ({ loading, folders, handleDelete, isEditFolderOpen, set
                         <button className="p-2 absolute right-0 top-2 rounded-full hover:bg-gray-200" onClick={() => handleMenu(folder)}>
                             <FaEllipsisV className="text-gray-500" />
                         </button>
+
                         {(folder === currentFolder) && isMenuOpen && (
-                            <div className="absolute right-6  w-40 bg-white shadow-lg rounded-lg z-50">
+                            <div className="absolute right-6 w-40 bg-white shadow-lg rounded-lg z-50">
                                 <button onClick={handleEditFolder} className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 w-full text-left">
                                     Edit Folder
                                 </button>
-                                <button onClick={() => handleDelteFolder(folder.id)} className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 w-full text-left">
+                                <button onClick={() => handleDeleteFolder(folder.id)} className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 w-full text-left">
                                     Delete Folder
                                 </button>
-
                             </div>
                         )}
-                        <img src={FolderIcon} alt="folder" className='w-12 h-12 mx-auto' />
-                        <p className="font-semibold mt-2">{folder.folder_name}</p>
+
+                        <Link to={`folder/${folder.id}`}>
+                            <img src={FolderIcon} alt="folder" className='w-12 h-12 mx-auto' />
+                            <p className="font-semibold mt-2">{folder.folder_name}</p>
+                        </Link>
                         <p className="text-sm">${folder.price}</p>
                         <p className="text-xs text-gray-500">{folder.status}</p>
                     </div>
                 ))}
             </div>
+
+            {/* Lazy Load Edit Folder Modal */}
             {isEditFolderOpen && currentFolder && (
-                <EditFolderModel
-                    isOpen={isEditFolderOpen}
-                    onClose={() => setIsEditFolderOpen(false)}
-                    folder={currentFolder}
-                    refetchFolders={refetchFolders}
-                />
+                <Suspense fallback={<p>Loading...</p>}>
+                    <EditFolderModel
+                        isOpen={isEditFolderOpen}
+                        onClose={() => setIsEditFolderOpen(false)}
+                        folder={currentFolder}
+                        refetchFolders={refetchFolders}
+                    />
+                </Suspense>
             )}
         </>
-    )
-}
+    );
+};
 
-export default FolderGridTable
+export default FolderGridTable;

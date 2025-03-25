@@ -1,15 +1,17 @@
-import React, { useState } from 'react';
+import React, { useState, lazy, Suspense } from 'react';
 import usePatients from '@/hooks/lists/usePatients';
 import { Button } from '@/components/designSystem/button';
 import SelectGender from '@/components/small/SelectGender';
-import PatientsTable from '@/components/pagesComp/patients/PatientsTable';
-
-import AddPatientModel from '@/models/AddModels/AddPatientModel';
 import PerPage from '@/components/small/PerPage';
 import PageChange from '@/components/small/PageChange';
 import SearchInTable from '@/components/small/SearchInTable';
 import Sort from '@/components/small/Sort';
 import DateInput from '@/components/inputs/DateInput';
+
+// Lazy load large components
+const PatientsTable = lazy(() => import('@/components/pagesComp/patients/PatientsTable'));
+const AddPatientModel = lazy(() => import('@/models/AddModels/AddPatientModel'));
+
 const PatientsList = () => {
   const {
     patients,
@@ -36,7 +38,6 @@ const PatientsList = () => {
 
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-
   return (
     <>
       <div className='flex justify-between w-5/6 mt-10 mx-auto items-center'>
@@ -57,7 +58,10 @@ const PatientsList = () => {
           </div>
         </div>
 
-        <PatientsTable patients={patients} fetchPatients={fetchPatients} patientLoading={loading} />
+        {/* Use Suspense to show fallback loading UI */}
+        <Suspense fallback={<p>Loading patients...</p>}>
+          <PatientsTable patients={patients} fetchPatients={fetchPatients} patientLoading={loading} />
+        </Suspense>
 
         <div className='flex justify-between items-center pb-3 px-4 mt-4'>
           <PageChange page={page} setPage={setPage} total_pages={pagination.total_pages} loading={loading} />
@@ -66,7 +70,12 @@ const PatientsList = () => {
         </div>
       </div>
 
-      <AddPatientModel isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
+      {/* Lazy load modal */}
+      {isModalOpen && (
+        <Suspense fallback={<p>Loading...</p>}>
+          <AddPatientModel isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
+        </Suspense>
+      )}
     </>
   );
 };

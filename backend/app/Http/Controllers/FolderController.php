@@ -125,8 +125,9 @@ class FolderController extends Controller
     public function show(string $id)
     {
         //id is of the folder not the patient 
-            $folder = Folder::with("visits")->findOrFail($id);
+            $folder = Folder::with(["visits","patient"])->findOrFail($id);
             $visits = $folder->visits;
+            $patient_name = $folder->patient->patient_name;
             try{
 
             
@@ -152,7 +153,8 @@ class FolderController extends Controller
             "success" => true,
             "message" => "Folder retrieved successfully",
             "data" => [
-                "folder" => $folder
+                "folder" => $folder,
+                "patient_name"=>$patient_name
             ],
         ], Response::HTTP_OK);
             }

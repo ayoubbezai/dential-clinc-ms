@@ -1,8 +1,10 @@
 import { useLocation } from "react-router-dom";
-import { useContext } from "react";
+import { useContext, lazy, Suspense, useMemo } from "react";
 import { AuthContext } from "../context/AuthContext";
-import SideBarDentist from "../layouts/SideBarDentist";
-import SideBarReceptionist from "../layouts/SideBarReceptionist";
+
+// Lazy load sidebars
+const SideBarDentist = lazy(() => import("../layouts/SideBarDentist"));
+const SideBarReceptionist = lazy(() => import("../layouts/SideBarReceptionist"));
 
 const DashboardLayout = ({ children }) => {
     const location = useLocation();
@@ -20,21 +22,30 @@ const DashboardLayout = ({ children }) => {
         "/patient/"
     ];
 
-    const showSidebar = sidebarPaths.includes(location.pathname) ||
-        location.pathname.startsWith("/patient/");
-    const renderSidebar = () => {
+    const showSidebar = sidebarPaths.some(path =>
+        location.pathname.startsWith(path)
+    );
+
+    // Memoize the sidebar component to prevent unnecessary re-renders
+    const SidebarComponent = useMemo(() => {
         if (user?.role === "dentist") {
-            return <SideBarDentist />;
+            return SideBarDentist;
         } else if (user?.role === "receptionist") {
-            return <SideBarReceptionist />;
+            return SideBarReceptionist;
         }
         return null;
-    };
+    }, [user?.role]);
 
     return (
         <div className="flex">
-            {showSidebar && renderSidebar()}
-            <div className="flex-grow w-1/2 max-h-screen overflow-auto">{children}</div>
+            {showSidebar && SidebarComponent && (
+                <Suspense fallback={<p>Loading sidebar...</p>}>
+                    <SidebarComponent />
+                </Suspense>
+            )}
+            <div className="flex-grow w-1/2 max-h-screen overflow-auto">
+                {children}
+            </div>
         </div>
     );
 };

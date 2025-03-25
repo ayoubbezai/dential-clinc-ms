@@ -1,10 +1,13 @@
-import React, { useState } from "react";
+import React, { useState, lazy, Suspense } from "react";
 import { TableBody, TableCell, TableRow } from "@/components/designSystem/table";
 import { Badge } from "@/components/designSystem/badge";
 import FolderIcon from "../../../assets/icons/folder2.svg";
 import FolderTableSkeleton from "@/Skeletons/FolderTableSkeleton";
 import EditAndDelete from "../../small/EditAndDelete";
-import EditFolderModel from "@/models/EditModels/EditFolderModel";
+import { Link } from "react-router-dom";
+
+// Lazy load the EditFolderModel
+const EditFolderModel = lazy(() => import("@/models/EditModels/EditFolderModel"));
 
 const statusColors = {
     working_on_it: "bg-green-100 text-green-800",
@@ -15,13 +18,12 @@ const statusColors = {
 
 const FolderTableBody = ({ loading, folders, handleDelete, isEditFolderOpen, setIsEditFolderOpen, refetchFolders }) => {
     const [currentFolder, setCurrentFolder] = useState(null);
-    
 
     const handleEdit = (folder) => {
         setCurrentFolder(folder);
         setIsEditFolderOpen(true);
     };
-    console.log(folders)
+
     return (
         <>
             <TableBody>
@@ -33,8 +35,10 @@ const FolderTableBody = ({ loading, folders, handleDelete, isEditFolderOpen, set
                         return (
                             <TableRow key={index} className="bg-gray-50 hover:bg-gray-200">
                                 <TableCell className="flex items-center gap-3">
-                                    <img src={FolderIcon} alt="folder" className="w-10 h-8" />
-                                    <span>{folder.folder_name}</span>
+                                    <Link className="flex items-center gap-2" to={`folder/${folder.id}`}>
+                                        <img src={FolderIcon} alt="folder" className="w-10 h-8" />
+                                        <span>{folder.folder_name}</span>
+                                    </Link>
                                 </TableCell>
                                 <TableCell>${folder.price}</TableCell>
                                 <TableCell>
@@ -55,13 +59,17 @@ const FolderTableBody = ({ loading, folders, handleDelete, isEditFolderOpen, set
                     })
                 )}
             </TableBody>
+
+            {/* Lazy Load Edit Folder Modal */}
             {isEditFolderOpen && currentFolder && (
-                <EditFolderModel
-                    isOpen={isEditFolderOpen}
-                    onClose={() => setIsEditFolderOpen(false)}
-                    folder={currentFolder}
-                    refetchFolders={refetchFolders}
-                />
+                <Suspense fallback={<p>Loading...</p>}>
+                    <EditFolderModel
+                        isOpen={isEditFolderOpen}
+                        onClose={() => setIsEditFolderOpen(false)}
+                        folder={currentFolder}
+                        refetchFolders={refetchFolders}
+                    />
+                </Suspense>
             )}
         </>
     );
