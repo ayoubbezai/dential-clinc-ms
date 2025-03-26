@@ -141,7 +141,8 @@ public function show(string $id)
     try {
         // Retrieve folder with related patient and payments
         $folder = Folder::with(['patient', 'payments'])->findOrFail($id);
-
+$total_payments = $folder->payments->where("type", "in")->sum('amount') -
+                  $folder->payments->where("type", "out")->sum('amount');
         return response()->json([
             "success" => true,
             "message" => "Retrieved payments successfully",
@@ -150,7 +151,7 @@ public function show(string $id)
                 "folder_name" => $folder->folder_name,
                 "patient_name" => $folder->patient->patient_name ?? null,
                 "payments" => $folder->payments,
-                "total_payments" => $folder->payments->sum('amount')
+                "total_payments" => $total_payments
             ]
         ], Response::HTTP_OK);
     } catch (\Exception $e) {

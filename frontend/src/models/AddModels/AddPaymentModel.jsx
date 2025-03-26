@@ -11,50 +11,63 @@ const AddPaymentModel = ({ isOpen, onClose, folderId, folderDetails, folderPayme
     const [amount, setAmount] = useState("");
     const [note, setNote] = useState("");
     const [loading, setLoading] = useState(false);
+    const [transactionType, setTransactionType] = useState("in");
+    const [isNoteRequired, setIsNoteRequired] = useState(false);
 
     const totalPrice = folderDetails?.price || 0;
     const totalPaid = folderPayments?.total_payments || 0;
-    const remainingAmount = (totalPrice - totalPaid) > 0 ? totalPrice - totalPaid : 0;
+    const remainingAmount = Math.max(totalPrice - totalPaid, 0);
+
+    function handleTransactionTypeChange(e) {
+        const newType = e.target.value;
+        setTransactionType(newType);
+        setIsNoteRequired(newType === "out");
+    }
 
     async function handleAddPayment(finalAmount) {
         if (!finalAmount) return toast.error("Amount is required!");
-
-        if (finalAmount > remainingAmount) {
-            const result = await Swal.fire({
-                title: "Overpayment Warning",
-                text: `You're about to pay more than the remaining balance (${remainingAmount} DA). Do you want to proceed?`,
-                icon: "warning",
-                showCancelButton: true,
-                confirmButtonText: "Yes, Proceed",
-                cancelButtonText: "Cancel",
-                confirmButtonColor: "#1a75ff",
-            });
-
-            if (!result.isConfirmed) return;
-        }
+        if (isNoteRequired && !note) return toast.error("Refund reason is required!");
 
         setLoading(true);
-        const { data, error } = await paymentService.addPayment(folderId, finalAmount, note);
+        const { data, error } = await paymentService.addPayment(folderId, finalAmount, note, transactionType);
 
         if (data?.success) {
-            toast.success("Payment added successfully!");
+            toast.success(transactionType === "in" ? "Payment added successfully!" : "Refund processed successfully!");
             fetchFolderPayments(folderId);
             setAmount("");
             setNote("");
             onClose();
         } else {
-            toast.error(error?.message || "Failed to add payment.");
+            toast.error(error?.message || "Failed to process the transaction.");
         }
         setLoading(false);
     }
 
     async function handleConfirm() {
+        if (transactionType === "out") {
+            const refundResult = await Swal.fire({
+                title: "Confirm Refund",
+                text: `Are you sure you want to refund ${amount} DA?`,
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonText: "Yes, Refund",
+                cancelButtonText: "Cancel",
+                confirmButtonColor: "#dc2626",
+                cancelButtonColor: "#6c757d",
+            });
+
+            if (refundResult.isConfirmed) {
+                handleAddPayment(parseFloat(amount));
+            }
+            return;
+        }
+
         const result = await Swal.fire({
             title: "Confirm Payment",
             text: `You entered ${amount} DA. What would you like to do?`,
             icon: "question",
             showCancelButton: true,
-            showDenyButton: amount - remainingAmount > 0 && !remainingAmount < 0 ,
+            showDenyButton: amount - remainingAmount > 0 && remainingAmount > 0,
             confirmButtonText: "Confirm",
             denyButtonText: `Confirm with (${remainingAmount} DA)`,
             cancelButtonText: "Cancel",
@@ -76,25 +89,40 @@ const AddPaymentModel = ({ isOpen, onClose, folderId, folderDetails, folderPayme
 
             <form className="flex flex-col gap-4">
                 <div>
+                    <label className="block text-sm font-medium text-gray-700">Transaction Type</label>
+                    <select
+                        value={transactionType}
+                        onChange={handleTransactionTypeChange}
+                        className={`${selectClassName} w-full mt-2`}
+                    >
+                        <option value="in">Pay</option>
+                        <option value="out">Refund</option>
+                    </select>
+                </div>
+
+                <div>
                     <label className="block text-sm font-medium text-gray-700">Amount (DA)</label>
                     <Input
                         type="number"
                         value={amount}
                         onChange={(e) => setAmount(e.target.value)}
                         placeholder="Enter amount"
-                        className={selectClassName}
+                        className={`${selectClassName} mt-2`}
                         required
                     />
                 </div>
 
                 <div>
-                    <label className="block text-sm font-medium text-gray-700">Note (Optional)</label>
+                    <label className="block text-sm font-medium text-gray-700">
+                        {transactionType === "out" ? "Refund Reason" : "Note (Optional)"}
+                    </label>
                     <Input
                         type="text"
                         value={note}
                         onChange={(e) => setNote(e.target.value)}
-                        placeholder="Add a note (optional)"
-                        className={selectClassName}
+                        placeholder={transactionType === "out" ? "Enter refund reason" : "Add a note (optional)"}
+                        className={`${selectClassName} mt-2`}
+                        required={isNoteRequired}
                     />
                 </div>
 
@@ -105,11 +133,11 @@ const AddPaymentModel = ({ isOpen, onClose, folderId, folderDetails, folderPayme
 
                     <Button
                         type="button"
-                        className={"text-white"}
+                        className="text-white"
                         onClick={handleConfirm}
-                        disabled={loading || !amount}
+                        disabled={loading || !amount || (isNoteRequired && !note)}
                     >
-                        {loading ? "Processing..." : "Confirm"}
+                        {loading ? "Processing..." : transactionType === "out" ? "Refund" : "Confirm"}
                     </Button>
                 </div>
             </form>
