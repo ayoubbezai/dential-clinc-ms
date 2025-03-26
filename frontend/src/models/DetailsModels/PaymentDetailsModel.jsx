@@ -10,12 +10,11 @@ const paymentsDetailsModel = ({ isOpen, onClose, payments }) => {
             <div className="p-5">
                 <div className="mb-4 border-b pb-3">
                     <h2 className="text-xl font-semibold text-gray-800">{payments?.patient_name}</h2>
-                    
                     <p className="text-sm text-gray-600">Folder: <span className="font-medium">{payments?.folder_name}</span></p>
                 </div>
 
                 {/* paymentss List */}
-                <div className="space-y-3">
+                <div className="space-y-3 max-h-72 overflow-y-auto">
                     {payments?.payments?.length > 0 ? (
                         payments.payments.map((pay, index) => (
                             <div key={index} className="border border-gray-200 p-3 rounded-md">

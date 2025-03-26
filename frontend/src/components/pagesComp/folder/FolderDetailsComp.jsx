@@ -1,14 +1,73 @@
-import React from "react";
+import React, { useState, lazy, Suspense } from "react";
+import { FaEllipsisH } from "react-icons/fa";
+import Swal from "sweetalert2";
+import { folderService } from "@/services/dentist/foldersService";
 
-const FolderDetailsComp = ({ folderDetails }) => {
+const EditFolderModel = lazy(() => import("@/models/EditModels/EditFolderModel"));
+
+const FolderDetailsComp = ({ folderDetails, refetchPatient }) => {
+    const [isMenuOpen, setIsMenuOpen] = useState(false);
+    const [isEditOpen, setIsEditOpen] = useState(false);
+
+    const handleDelete = async (folderId) => {
+        const result = await Swal.fire({
+            title: "Are you sure?",
+            text: "This action cannot be undone!",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#d33",
+            cancelButtonColor: "#3b82f6",
+            confirmButtonText: "Yes, delete it!",
+        });
+
+        if (result.isConfirmed) {
+            const response = await folderService.deleteFolder(folderId);
+
+            if (response?.success) {
+                Swal.fire("Deleted!", "Your folder has been removed.", "success");
+                refetchPatient();
+            } else {
+                Swal.fire("Error", response?.message || "Failed to delete folder.", "error");
+            }
+        }
+    };
+
     return (
-        <div className="col-span-6 bg-white p-5 shadow-md rounded-lg border border-gray-200 text-sm">
+        <div className="col-span-6 bg-white p-5  shadow-md rounded-lg border border-gray-200 text-sm relative">
             {/* Header */}
-            <div className="flex items-center justify-between pb-2 border-b">
-                <h3 className="text-[#223354] font-bold text-lg">{folderDetails?.folder_name || "N/A"}</h3>
-                <p className={`text-xs font-medium px-3 py-1 rounded-md ${folderDetails?.status === "working_on_it" ? "text-green-600 bg-green-100" : "text-red-600 bg-red-100"}`}>
-                    {folderDetails?.status || "Unknown"}
-                </p>
+            <div className="flex items-center justify-between pb-2 ">
+                <div>
+                    <h3 className="text-[#223354] font-bold text-lg">{folderDetails?.folder_name || "N/A"}</h3>
+                    <p className={`text-xs font-medium px-3 py-1 rounded-md mt-1 inline-block 
+                        ${folderDetails?.status === "working_on_it" ? "text-green-600 bg-green-100" : "text-red-600 bg-red-100"}`}>
+                        {folderDetails?.status || "Unknown"}
+                    </p>
+                </div>
+
+                {/* Menu Icon */}
+                <div className="relative">
+                    <button onClick={() => setIsMenuOpen(!isMenuOpen)} className="text-gray-500 hover:text-gray-700 p-2">
+                        <FaEllipsisH />
+                    </button>
+
+                    {/* Dropdown Menu */}
+                    {isMenuOpen && (
+                        <div className="absolute right-0 mt-2 w-32 bg-white shadow-md rounded-md border border-gray-200 z-10">
+                            <button
+                                onClick={() => { setIsMenuOpen(false); setIsEditOpen(true); }}
+                                className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                            >
+                                Edit
+                            </button>
+                            <button
+                                onClick={() => { setIsMenuOpen(false); handleDelete(folderDetails.id); }}
+                                className="block w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-gray-100"
+                            >
+                                Delete
+                            </button>
+                        </div>
+                    )}
+                </div>
             </div>
 
             {/* Visits List */}
@@ -34,6 +93,11 @@ const FolderDetailsComp = ({ folderDetails }) => {
                     <p className="text-gray-500 text-center bg-gray-100 p-3 rounded-md">No tooth details available.</p>
                 )}
             </div>
+
+            {/* Lazy-loaded Edit Modal */}
+            <Suspense fallback={<div>Loading...</div>}>
+                {isEditOpen && <EditFolderModel isOpen={isEditOpen} onClose={() => setIsEditOpen(false)} folder={folderDetails} />}
+            </Suspense>
         </div>
     );
 };

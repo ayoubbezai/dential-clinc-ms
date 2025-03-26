@@ -4,6 +4,7 @@ import { HiArrowNarrowRight } from "react-icons/hi";
 import { Table } from "@/components/designSystem/table";
 import usePatient from "@/hooks/other/usePatient";
 import { folderService } from "@/services/dentist/foldersService";
+import Swal from "sweetalert2";
 import toast from "react-hot-toast";
 
 // Lazy Load Components
@@ -26,13 +27,24 @@ const PatientDetails = () => {
   const [isEditFolderOpen, setIsEditFolderOpen] = useState(false);
 
   async function handleDelete(folderId) {
-    const response = await folderService.deleteFolder(folderId);
+    const result = await Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#d33",
+      cancelButtonColor: "#3085d6",
+      confirmButtonText: "Yes, delete it!"
+    });
 
-    if (response?.success) {
-      toast.success("Folder deleted successfully!");
-      refetchPatient();
-    } else {
-      toast.error(response?.message || "Failed to delete folder.");
+    if (result.isConfirmed) {
+      const response = await folderService.deleteFolder(folderId);
+      if (response?.success) {
+        toast.success("Folder deleted successfully!");
+        refetchPatient();
+      } else {
+        toast.error(response?.message || "Failed to delete folder.");
+      }
     }
   }
 

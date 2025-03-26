@@ -10,12 +10,14 @@ import FolderDocuments from '@/components/pagesComp/folder/FolderDocuments';
 import FolderPayments from '@/components/pagesComp/folder/FolderPayments';
 const FolderDetails = () => {
     const { patientId, folderId } = useParams();
-    const { loading, folderDetails, folderDetailsError, folderNotes, folderNotesError, folderPayments, folderAppointments } = useFolder(folderId);
+    const { loading, folderDetails, folderDetailsError, folderNotes, folderNotesError,fetchFolderPayments, folderPayments, folderAppointments } = useFolder(folderId);
 
     console.log("folderDetails", folderDetails)
     console.log("folderNotes", folderNotes)
     console.log("folderPayments", folderPayments)
     console.log("folderAppointments", folderAppointments)
+
+    
 
 
 
@@ -38,7 +40,7 @@ const FolderDetails = () => {
                 {/* folder Documents 4 col */}
                 <FolderDocuments />
                 {/* folder payments 4 col */}
-                <FolderPayments folderDetails={folderDetails} folderPayments={folderPayments}/>
+                <FolderPayments folderDetails={folderDetails} folderPayments={folderPayments} fetchFolderPayments={fetchFolderPayments}/>
 
 
 
