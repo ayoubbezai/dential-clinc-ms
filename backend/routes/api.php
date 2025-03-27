@@ -10,6 +10,7 @@ use App\Http\Controllers\EventController;
 use App\Http\Controllers\StockUnitController;
 use App\Http\Controllers\NoteController;
 use App\Http\Controllers\PaymentController;
+use App\Http\Controllers\MedicineController;
 use App\Models\Appointment;
 use Illuminate\Support\Facades\Route;
 
@@ -44,6 +45,7 @@ Route::middleware([$auth, 'role:dentist,receptionist'])->group(function () {
     Route::apiResources(['/payments' => PaymentController::class,]);
     Route::apiResources(['/events' => EventController::class,]);
     Route::apiResources(['/stock_units' => StockUnitController::class,]);
+    Route::apiResources(['/medicines' => MedicineController::class,]);
 });
 
 
