@@ -8,5 +8,10 @@ class StockUnit extends Model
 {
         protected $fillable = ['name'];
 
+            public function stocks()
+    {
+        return $this->hasMany(Stock::class, 'medicine_id');
+    }
+
 
 }

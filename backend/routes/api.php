@@ -11,6 +11,7 @@ use App\Http\Controllers\StockUnitController;
 use App\Http\Controllers\NoteController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\MedicineController;
+use App\Http\Controllers\StockController;
 use App\Http\Controllers\SupplierController;
 use App\Models\Appointment;
 use Illuminate\Support\Facades\Route;
@@ -48,6 +49,7 @@ Route::middleware([$auth, 'role:dentist,receptionist'])->group(function () {
     Route::apiResources(['/stock_units' => StockUnitController::class,]);
     Route::apiResources(['/medicines' => MedicineController::class,]);
     Route::apiResources(['/suppliers' => SupplierController::class,]);
+    Route::apiResources(['/stocks' => StockController::class,]);
 });
 
 
