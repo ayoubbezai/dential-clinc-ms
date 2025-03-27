@@ -13,6 +13,7 @@ use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\MedicineController;
 use App\Http\Controllers\StockController;
 use App\Http\Controllers\SupplierController;
+use App\Http\Controllers\AttachmentController;
 use App\Models\Appointment;
 use Illuminate\Support\Facades\Route;
 
@@ -50,6 +51,7 @@ Route::middleware([$auth, 'role:dentist,receptionist'])->group(function () {
     Route::apiResources(['/medicines' => MedicineController::class,]);
     Route::apiResources(['/suppliers' => SupplierController::class,]);
     Route::apiResources(['/stocks' => StockController::class,]);
+    Route::post('/folders/{folder}/attachments', [AttachmentController::class, 'store']);
 });
 
 

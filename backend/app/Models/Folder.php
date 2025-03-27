@@ -47,4 +47,9 @@ class Folder extends Model
     {
         return $this->hasMany(Payment::class);
     }
+
+    public function attachments()
+{
+    return $this->hasMany(Attachment::class);
+}
 }
