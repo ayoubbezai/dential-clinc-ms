@@ -8,7 +8,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Illuminate\Http\Response;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class AttachmentController extends Controller
 {
@@ -109,20 +108,18 @@ public function download(string $id)
             ], Response::HTTP_NOT_FOUND);
         }
 
-        // Get the full file path
+        // Get file path and return file as a download response
         $filePath = Storage::disk('attachments')->path($attachment->storage_path);
 
-        // Ensure correct headers for PDF download
+        return response()->json([
+            "path"=>$filePath
+        ],200);
+        
         return response()->download($filePath, $attachment->original_name, [
-            'Content-Type' => 'application/pdf',
-            'Content-Disposition' => 'attachment; filename="' . $attachment->original_name . '"'
+            'Content-Type' => $attachment->mime_type
         ]);
 
-    } catch (ModelNotFoundException $e) {
-        return response()->json([
-            'success' => false,
-            'message' => 'Attachment not found.'
-        ], Response::HTTP_NOT_FOUND);
+
     } catch (\Exception $e) {
         return response()->json([
             'success' => false,
@@ -130,5 +127,4 @@ public function download(string $id)
             'error' => $e->getMessage()
         ], Response::HTTP_INTERNAL_SERVER_ERROR);
     }
-}
-}
+}}
