@@ -1,17 +1,51 @@
+
 import React, { useCallback, useEffect, useState } from "react";
 import _ from "lodash";
 import { folderDetailsService } from "@/services/dentist/folderDetailsService";
+import { attachmentService } from "@/services/dentist/attachmentService";
+import { folderService } from "@/services/dentist/foldersService";
 
 const useFolder = (folderId) => {
     const [folderDetails, setFolderDetails] = useState();
     const [folderNotes, setFolderNotes] = useState();
     const [folderPayments, setFolderPayments] = useState();
-    const [folderAppointments, setFolderAppointments] = useState(); 
+    const [folderAppointments, setFolderAppointments] = useState();
+    const [folderAttachments, setFolderAttachments] = useState();
     const [loading, setLoading] = useState(false);
+
     const [folderDetailsError, setFolderDetailsError] = useState(null);
     const [folderNotesError, setFolderNotesError] = useState(null);
     const [folderPaymentsError, setFolderPaymentsError] = useState(null);
-    const [folderAppointmentsError, setFolderAppointmentsError] = useState(null); 
+    const [folderAppointmentsError, setFolderAppointmentsError] = useState(null);
+    const [folderAttachmentsError, setFolderAttachmentsError] = useState(null);
+
+    // Fetch all folder details (fetching everything except appointments)
+    const fetchAllFolderDetails = useCallback(
+        _.debounce(async (folderId) => {
+            if (!folderId) return;
+            setFolderDetailsError(null);
+            setLoading(true);
+            try {
+                const response = await folderService.getAllFolderDetails(folderId);
+                console.log("All Folder Details:", response);
+                console.log("All Folder Details:", response.data.data);
+                setFolderDetails(response.data.data);
+                setFolderNotes(response.data.data.notes); // Set folder notes from response
+                setFolderPayments(response.data.data.payments); // Set folder payments
+                setFolderAttachments(response.data.data.attachments); // Set folder attachments
+            } catch (error) {
+                setFolderDetailsError(error);
+            } finally {
+                setLoading(false);
+            }
+        }, 0),
+        [folderId]
+    );
+
+    // Initial fetch using the fetchAllFolderDetails method (with useEffect)
+    useEffect(() => {
+        fetchAllFolderDetails(folderId);
+    }, [folderId, fetchAllFolderDetails]);
 
     const fetchFolderDetails = useCallback(
         _.debounce(async (folderId) => {
@@ -31,75 +65,69 @@ const useFolder = (folderId) => {
         [folderId]
     );
 
-    useEffect(() => {
-        fetchFolderDetails(folderId);
-    }, [folderId, fetchFolderDetails]);
+    // Function to fetch folder notes
+    const fetchFolderNotes = async (folderId) => {
+        if (!folderId) return;
+        setFolderNotesError(null);
+        setLoading(true);
+        try {
+            const response = await folderDetailsService.getFolderNotes(folderId);
+            console.log("Folder Notes:", response);
+            setFolderNotes(response.data.data);
+        } catch (error) {
+            setFolderNotesError(error);
+        } finally {
+            setLoading(false);
+        }
+    };
 
-    const fetchFolderNotes = useCallback(
-        _.debounce(async (folderId) => {
-            if (!folderId) return;
-            setFolderNotesError(null);
-            setLoading(true);
-            try {
-                const response = await folderDetailsService.getFolderNotes(folderId);
-                console.log("Folder Notes:", response);
-                setFolderNotes(response.data.data);
-            } catch (error) {
-                setFolderNotesError(error);
-            } finally {
-                setLoading(false);
-            }
-        }, 0),
-        [folderId]
-    );
+    // Function to fetch folder payments
+    const fetchFolderPayments = async (folderId) => {
+        if (!folderId) return;
+        setFolderPaymentsError(null);
+        setLoading(true);
+        try {
+            const response = await folderDetailsService.getFolderPayments(folderId);
+            console.log("Folder Payments:", response);
+            setFolderPayments(response.data.data);
+        } catch (error) {
+            setFolderPaymentsError(error);
+        } finally {
+            setLoading(false);
+        }
+    };
 
-    useEffect(() => {
-        fetchFolderNotes(folderId);
-    }, [folderId, fetchFolderNotes]);
+    // Function to fetch folder attachments
+    const fetchFolderAttachments = async (folderId) => {
+        if (!folderId) return;
+        setFolderAttachmentsError(null);
+        setLoading(true);
+        try {
+            const response = await attachmentService.getAllAttchments(folderId);
+            console.log("Folder Attachments:", response);
+            setFolderAttachments(response?.data?.attachments);
+        } catch (error) {
+            setFolderAttachmentsError(error);
+        } finally {
+            setLoading(false);
+        }
+    };
 
-    const fetchFolderPayments = useCallback(
-        _.debounce(async (folderId) => {
-            if (!folderId) return;
-            setFolderPaymentsError(null);
-            setLoading(true);
-            try {
-                const response = await folderDetailsService.getFolderPayments(folderId);
-                console.log("Folder Payments:", response);
-                setFolderPayments(response.data.data);
-            } catch (error) {
-                setFolderPaymentsError(error);
-            } finally {
-                setLoading(false);
-            }
-        }, 0),
-        [folderId]
-    );
-
-    useEffect(() => {
-        fetchFolderPayments(folderId);
-    }, [folderId, fetchFolderPayments]);
-
-    const fetchFolderAppointments = useCallback(
-        _.debounce(async (folderId) => {
-            if (!folderId) return;
-            setFolderAppointmentsError(null);
-            setLoading(true);
-            try {
-                const response = await folderDetailsService.getFolderAppointments(folderId);
-                console.log("Folder Appointments:", response);
-                setFolderAppointments(response.data.data.appointments);
-            } catch (error) {
-                setFolderAppointmentsError(error);
-            } finally {
-                setLoading(false);
-            }
-        }, 0),
-        [folderId]
-    );
-
-    useEffect(() => {
-        fetchFolderAppointments(folderId);
-    }, [folderId, fetchFolderAppointments]);
+    // Function to fetch folder appointments (if needed, can be manually triggered)
+    const fetchFolderAppointments = async (folderId) => {
+        if (!folderId) return;
+        setFolderAppointmentsError(null);
+        setLoading(true);
+        try {
+            const response = await folderDetailsService.getFolderAppointments(folderId);
+            console.log("Folder Appointments:", response);
+            setFolderAppointments(response.data.data.appointments);
+        } catch (error) {
+            setFolderAppointmentsError(error);
+        } finally {
+            setLoading(false);
+        }
+    };
 
     return {
         loading,
@@ -107,14 +135,18 @@ const useFolder = (folderId) => {
         folderNotes,
         folderPayments,
         folderAppointments,
+        folderAttachments,
         folderDetailsError,
         folderNotesError,
         folderPaymentsError,
         folderAppointmentsError,
-        fetchFolderDetails,
+        folderAttachmentsError,
+        fetchAllFolderDetails,//fetch all details
+        fetchFolderDetails,//fetch only fodler details
         fetchFolderNotes,
         fetchFolderPayments,
-        fetchFolderAppointments
+        fetchFolderAppointments,
+        fetchFolderAttachments,
     };
 };
 

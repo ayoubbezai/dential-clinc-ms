@@ -10,7 +10,7 @@ const FolderPayments = ({ folderDetails, folderPayments, fetchFolderPayments }) 
     const [isMenuOpen, setIsMenuOpen] = useState(false);
 
     const totalPrice = folderDetails?.price || 0;
-    const totalPaid = folderPayments?.total_payments || 0;
+    const totalPaid = folderDetails?.total_payments || 0;
     const remainingAmount = totalPrice - totalPaid;
 
     return (

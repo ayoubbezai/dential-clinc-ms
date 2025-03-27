@@ -15,7 +15,7 @@ const AddPaymentModel = ({ isOpen, onClose, folderId, folderDetails, folderPayme
     const [isNoteRequired, setIsNoteRequired] = useState(false);
 
     const totalPrice = folderDetails?.price || 0;
-    const totalPaid = folderPayments?.total_payments || 0;
+    const totalPaid = folderDetails?.total_payments || 0;
     const remainingAmount = Math.max(totalPrice - totalPaid, 0);
 
     function handleTransactionTypeChange(e) {

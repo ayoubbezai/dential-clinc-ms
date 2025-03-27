@@ -6,7 +6,7 @@ import { selectClassName } from "@/constant/classNames";
 import { folderService } from "@/services/dentist/foldersService";
 import toast from "react-hot-toast";
 
-const EditFolderModel = ({ isOpen, onClose, folder, refetchFolders }) => {
+const EditFolderModel = ({ isOpen, onClose, folder, fetchFolderDetails }) => {
     const [formData, setFormData] = useState({ folder_name: "", price: "", status: "" });
     const [visits, setVisits] = useState([]);
     const [loading, setLoading] = useState(false);
@@ -45,22 +45,18 @@ const EditFolderModel = ({ isOpen, onClose, folder, refetchFolders }) => {
         }
 
         setLoading(true);
-        try {
             console.log(formData)
             const { data } = await folderService.editFolder(folder.id, formData, visits);
 
             if (data?.success) {
                 toast.success("Folder updated successfully!");
-                refetchFolders()
+                fetchFolderDetails()
                 onClose();
             } else {
                 toast.error(data?.message || "Failed to update folder.");
             }
-        } catch (error) {
-            toast.error("An error occurred while updating.", error);
-        } finally {
+        
             setLoading(false);
-        }
     }
 
     return (

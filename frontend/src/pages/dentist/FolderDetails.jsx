@@ -10,12 +10,30 @@ import FolderDocuments from '@/components/pagesComp/folder/FolderDocuments';
 import FolderPayments from '@/components/pagesComp/folder/FolderPayments';
 const FolderDetails = () => {
     const { patientId, folderId } = useParams();
-    const { loading, folderDetails, folderDetailsError, folderNotes, folderNotesError,fetchFolderPayments, folderPayments, folderAppointments ,fetchFolderNotes } = useFolder(folderId);
+    const { loading,
+        folderDetails,
+        folderNotes,
+        folderPayments,
+        folderAppointments,
+        folderAttachments,
+        folderDetailsError,
+        folderNotesError,
+        folderPaymentsError,
+        folderAppointmentsError,
+        folderAttachmentsError,
+        fetchAllFolderDetails,//fetch all details
+        fetchFolderDetails,//fetch only fodler details
+        fetchFolderNotes,
+        fetchFolderPayments,
+        fetchFolderAppointments,
+        fetchFolderAttachments, } = useFolder(folderId);
+
 
     console.log("folderDetails", folderDetails)
     console.log("folderNotes", folderNotes)
     console.log("folderPayments", folderPayments)
     console.log("folderAppointments", folderAppointments)
+    console.log("folderAttachments", folderAttachments)
 
     
 
@@ -34,11 +52,11 @@ const FolderDetails = () => {
 
             <div className="grid grid-cols-12 gap-4 my-4">
                 {/* folderDetails 6 col */}
-                <FolderDetailsComp folderDetails={folderDetails} />
+                <FolderDetailsComp folderDetails={folderDetails} fetchFolderDetails={fetchFolderDetails}/>
                 {/* folder notes 6 col */}
                 <FolderNotes folderNotes={folderNotes} folderId={folderId} fetchFolderNotes={fetchFolderNotes} />
                 {/* folder Documents 4 col */}
-                <FolderDocuments folderId={folderId} />
+                <FolderDocuments folderId={folderId} folderAttachments={folderAttachments} fetchFolderAttachments={fetchFolderAttachments}  />
                 {/* folder payments 4 col */}
                 <FolderPayments folderDetails={folderDetails} folderPayments={folderPayments} fetchFolderPayments={fetchFolderPayments}/>
 

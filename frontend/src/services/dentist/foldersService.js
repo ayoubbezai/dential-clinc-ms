@@ -1,7 +1,7 @@
 import api from "../other/api";
 
 export const folderService = {
-  async getPatientFolders(patientId, perPage, search, page=1) {
+  async getPatientFolders(patientId, perPage, search, page = 1) {
     try {
       const params = new URLSearchParams();
       const appendParam = (key, value) => {
@@ -69,6 +69,22 @@ export const folderService = {
       return { data: response.data };
     } catch (err) {
       console.log("err", err);
+    }
+  },
+  async getAllFolderDetails(folderId) {
+    try {
+      console.log("Fetching details for folderId:", folderId);
+
+      const response = await api.get(`/folder_details/${folderId}`);
+      console.log("Folder details response:", response);
+
+      return { data: response.data };
+    } catch (error) {
+      console.log("Error fetching folder details:", error);
+      return {
+        error:
+          error?.response?.data?.message || "Failed to fetch folder details.",
+      };
     }
   },
 };

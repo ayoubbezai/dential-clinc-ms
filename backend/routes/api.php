@@ -53,6 +53,7 @@ Route::middleware([$auth, 'role:dentist,receptionist'])->group(function () {
     Route::apiResources(['/stocks' => StockController::class,]);
     Route::post('/folders/{folder}/attachments', [AttachmentController::class, 'store']);
     Route::get('/folders/{folder}/attachments', [AttachmentController::class, 'getAttachments']);
+    Route::get('/folder_details/{id}', [FolderController::class, 'getAllFolderDetails']);
 });
 Route::get('/attachments/{id}/download', [AttachmentController::class, 'download']);
 

@@ -332,6 +332,43 @@ public function getFoldersOfPatient(Request $request, string $id)
             "error" => $e->getMessage(),
         ], Response::HTTP_INTERNAL_SERVER_ERROR);
     }
+
+
 }
+public function getAllFolderDetails(string $id)
+{
+    try {
+        // Fetch folder with all related data (visits, notes, payments, attachments)
+        $folder = Folder::with(['visits', 'notes', 'payments', 'attachments',"patient"])->findOrFail($id);
+
+        // Decrypt visit data if available
+        foreach ($folder->visits as $visit) {
+            $visit->dent = $visit->dent ? Crypt::decryptString($visit->dent) : null;
+            $visit->reason_of_visit = $visit->reason_of_visit ? Crypt::decryptString($visit->reason_of_visit) : null;
+            $visit->treatment_details = $visit->treatment_details ? Crypt::decryptString($visit->treatment_details) : null;
+        }
+        foreach ($folder->notes as $note) {
+            $note->title = $note->title ? Crypt::decryptString($note->title) : null;
+            $note->content = $note->content ? Crypt::decryptString($note->content) : null;
+
+        }
+        $total_payments = $folder->payments->where("type", "in")->sum('amount') -
+                  $folder->payments->where("type", "out")->sum('amount');
+                $folder->total_payments = $total_payments;
+
+        return response()->json([
+            'success' => true,
+            'data' => $folder
+        ], 200);
+
+    } catch (\Exception $e) {
+        return response()->json([
+            'success' => false,
+            'message' => 'Error fetching folder details',
+            'error' => $e->getMessage()
+        ], 500);
+    }
+}
+
 
 }

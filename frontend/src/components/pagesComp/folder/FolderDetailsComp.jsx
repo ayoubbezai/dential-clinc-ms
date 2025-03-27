@@ -5,7 +5,7 @@ import { folderService } from "@/services/dentist/foldersService";
 
 const EditFolderModel = lazy(() => import("@/models/EditModels/EditFolderModel"));
 
-const FolderDetailsComp = ({ folderDetails, refetchPatient }) => {
+const FolderDetailsComp = ({ folderDetails, fetchFolderDetails }) => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [isEditOpen, setIsEditOpen] = useState(false);
 
@@ -25,7 +25,7 @@ const FolderDetailsComp = ({ folderDetails, refetchPatient }) => {
 
             if (response?.success) {
                 Swal.fire("Deleted!", "Your folder has been removed.", "success");
-                refetchPatient();
+                fetchFolderDetails();
             } else {
                 Swal.fire("Error", response?.message || "Failed to delete folder.", "error");
             }
@@ -96,7 +96,7 @@ const FolderDetailsComp = ({ folderDetails, refetchPatient }) => {
 
             {/* Lazy-loaded Edit Modal */}
             <Suspense fallback={<div>Loading...</div>}>
-                {isEditOpen && <EditFolderModel isOpen={isEditOpen} onClose={() => setIsEditOpen(false)} folder={folderDetails} />}
+                {isEditOpen && <EditFolderModel isOpen={isEditOpen} onClose={() => setIsEditOpen(false)} folder={folderDetails} fetchFolderDetails={fetchFolderDetails} />}
             </Suspense>
         </div>
     );
