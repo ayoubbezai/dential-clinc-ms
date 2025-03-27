@@ -91,7 +91,21 @@ class MedicineController extends Controller
      */
     public function show(string $id)
     {
-        //
+        try {
+            $medicine = Medicine::findOrFail($id);
+            
+            return response()->json([
+                'success' => true,
+                'message' => 'medicine fetched successfully',
+                'data' => $medicine
+            ], Response::HTTP_OK);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'error getting medicine info ',
+                'error' => $e->getMessage(),
+            ], Response::HTTP_NOT_FOUND);
+        }
     }
 
     /**
