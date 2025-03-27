@@ -38,7 +38,7 @@ const FolderDetails = () => {
                 {/* folder notes 6 col */}
                 <FolderNotes folderNotes={folderNotes} folderId={folderId} fetchFolderNotes={fetchFolderNotes} />
                 {/* folder Documents 4 col */}
-                <FolderDocuments />
+                <FolderDocuments folderId={folderId} />
                 {/* folder payments 4 col */}
                 <FolderPayments folderDetails={folderDetails} folderPayments={folderPayments} fetchFolderPayments={fetchFolderPayments}/>
 

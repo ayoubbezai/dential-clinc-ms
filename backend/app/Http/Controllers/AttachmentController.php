@@ -111,9 +111,9 @@ public function download(string $id)
         // Get file path and return file as a download response
         $filePath = Storage::disk('attachments')->path($attachment->storage_path);
 
-        return response()->json([
-            "path"=>$filePath
-        ],200);
+        // return response()->json([
+        //     "path"=>$filePath
+        // ],200);
         
         return response()->download($filePath, $attachment->original_name, [
             'Content-Type' => $attachment->mime_type
