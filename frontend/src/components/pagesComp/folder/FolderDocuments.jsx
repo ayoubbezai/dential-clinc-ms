@@ -1,12 +1,29 @@
+import { attachmentService } from "@/services/dentist/attachmentService";
 import React, { useState, lazy, Suspense } from "react";
 import { AiOutlineFilePdf } from "react-icons/ai";
 import { FaEllipsisV, FaTrash } from "react-icons/fa";
+import toast from "react-hot-toast"; // Import react-hot-toast
 
 const AddDocumentModel = lazy(() => import("@/models/AddModels/AddDocumentModel"));
 
 const FolderDocuments = ({ folderId, folderAttachments, fetchFolderAttachments }) => {
     const [isAddModelOpen, setIsAddModelOpen] = useState(false);
     const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+    async function handleDelete(attachments_id) {
+        try {
+            const data = await attachmentService.deleteAttachments(attachments_id);
+            if (data.success) {
+                toast.success("Document deleted successfully!");
+                fetchFolderAttachments(folderId);
+            } else {
+                toast.error("Failed to delete document.");
+            }
+        } catch (error) {
+            toast.error("Error deleting document.");
+            console.error("Delete Error:", error);
+        }
+    }
 
     return (
         <div className="col-span-4 bg-white p-5 shadow-md rounded-lg border border-gray-200 text-sm">
@@ -64,7 +81,10 @@ const FolderDocuments = ({ folderId, folderAttachments, fetchFolderAttachments }
                                     <span className="text-xs text-gray-500">{doc.size}</span>
                                 </div>
                             </div>
-                            <button className="text-red-500/50 hover:text-red-500/80 hover:cursor-pointer text-sm">
+                            <button
+                                onClick={() => handleDelete(doc.id)}
+                                className="text-red-500/50 hover:text-red-500/80 hover:cursor-pointer text-sm"
+                            >
                                 <FaTrash />
                             </button>
                         </div>

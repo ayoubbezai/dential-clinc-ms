@@ -106,7 +106,7 @@ const useFolder = (folderId) => {
         try {
             const response = await attachmentService.getAllAttchments(folderId);
             console.log("Folder Attachments:", response);
-            setFolderAttachments(response?.data?.attachments);
+            setFolderAttachments(response?.data?.data?.attachments);
         } catch (error) {
             setFolderAttachmentsError(error);
         } finally {

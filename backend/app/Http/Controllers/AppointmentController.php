@@ -142,8 +142,9 @@ public function store(Request $request)
 {
     $data = $request->validate([
         "date" => "required|date",
-        "status" => ["required", Rule::in(['pending', 'completed', 'cancelled', 'rescheduled'])],
-        "title" => "required|string|max:255",
+        "status" => ["required", Rule::in(['pending', 'completed', 'cancelled', 'rescheduled','scheduled'])],
+        "tooth" => "nullable|string|max:255",
+        "title" => "nullable|string|max:255",
         "content" => "nullable|string",
         "folder_id" => "required|integer|exists:folders,id"
     ]);
@@ -162,6 +163,7 @@ public function store(Request $request)
                 "date" => $appointment->date,
                 "status" => $appointment->status,
                 "title" => $appointment->title,
+                "tooth" => $appointment->tooth,
                 "content" => $appointment->content,
             ]
         ], Response::HTTP_CREATED);
@@ -218,8 +220,9 @@ public function store(Request $request)
         //valideate data before update
         $data = $request->validate([
         "date" => "nullable|date",
-        "status" => ["required", Rule::in(['pending', 'completed', 'cancelled', 'rescheduled'])],
+        "status" => ["required", Rule::in(['pending', 'completed', 'cancelled', 'rescheduled','scheduled'])],
         "title" => "nullable|string|max:255",
+        "tooth" => "nullable|string|max:255",
         "content" => "nullable|string",
         "folder_id" => "nullable|integer|exists:folders,id"
     ]);

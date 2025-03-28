@@ -16,7 +16,7 @@ const FolderPayments = ({ folderDetails, folderPayments, fetchFolderPayments, fo
 
     return (
         <>
-            <div className="col-span-4 bg-white p-4 px-5 shadow-sm rounded-md border border-gray-200 text-sm relative">
+            <div className="col-span-4 bg-white p-4 px-5 min-h-80 shadow-sm rounded-md border border-gray-200 text-sm relative">
                 <div className="flex items-center border-b justify-between pb-3 mb-3">
                     <h3 className="text-[#223354] font-bold text-lg">Payments</h3>
 

@@ -54,6 +54,7 @@ Route::middleware([$auth, 'role:dentist,receptionist'])->group(function () {
     Route::post('/folders/{folder}/attachments', [AttachmentController::class, 'store']);
     Route::get('/folders/{folder}/attachments', [AttachmentController::class, 'getAttachments']);
     Route::get('/folder_details/{id}', [FolderController::class, 'getAllFolderDetails']);
+    Route::delete('/attachments/{id}', [AttachmentController::class, 'destroy']);
 });
 Route::get('/attachments/{id}/download', [AttachmentController::class, 'download']);
 

@@ -14,7 +14,7 @@ const FolderTableHeader = lazy(() => import("@/components/pagesComp/patient/Fold
 const FolderTableHead = lazy(() => import("@/components/pagesComp/patient/FolderTableHead"));
 const FolderTableBody = lazy(() => import("@/components/pagesComp/patient/FolderTableBody"));
 const FolderGridTable = lazy(() => import("@/components/pagesComp/patient/FolderGridTable"));
-const FolderTableFooter = lazy(() => import("@/components/pagesComp/patient/FolderTableFooter"));
+const FolderTableFooter = lazy(() => import("@/components/small/TableFooter"));
 
 const PatientDetails = () => {
   const { id } = useParams();

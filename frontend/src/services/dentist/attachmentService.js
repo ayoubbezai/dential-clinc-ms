@@ -1,6 +1,7 @@
 import api from "../other/api";
 
 export const attachmentService = {
+
   async storeAttachment(folder_id, formData) {
     try {
       const response = await api.post(
@@ -21,14 +22,24 @@ export const attachmentService = {
     }
   },
 
-  async getAllAttchments(folder_id) {
+  async deleteAttachments(attachments_id) {
     try {
-      const response = await api.get(`/folders/${folder_id}/attachments`);
+      const response = await api.delete(`/attachments/${attachments_id}`);
       console.log(response);
       return response.data;
-    } catch (e) {
-      console.log(e);
-      return e;
+    } catch (err) {
+      console.log("err", err);
+      return err;
     }
   },
+
+  async getAllAttchments(folderId){
+        try {
+          const response = await api.get(`/folders/${folderId}/attachments`);
+          console.log(response);
+          return { data: response.data };
+        } catch (err) {
+          console.log(err);
+        }
+  }
 };

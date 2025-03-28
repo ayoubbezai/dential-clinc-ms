@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
+use Illuminate\Support\Facades\DB;
 
 use App\Models\Attachment;
 use App\Models\Folder;
@@ -127,4 +128,41 @@ public function download(string $id)
             'error' => $e->getMessage()
         ], Response::HTTP_INTERNAL_SERVER_ERROR);
     }
-}}
+}
+
+public function destroy(string $id)
+{
+    DB::beginTransaction(); // Start a transaction
+
+    try {
+        // Fetch attachment by ID
+        $attachment = Attachment::findOrFail($id);
+
+        // Check if file exists and delete it
+        if (Storage::disk('attachments')->exists($attachment->storage_path)) {
+            Storage::disk('attachments')->delete($attachment->storage_path);
+        }
+
+        // Delete the database record
+        $attachment->delete();
+
+        DB::commit(); // Commit transaction if everything is successful
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Attachment deleted successfully'
+        ], Response::HTTP_OK);
+        
+    } catch (\Exception $e) {
+        DB::rollBack(); // Rollback transaction if any error occurs
+
+        return response()->json([
+            'success' => false,
+            'message' => 'Failed to delete attachment',
+            'error' => $e->getMessage()
+        ], Response::HTTP_INTERNAL_SERVER_ERROR);
+    }
+}
+
+
+}

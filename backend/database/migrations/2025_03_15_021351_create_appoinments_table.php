@@ -14,8 +14,9 @@ return new class extends Migration
     Schema::create('appointments', function (Blueprint $table) {
         $table->id();
         $table->date("date")->nullable();
-        $table->enum('status', ['pending', 'completed', 'cancelled', 'rescheduled'])->default('pending');
-        $table->string("title");
+        $table->enum('status', ['pending', 'completed', 'cancelled', 'scheduled','rescheduled'])->default('scheduled');
+        $table->string("title")->nullable();
+        $table->string("tooth")->nullable();
         $table->text("content")->nullable();
         $table->foreignId('folder_id')->constrained('folders')->onDelete('cascade');
         $table->timestamps();
