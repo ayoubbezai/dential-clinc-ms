@@ -7,7 +7,7 @@ import { Button } from "@/components/designSystem/button";
 import { selectClassName } from "@/constant/classNames";
 import toast from "react-hot-toast";
 
-const AddPaymentModel = ({ isOpen, onClose, folderId, folderDetails, folderPayments, fetchFolderPayments }) => {
+const AddPaymentModel = ({ isOpen, onClose, folderId, folderDetails, fetchFolderPayments }) => {
     const [amount, setAmount] = useState("");
     const [note, setNote] = useState("");
     const [loading, setLoading] = useState(false);

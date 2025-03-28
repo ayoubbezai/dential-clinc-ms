@@ -150,7 +150,7 @@ $total_payments = $folder->payments->where("type", "in")->sum('amount') -
                 "folder_id" => $folder->id,
                 "folder_name" => $folder->folder_name,
                 "patient_name" => $folder->patient->patient_name ?? null,
-                "payments" => $folder->payments,
+                "details" => $folder->payments,
                 "total_payments" => $total_payments
             ]
         ], Response::HTTP_OK);

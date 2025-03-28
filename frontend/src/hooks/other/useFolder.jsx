@@ -31,8 +31,9 @@ const useFolder = (folderId) => {
                 console.log("All Folder Details:", response.data.data);
                 setFolderDetails(response.data.data);
                 setFolderNotes(response.data.data.notes); // Set folder notes from response
-                setFolderPayments(response.data.data.payments); // Set folder payments
+                setFolderPayments(response?.data?.data?.payments); // Set folder payments
                 setFolderAttachments(response.data.data.attachments); // Set folder attachments
+                await fetchFolderAppointments(folderId)
             } catch (error) {
                 setFolderDetailsError(error);
             } finally {
@@ -88,7 +89,7 @@ const useFolder = (folderId) => {
         setLoading(true);
         try {
             const response = await folderDetailsService.getFolderPayments(folderId);
-            console.log("Folder Payments:", response);
+            console.log("Folder Payments:", response.data.data);
             setFolderPayments(response.data.data);
         } catch (error) {
             setFolderPaymentsError(error);
@@ -128,6 +129,8 @@ const useFolder = (folderId) => {
             setLoading(false);
         }
     };
+
+
 
     return {
         loading,

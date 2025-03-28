@@ -1,19 +1,12 @@
-import React, { useEffect, useState, lazy, Suspense } from "react";
+import React, { useState, lazy, Suspense } from "react";
 import { AiOutlineFilePdf } from "react-icons/ai";
-import { FaEllipsisV } from "react-icons/fa";
+import { FaEllipsisV, FaTrash } from "react-icons/fa";
 
 const AddDocumentModel = lazy(() => import("@/models/AddModels/AddDocumentModel"));
 
 const FolderDocuments = ({ folderId, folderAttachments, fetchFolderAttachments }) => {
     const [isAddModelOpen, setIsAddModelOpen] = useState(false);
     const [isMenuOpen, setIsMenuOpen] = useState(false);
-
-    useEffect(()=>(
-        console.log(folderAttachments)
-    ), [folderAttachments])
-
-
-
 
     return (
         <div className="col-span-4 bg-white p-5 shadow-md rounded-lg border border-gray-200 text-sm">
@@ -55,14 +48,25 @@ const FolderDocuments = ({ folderId, folderAttachments, fetchFolderAttachments }
                     folderAttachments.map((doc, index) => (
                         <div
                             key={index}
-                            className="flex items-center gap-3 p-3 bg-[#F0F8FA] rounded-lg shadow-sm transition-all duration-200 hover:bg-blue-50 cursor-pointer"
+                            className="flex items-center justify-between p-3 bg-[#F0F8FA] rounded-lg shadow-sm transition-all duration-200 hover:bg-blue-50"
                         >
-                            <AiOutlineFilePdf className="text-red-600 text-2xl" />
-                            <span className="text-[#223354] font-medium text-[13px] truncate">
-                                <a href={doc.download_url} target="_blank" rel="noopener noreferrer">
-                                    {doc?.title}
-                                </a>
-                            </span>
+                            <div className="flex items-center gap-3">
+                                <AiOutlineFilePdf className="text-red-500 text-2xl" />
+                                <div className="flex flex-col">
+                                    <a
+                                        href={doc.download_url}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="text-[#223354] font-medium text-[13px] truncate"
+                                    >
+                                        {doc?.title}
+                                    </a>
+                                    <span className="text-xs text-gray-500">{doc.size}</span>
+                                </div>
+                            </div>
+                            <button className="text-red-500/50 hover:text-red-500/80 hover:cursor-pointer text-sm">
+                                <FaTrash />
+                            </button>
                         </div>
                     ))
                 ) : (

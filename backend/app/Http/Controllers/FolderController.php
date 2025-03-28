@@ -354,11 +354,37 @@ public function getAllFolderDetails(string $id)
         }
         $total_payments = $folder->payments->where("type", "in")->sum('amount') -
                   $folder->payments->where("type", "out")->sum('amount');
-                $folder->total_payments = $total_payments;
+// Format attachments
+
+
+        $attachments = $folder->attachments->map(function ($file) {
+            return [
+                'id' => $file->id,
+                'title' => $file->title,
+                 'size' => $this->formatBytes($file->size),
+                'download_url' => url("/api/attachments/{$file->id}/download"),
+            ];
+        });
 
         return response()->json([
             'success' => true,
-            'data' => $folder
+            'data' => [
+                'id' => $folder->id,
+                'patient_id' => $folder->patient_id,
+                'folder_name' => $folder->folder_name,
+                'price' => $folder->price,
+                'status' => $folder->status,
+                'created_at' => $folder->created_at,
+                'updated_at' => $folder->updated_at,
+                'payments' => [
+                    'total_payments' => $total_payments,
+                    'details' => $folder->payments
+                ],
+                'visits' => $folder->visits,
+                'notes' => $folder->notes,
+                'attachments' => $attachments, 
+                'patient_name' => $folder->patient->patient_name
+            ]
         ], 200);
 
     } catch (\Exception $e) {
@@ -371,4 +397,11 @@ public function getAllFolderDetails(string $id)
 }
 
 
+private function formatBytes($bytes) {
+    if ($bytes == 0) return '0 Bytes';
+    $k = 1024;
+    $sizes = ['Bytes', 'KB', 'MB', 'GB'];
+    $i = floor(log($bytes) / log($k));
+    return round($bytes / pow($k, $i), 2) . ' ' . $sizes[$i];
+}
 }

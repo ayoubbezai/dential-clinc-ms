@@ -4,13 +4,14 @@ import { FaEllipsisV } from "react-icons/fa";
 const FolderDetailsModel = lazy(() => import('@/models/DetailsModels/PaymentDetailsModel'));
 const AddPaymentModel = lazy(() => import('@/models/AddModels/AddPaymentModel'));
 
-const FolderPayments = ({ folderDetails, folderPayments, fetchFolderPayments }) => {
+const FolderPayments = ({ folderDetails, folderPayments, fetchFolderPayments, folderId }) => {
     const [isModelOpen, setIsModelOpen] = useState(false);
     const [isAddModelOpen, setIsAddModelOpen] = useState(false);
     const [isMenuOpen, setIsMenuOpen] = useState(false);
+    console.log(folderPayments);
 
     const totalPrice = folderDetails?.price || 0;
-    const totalPaid = folderDetails?.total_payments || 0;
+    const totalPaid = folderPayments?.total_payments || 0;
     const remainingAmount = totalPrice - totalPaid;
 
     return (
@@ -71,7 +72,8 @@ const FolderPayments = ({ folderDetails, folderPayments, fetchFolderPayments }) 
                     <FolderDetailsModel
                         isOpen={isModelOpen}
                         onClose={() => setIsModelOpen(false)}
-                        payments={folderPayments}
+                        folderPayments={folderPayments}
+                        folderDetails={folderDetails}
                     />
                 </Suspense>
             )}
@@ -81,9 +83,8 @@ const FolderPayments = ({ folderDetails, folderPayments, fetchFolderPayments }) 
                     <AddPaymentModel
                         isOpen={isAddModelOpen}
                         onClose={() => setIsAddModelOpen(false)}
-                        folderId={folderDetails?.id}
+                        folderId={folderId}
                         folderDetails={folderDetails}
-                        folderPayments={folderPayments}
                         fetchFolderPayments={fetchFolderPayments}
                     />
                 </Suspense>
