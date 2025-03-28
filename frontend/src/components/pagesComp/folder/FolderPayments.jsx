@@ -86,6 +86,8 @@ const FolderPayments = ({ folderDetails, folderPayments, fetchFolderPayments, fo
                         folderId={folderId}
                         folderDetails={folderDetails}
                         fetchFolderPayments={fetchFolderPayments}
+                        folderPayments={folderPayments}
+
                     />
                 </Suspense>
             )}

@@ -2,6 +2,7 @@ import React, { useState, lazy, Suspense } from "react";
 import { FaEllipsisV } from "react-icons/fa";
 
 const AddNoteModel = lazy(() => import("@/models/AddModels/AddNoteModel"));
+const EditNoteModel = lazy(() => import("@/models/EditModels/EditNoteModel"));
 
 const FolderNotes = ({ folderNotes, folderId, fetchFolderNotes }) => {
     const [isEditModelOpen, setIsEditModelOpen] = useState(false);
@@ -27,7 +28,7 @@ const FolderNotes = ({ folderNotes, folderId, fetchFolderNotes }) => {
                                     onClick={() => { setIsMenuOpen(false); setIsEditModelOpen(true); }}
                                     className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                                 >
-                                    Edit Notes
+                                    Manage Notes
                                 </button>
                                 <button
                                     onClick={() => { setIsMenuOpen(false); setIsAddModelOpen(true); }}
@@ -39,14 +40,12 @@ const FolderNotes = ({ folderNotes, folderId, fetchFolderNotes }) => {
                         )}
                     </div>
                 </div>
+
                 {/* Notes List */}
                 <div className="max-h-60 overflow-y-auto space-y-3">
                     {folderNotes?.length > 0 ? (
                         folderNotes.map((note, index) => (
-                            <div
-                                key={index}
-                                className="p-4 bg-[#F0F8FA] rounded-lg shadow-sm transition-all duration-200 hover:bg-blue-50"
-                            >
+                            <div key={index} className="p-4 bg-[#F0F8FA] rounded-lg shadow-sm">
                                 <p className="text-gray-800 font-semibold">
                                     Title: <span className="text-[#223354] font-normal">{note?.title || "Untitled"}</span>
                                 </p>
@@ -60,11 +59,29 @@ const FolderNotes = ({ folderNotes, folderId, fetchFolderNotes }) => {
                     )}
                 </div>
             </div>
-            {/* Suspense for Lazy Loaded AddNoteModel */}
+
+            {/* Add Note Model */}
             {isAddModelOpen && (
                 <Suspense fallback={<div>Loading...</div>}>
-                    <AddNoteModel isOpen={isAddModelOpen} onClose={() => setIsAddModelOpen(false)} folderId={folderId}
+                    <AddNoteModel
+                        isOpen={isAddModelOpen}
+                        onClose={() => setIsAddModelOpen(false)}
+                        folderId={folderId}
                         fetchFolderNotes={fetchFolderNotes}
+                    />
+                </Suspense>
+            )}
+
+            {/* Edit Notes Model (Bulk Edit & Delete) */}
+            {isEditModelOpen && (
+                <Suspense fallback={<div>Loading...</div>}>
+                    <EditNoteModel
+                        isOpen={isEditModelOpen}
+                        onClose={() => setIsEditModelOpen(false)}
+                        folderNotes={folderNotes}
+                        fetchFolderNotes={fetchFolderNotes}
+                        folderId={folderId}
+
                     />
                 </Suspense>
             )}

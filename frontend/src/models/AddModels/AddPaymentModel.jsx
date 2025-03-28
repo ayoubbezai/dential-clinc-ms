@@ -7,7 +7,7 @@ import { Button } from "@/components/designSystem/button";
 import { selectClassName } from "@/constant/classNames";
 import toast from "react-hot-toast";
 
-const AddPaymentModel = ({ isOpen, onClose, folderId, folderDetails, fetchFolderPayments }) => {
+const AddPaymentModel = ({ isOpen, onClose, folderId, folderDetails, fetchFolderPayments, folderPayments }) => {
     const [amount, setAmount] = useState("");
     const [note, setNote] = useState("");
     const [loading, setLoading] = useState(false);
@@ -15,7 +15,7 @@ const AddPaymentModel = ({ isOpen, onClose, folderId, folderDetails, fetchFolder
     const [isNoteRequired, setIsNoteRequired] = useState(false);
 
     const totalPrice = folderDetails?.price || 0;
-    const totalPaid = folderDetails?.total_payments || 0;
+    const totalPaid = folderPayments?.total_payments || 0;
     const remainingAmount = Math.max(totalPrice - totalPaid, 0);
 
     function handleTransactionTypeChange(e) {
@@ -67,7 +67,7 @@ const AddPaymentModel = ({ isOpen, onClose, folderId, folderDetails, fetchFolder
             text: `You entered ${amount} DA. What would you like to do?`,
             icon: "question",
             showCancelButton: true,
-            showDenyButton: amount - remainingAmount > 0 && remainingAmount > 0,
+            showDenyButton: amount - remainingAmount > 0,
             confirmButtonText: "Confirm",
             denyButtonText: `Confirm with (${remainingAmount} DA)`,
             cancelButtonText: "Cancel",
