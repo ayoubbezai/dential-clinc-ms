@@ -22,7 +22,7 @@ const PatientDetails = () => {
     patient, loading, folders, refetchPatient,
     perPage, setPerPage, page, setPage, pagination, search, setSearch, refetchFolders
   } = usePatient(id);
-
+  console.log(patient)
   const [view, setView] = useState("list");
   const [isEditFolderOpen, setIsEditFolderOpen] = useState(false);
 

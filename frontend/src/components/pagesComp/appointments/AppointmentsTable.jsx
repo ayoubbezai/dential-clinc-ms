@@ -1,5 +1,4 @@
-import React, { useState } from 'react'
-
+import React, { useState, lazy, Suspense } from 'react';
 import { Table, TableHeader, TableBody, TableHead, TableCell, TableRow } from '@/components/designSystem/table';
 import { Badge } from '@/components/designSystem/badge';
 import EditIcon from "../../../assets/icons/edit.svg";
@@ -8,11 +7,24 @@ import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 import { AppointmentService } from '@/services/shared/AppointmentsService';
 import toast from 'react-hot-toast';
-import EditAppointmentModel from '@/models/EditModels/EditAppointmentModel';
-import { getStatusClasses } from '@/utils/classes/getStatusClasses';
+import AppointmnetTableHeader from './AppointmnetTableHeader';
+
+// Lazy load the EditAppointmentModel
+const EditAppointmentModel = lazy(() => import('@/models/EditModels/EditAppointmentModel'));
+
+// Function to return different colors based on status
+const getStatusColor = (status) => {
+    const statusColors = {
+        pending: "bg-yellow-100 text-yellow-700",
+        completed: "bg-green-100 text-green-700",
+        cancelled: "bg-red-100 text-red-700",
+        scheduled: "bg-blue-100 text-blue-700",
+        rescheduled: "bg-purple-100 text-purple-700"
+    };
+    return statusColors[status] || "bg-gray-100 text-gray-700";
+};
 
 const AppointmentsTable = ({ appointments, appointmentloading, fetchAppointments }) => {
-
     const [loading, setLoading] = useState(false);
     const [isEditModalOpen, setIsEditModalOpen] = useState(false);
     const [currentAppointment, setCurrentAppointment] = useState(null);
@@ -21,12 +33,11 @@ const AppointmentsTable = ({ appointments, appointmentloading, fetchAppointments
         setLoading(true);
         const { data, error } = await AppointmentService.deleteAppointment(appointment_id);
         if (data?.success) {
-            toast.success('Success! appointment deleted successfully');
+            toast.success('Success! Appointment deleted successfully');
             fetchAppointments(); // Refresh the list after deletion
         } else {
             toast.error(error?.message || 'Error! Something went wrong.');
         }
-
         setLoading(false);
     }
 
@@ -35,20 +46,11 @@ const AppointmentsTable = ({ appointments, appointmentloading, fetchAppointments
         setIsEditModalOpen(true);
     }
 
-
     return (
         <>
             <Table>
-                <TableHeader>
-                    <TableRow>
-                        <TableHead>Title</TableHead>
-                        <TableHead>Date</TableHead>
-                        <TableHead>Status</TableHead>
-                        <TableHead>Folder Name</TableHead>
-                        <TableHead>Patient Name</TableHead>
-                        <TableHead>Actions</TableHead>
-                    </TableRow>
-                </TableHeader>
+                <AppointmnetTableHeader />
+
                 <TableBody>
                     {appointmentloading ? (
                         Array.from({ length: 5 }).map((_, index) => (
@@ -56,22 +58,23 @@ const AppointmentsTable = ({ appointments, appointmentloading, fetchAppointments
                                 <TableCell><Skeleton height={20} width={'80%'} /></TableCell>
                                 <TableCell><Skeleton height={20} width={'60%'} /></TableCell>
                                 <TableCell><Skeleton height={20} width={'70%'} /></TableCell>
-                                <TableCell><Skeleton height={20} width={'40%'} /></TableCell>
                                 <TableCell><Skeleton height={20} width={'50%'} /></TableCell>
+                                <TableCell><Skeleton height={20} width={'40%'} /></TableCell>
                                 <TableCell><Skeleton height={20} width={'30%'} /></TableCell>
                             </TableRow>
-                        ))) : (
-                        appointments.map((appointment) => (
+                        ))
+                    ) : (
+                        appointments?.map((appointment) => (
                             <TableRow key={appointment.id}>
-                                <TableCell>{appointment.title}</TableCell>
+                                <TableCell>{appointment.title || 'N/A'}</TableCell>
+                                <TableCell>{appointment.tooth || 'N/A'}</TableCell>
+                                <TableCell>{appointment.content || 'N/A'}</TableCell>
                                 <TableCell>{new Date(appointment.date).toLocaleDateString()}</TableCell>
                                 <TableCell>
-                                    <Badge variant="default" className={getStatusClasses(appointment.status)}>
+                                    <Badge variant="default" className={getStatusColor(appointment.status)}>
                                         {appointment.status}
                                     </Badge>
                                 </TableCell>
-                                <TableCell>{appointment.folder_name}</TableCell>
-                                <TableCell>{appointment.patient_name}</TableCell>
                                 <TableCell>
                                     <div className="flex gap-2">
                                         <button className="cursor-pointer" onClick={() => handleEdit(appointment)}>
@@ -91,17 +94,19 @@ const AppointmentsTable = ({ appointments, appointmentloading, fetchAppointments
                     )}
                 </TableBody>
             </Table>
-            {
-                isEditModalOpen && (
+
+            {isEditModalOpen && (
+                <Suspense fallback={<div>Loading...</div>}>
                     <EditAppointmentModel
                         isOpen={isEditModalOpen}
                         onClose={() => setIsEditModalOpen(false)}
                         currentAppointment={currentAppointment}
                         refreshAppointments={fetchAppointments}
                     />
-                )
-            }</>
-    )
-}
+                </Suspense>
+            )}
+        </>
+    );
+};
 
-export default AppointmentsTable
+export default AppointmentsTable;

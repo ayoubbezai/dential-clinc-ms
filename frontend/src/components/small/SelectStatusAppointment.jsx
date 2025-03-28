@@ -10,6 +10,7 @@ const SelectStatusAppointment = ({ status, setStatus }) => {
           onChange={(e) => setStatus(e.target.value)}
       >
           <option value="">All Status</option>
+          <option value="scheduled">scheduled</option>
           <option value="pending">pending</option>
           <option value="completed">completed</option>
           <option value="rescheduled">rescheduled</option>

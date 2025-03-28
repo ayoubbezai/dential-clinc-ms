@@ -2,10 +2,11 @@
 import toast from "react-hot-toast";
 import { AppointmentService } from "@/services/shared/AppointmentsService";
 const initializeFormData = (appointment) => ({
-    date: appointment?.date || '',
-    title: appointment?.title || '',
-    content: appointment?.content || '',
-    status: appointment?.status || '',
+  date: appointment?.date || "",
+  title: appointment?.title || "",
+  tooth: appointment?.tooth || "",
+  content: appointment?.content || "",
+  status: appointment?.status || "",
 });
 
 
@@ -15,11 +16,12 @@ const handleSubmit = async (e, formData, currentAppointment, onClose, refreshApp
     console.log("Submitting:", formData);
 
     const { data, error } = await AppointmentService.updateAppointments(
-        currentAppointment.id,
-        formData.date,
-        formData.title,
-        formData.content,
-        formData.status
+      currentAppointment.id,
+      formData.date,
+      formData.title,
+      formData.tooth,
+      formData.content,
+      formData.status,
     );
 
     if (data?.success) {

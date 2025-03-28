@@ -94,10 +94,16 @@ const FolderDetailsComp = ({ folderDetails, fetchFolderDetails }) => {
                 )}
             </div>
 
-            {/* Lazy-loaded Edit Modal */}
-            <Suspense fallback={<div>Loading...</div>}>
-                {isEditOpen && <EditFolderModel isOpen={isEditOpen} onClose={() => setIsEditOpen(false)} folder={folderDetails} fetchFolderDetails={fetchFolderDetails} />}
-            </Suspense>
+            {isEditOpen && (
+                <Suspense fallback={<div>Loading...</div>}>
+                    <EditFolderModel
+                        isOpen={isEditOpen}
+                        onClose={() => setIsEditOpen(false)}
+                        folder={folderDetails}
+                        fetchFolderDetails={fetchFolderDetails}
+                    />
+                </Suspense>
+            )}
         </div>
     );
 };

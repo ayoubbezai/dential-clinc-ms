@@ -40,11 +40,19 @@ export const AppointmentService = {
     }
   },
 
-  async updateAppointments(appointment_id, date, title, content, status) {
+  async updateAppointments(
+    appointment_id,
+    date,
+    title,
+    tooth,
+    content,
+    status
+  ) {
     try {
       const response = await api.put(`/appointments/${appointment_id}`, {
         date,
         title,
+        tooth,
         content,
         status,
       });
@@ -69,6 +77,27 @@ export const AppointmentService = {
       return {
         data: null,
         error: error.message || "Failed to delete the  appointment",
+      };
+    }
+  },
+
+  async createAppointment(folder_id,date, title, tooth, content, status) {
+    try {
+      const response = await api.post(`/appointments`, {
+        folder_id,
+        date,
+        title,
+        tooth,
+        content,
+        status,
+      });
+      console.log(response);
+      return { data: response.data, error: null };
+    } catch (error) {
+      console.log(error);
+      return {
+        data: null,
+        error: error.message || "Failed to create appointment",
       };
     }
   },

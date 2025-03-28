@@ -19,6 +19,8 @@ const useFolder = (folderId) => {
     const [folderAppointmentsError, setFolderAppointmentsError] = useState(null);
     const [folderAttachmentsError, setFolderAttachmentsError] = useState(null);
 
+    const [appsPagination, setAppsPagination] = useState()
+
     // Fetch all folder details (fetching everything except appointments)
     const fetchAllFolderDetails = useCallback(
         _.debounce(async (folderId) => {
@@ -115,21 +117,25 @@ const useFolder = (folderId) => {
     };
 
     // Function to fetch folder appointments (if needed, can be manually triggered)
-    const fetchFolderAppointments = async (folderId) => {
-        if (!folderId) return;
-        setFolderAppointmentsError(null);
-        setLoading(true);
-        try {
-            const response = await folderDetailsService.getFolderAppointments(folderId);
-            console.log("Folder Appointments:", response);
-            setFolderAppointments(response.data.data.appointments);
-        } catch (error) {
-            setFolderAppointmentsError(error);
-        } finally {
-            setLoading(false);
-        }
-    };
+    const fetchFolderAppointments = useCallback(
+        _.debounce(async (folder_id, per_page , search = '', status = '', sortBy , page = 1) => {
+            if (!folder_id) return;
+            setFolderAppointmentsError(null);
+            setLoading(true);
+            try {
 
+                const response = await folderDetailsService.getAppointments(folder_id, per_page, search, status, sortBy, page);
+                console.log("Folder Appointments:", response.data);
+                setFolderAppointments(response.data.data);
+                setAppsPagination(response.data.pagination);
+            } catch (error) {
+                setFolderAppointmentsError(error);
+            } finally {
+                setLoading(false);
+            }
+        }, 0),
+        []
+    );
 
 
     return {
@@ -150,6 +156,8 @@ const useFolder = (folderId) => {
         fetchFolderPayments,
         fetchFolderAppointments,
         fetchFolderAttachments,
+        setAppsPagination,
+        appsPagination
     };
 };
 

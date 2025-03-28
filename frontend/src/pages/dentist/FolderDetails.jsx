@@ -22,6 +22,8 @@ const FolderDetails = () => {
         fetchFolderPayments,
         fetchFolderAppointments,
         fetchFolderAttachments,
+        setAppsPagination,
+        appsPagination
     } = useFolder(folderId);
 
 
@@ -50,7 +52,7 @@ const FolderDetails = () => {
 
 
                 </div>
-                <FolderAppointments folderAppointments={folderAppointments} />
+                <FolderAppointments folderId={folderId} folderAppointments={folderAppointments} fetchFolderAppointments={fetchFolderAppointments} loading={loading} setAppsPagination={setAppsPagination} appsPagination={appsPagination} />
 
                
             </div>

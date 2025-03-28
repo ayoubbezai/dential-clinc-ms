@@ -1,93 +1,103 @@
-import React, { useState } from 'react';
-import { Table, TableRow, TableBody, TableHeader, TableHead, TableCell } from '@/components/designSystem/table';
-import SearchInTable from '@/components/small/SearchInTable';
-import Sort from '@/components/small/Sort';
-import FolderTableFooter from '../../small/TableFooter';
+import React, { useState, useEffect, useRef, lazy, Suspense } from "react";
+import SearchInTable from "@/components/small/SearchInTable";
+import { Button } from "@/components/designSystem/button";
+import { FaPlus } from "react-icons/fa";
+import { selectClassName } from "@/constant/classNames";
+import AppointmentsTable from "../appointments/AppointmentsTable";
+import TableFooter from "@/components/small/TableFooter";
 
-const FolderAppointments = ({ folderAppointments }) => {
-    const [search, setSearch] = useState('');
-    const [sortDirection, setSortDirection] = useState('asc');
-    const [statusFilter, setStatusFilter] = useState('');
+const FolderAppointments = ({
+    folderId,
+    folderAppointments,
+    fetchFolderAppointments,
+    loading,
+    setAppsPagination,
+    appsPagination,
+}) => {
+    const [search, setSearch] = useState("");
+    const [sortDirection, setSortDirection] = useState("asc");
+    const [statusFilter, setStatusFilter] = useState("");
+    const [isAddAppOpen, setIsAddAppOpen] = useState(false);
+
+    // Pagination & Sorting States
+    const [perPage, setPerPage] = useState();
+    const [status, setStatus] = useState();
+    const [sortBy] = useState();
+    const [page, setPage] = useState();
+
+    const [isVisible, setIsVisible] = useState(false);
+    const observerRef = useRef(null);
+    const AddAppointmentModel = lazy(() => import("@/models/AddModels/AddAppointmnetModel"));
+
+    const statusOptions = ["pending", "completed", "cancelled", "scheduled", "rescheduled"];
 
     const handleStatusChange = (event) => {
         setStatusFilter(event.target.value);
+        setStatus(event.target.value);
     };
 
     const handleSortChange = (event) => {
         setSortDirection(event.target.value);
     };
 
+    useEffect(() => {
+        const observer = new IntersectionObserver(
+            ([entry]) => setIsVisible(entry.isIntersecting),
+            { threshold: 0.5 }
+        );
+
+        if (observerRef.current) {
+            observer.observe(observerRef.current);
+        }
+
+        return () => {
+            if (observerRef.current) observer.unobserve(observerRef.current);
+        };
+    }, []);
+
+    useEffect(() => {
+        if (isVisible) {
+            console.log("Fetching appointments...");
+            fetchFolderAppointments(folderId, perPage, search, status, sortBy, page);
+        }
+    }, [perPage, search, status, sortBy, page]);
+
     return (
-        <div className="col-span-12 bg-white p-3 pb-5 shadow-sm rounded-md border border-gray-200 text-sm">
+        <div ref={observerRef} className="col-span-12 bg-white p-3 pb-5 shadow-sm rounded-md border border-gray-200 text-sm">
             <div className="flex items-center justify-between pb-2 px-2">
                 <SearchInTable search={search} setSearch={setSearch} />
                 <div className="flex items-center gap-3">
-                    <select
-                        value={statusFilter}
-                        onChange={handleStatusChange}
-                        className="border border-gray-300 rounded-md px-2 py-1 text-sm"
-                    >
+                    <select value={statusFilter} onChange={handleStatusChange} className={selectClassName}>
                         <option value="">All</option>
-                        <option value="scheduled">Scheduled</option>
-                        <option value="completed">Completed</option>
-                        <option value="cancelled">Cancelled</option>
+                        {statusOptions.map((status) => (
+                            <option key={status} value={status}>
+                                {status.charAt(0).toUpperCase() + status.slice(1)}
+                            </option>
+                        ))}
                     </select>
-                    <select
-                        value={sortDirection}
-                        onChange={handleSortChange}
-                        className="border border-gray-300 rounded-md px-2 py-1 text-sm"
-                    >
+                    <select value={sortDirection} onChange={handleSortChange} className={selectClassName}>
                         <option value="asc">Ascending</option>
                         <option value="desc">Descending</option>
                     </select>
+                    <Button size={"sm"} className="bg-blue-600 text-white mx-2 rounded-lg" onClick={() => setIsAddAppOpen(true)}>
+                        <FaPlus size={12} />
+                    </Button>
                 </div>
             </div>
 
-            <Table>
-                <TableHeader>
-                    <TableRow>
-                        <TableHead>Date</TableHead>
-                        <TableHead>Title</TableHead>
-                        <TableHead>Status</TableHead>
-                        <TableHead>Content</TableHead>
-                        <TableHead>Actions</TableHead>
-                    </TableRow>
-                </TableHeader>
+                <AppointmentsTable
+                    appointments={folderAppointments}
+                    appointmentloading={loading}
+                    fetchAppointments={() => fetchFolderAppointments(folderId)}
+                />
 
-                <TableBody>
-                    {folderAppointments?.length > 0 ? (
-                        folderAppointments.map((appointment) => (
-                            <TableRow key={appointment.id}>
-                                <TableCell>{appointment.date}</TableCell>
-                                <TableCell>{appointment.title}</TableCell>
-                                <TableCell>
-                                    <span className={`px-2 py-1 rounded-full text-xs ${appointment.status === 'cancelled'
-                                        ? 'bg-red-100 text-red-800'
-                                        : appointment.status === 'completed'
-                                            ? 'bg-green-100 text-green-800'
-                                            : 'bg-blue-100 text-blue-800'
-                                        }`}>
-                                        {appointment.status}
-                                    </span>
-                                </TableCell>
-                                <TableCell className="max-w-xs truncate">{appointment.content}</TableCell>
-                                <TableCell>
-                                    <button className="text-blue-600 hover:text-blue-800 text-sm font-medium">
-                                        View
-                                    </button>
-                                </TableCell>
-                            </TableRow>
-                        ))
-                    ) : (
-                        <TableRow>
-                            <TableCell colSpan={5} className="text-center text-gray-500 py-4">
-                                No appointments found
-                            </TableCell>
-                        </TableRow>
-                    )}
-                </TableBody>
-            </Table>
-            <FolderTableFooter />
+            <TableFooter perPage={perPage} setPerPage={setPerPage} page={appsPagination?.current_page || 1} setPage={setPage} pagination={appsPagination} />
+
+            {isAddAppOpen && (
+                <Suspense fallback={<div>Loading...</div>}>
+                    <AddAppointmentModel isOpen={isAddAppOpen} onClose={() => setIsAddAppOpen(false)} folder_id={folderId} />
+                </Suspense>
+            )}
         </div>
     );
 };

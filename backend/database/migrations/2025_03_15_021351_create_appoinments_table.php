@@ -16,7 +16,7 @@ return new class extends Migration
         $table->date("date")->nullable();
         $table->enum('status', ['pending', 'completed', 'cancelled', 'scheduled','rescheduled'])->default('scheduled');
         $table->string("title")->nullable();
-        $table->string("tooth")->nullable();
+        $table->integer("tooth")->nullable();
         $table->text("content")->nullable();
         $table->foreignId('folder_id')->constrained('folders')->onDelete('cascade');
         $table->timestamps();

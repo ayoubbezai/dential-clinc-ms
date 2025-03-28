@@ -25,6 +25,7 @@ const usePatient = (patientId) => {
             setErrorPatient(null);
             try {
                 const { data } = await patientService.getPatientDetails(id);
+                console.log(data)
                 setPatient(data);
             } catch (err) {
                 setErrorPatient(err.message || "Failed to fetch patient data");

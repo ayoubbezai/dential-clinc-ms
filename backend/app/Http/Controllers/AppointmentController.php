@@ -91,6 +91,7 @@ class AppointmentController extends Controller
                 'date' => $appointment->date,
                 'status' => $appointment->status,
                 'title' => $appointment->title,
+                'tooth' => $appointment->tooth,
                 'content' => $appointment->content,
                 'folder_name' => $appointment->folder->folder_name,
                 'patient_name' => $appointment->folder->patient->patient_name,
@@ -143,7 +144,7 @@ public function store(Request $request)
     $data = $request->validate([
         "date" => "required|date",
         "status" => ["required", Rule::in(['pending', 'completed', 'cancelled', 'rescheduled','scheduled'])],
-        "tooth" => "nullable|string|max:255",
+        "tooth" => "nullable|integer|max:255",
         "title" => "nullable|string|max:255",
         "content" => "nullable|string",
         "folder_id" => "required|integer|exists:folders,id"
@@ -222,7 +223,7 @@ public function store(Request $request)
         "date" => "nullable|date",
         "status" => ["required", Rule::in(['pending', 'completed', 'cancelled', 'rescheduled','scheduled'])],
         "title" => "nullable|string|max:255",
-        "tooth" => "nullable|string|max:255",
+        "tooth" => "nullable|integer|max:255",
         "content" => "nullable|string",
         "folder_id" => "nullable|integer|exists:folders,id"
     ]);
@@ -273,30 +274,80 @@ public function store(Request $request)
     }
     }
 
-      public function getAppointmentsOfFolder(string $id)
-    {
-        //get appoinment in a folder ther id is for the fodler
-        try{
+ public function getAppointmentsOfFolder(Request $request, string $id)
+{
+    try {
         $folder = Folder::with('appointments')->findOrFail($id);
+
+        $request_query = $request->query();
+        
+        $perPage = filter_var($request_query["per_page"] ?? 15, FILTER_VALIDATE_INT) ?: 15;
+        $perPage = max($perPage, 1);
+
+        $validSortColumns = ["date", "created_at", "updated_at"];
+        $validSortDirection = ["asc", "desc"];
+
+      $sortBy = in_array($request_query['sort_by'] ?? '', $validSortColumns)
+    ? $request_query['sort_by']
+    : 'created_at';
+
+    
+        $sortDirection = in_array(strtolower($request_query['sort_direction'] ?? ''), $validSortDirection)
+            ? strtolower($request_query['sort_direction'] ?? 'asc')
+            : 'asc';
+
+        $data = $folder->appointments()->orderBy($sortBy, $sortDirection);
+
+        if (!empty($request_query['search'])) {
+            $search = $request_query['search'];
+            $data->where('title', 'like', '%' . $search . '%');
+        }
+
+        if (!empty($request_query['status'])) {
+            $status = $request_query['status'];
+            $data->where('status', $status);
+        }
+
+
+        $paginatedData = $data->paginate($perPage);
+
+        $mappedData = $paginatedData->getCollection()->map(function ($appointment) {
+            return [
+                'id' => $appointment->id,
+                'date' => $appointment->date,
+                'status' => $appointment->status,
+                'title' => $appointment->title,
+                'tooth' => $appointment->tooth,
+                'content' => $appointment->content,
+            ];
+        });
+
+        $paginatedData->setCollection($mappedData);
 
         return response()->json([
             "success" => true,
-            "message" => "Appointment retrived successfully",
-            "data" => [
-                "folder_id" => $folder->id,
-                "folder_name" => $folder->folder_name,
-                "appointments" => $folder->appointments
+            "message" => "Appointments retrieved successfully",
+            "data" => $paginatedData->items(),
+            "pagination" => [
+                "total_items" => $paginatedData->total(),
+                "items_per_page" => $paginatedData->perPage(),
+                "current_page" => $paginatedData->currentPage(),
+                "total_pages" => $paginatedData->lastPage(),
+                "from" => $paginatedData->firstItem(),
+                "to" => $paginatedData->lastItem(),
+                "first_page_url" => $paginatedData->url(1),
+                "last_page_url" => $paginatedData->url($paginatedData->lastPage()),
+                "next_page_url" => $paginatedData->nextPageUrl(),
+                "prev_page_url" => $paginatedData->previousPageUrl(),
+                "path" => $paginatedData->path(),
             ]
         ], Response::HTTP_OK);
-
-        }catch (\Exception $e) {
+    } catch (\Exception $e) {
         return response()->json([
-            'success' => false,
-            'message' => 'Failed to get the appointments in this folder',
-            'error' => $e->getMessage(),
+            "success" => false,
+            "message" => "Failed to get the appointments in this folder",
+            "error" => $e->getMessage(),
         ], Response::HTTP_INTERNAL_SERVER_ERROR);
     }
-
-        
-    }
+}
 }
