@@ -8,6 +8,7 @@ import "react-loading-skeleton/dist/skeleton.css";
 import { AppointmentService } from '@/services/shared/AppointmentsService';
 import toast from 'react-hot-toast';
 import AppointmnetTableHeader from './AppointmnetTableHeader';
+import TableSkeleton from '@/Skeletons/TableSkeleton';
 
 // Lazy load the EditAppointmentModel
 const EditAppointmentModel = lazy(() => import('@/models/EditModels/EditAppointmentModel'));
@@ -54,14 +55,8 @@ const AppointmentsTable = ({ appointments, appointmentloading, fetchAppointments
                 <TableBody>
                     {appointmentloading ? (
                         Array.from({ length: 5 }).map((_, index) => (
-                            <TableRow key={index}>
-                                <TableCell><Skeleton height={20} width={'80%'} /></TableCell>
-                                <TableCell><Skeleton height={20} width={'60%'} /></TableCell>
-                                <TableCell><Skeleton height={20} width={'70%'} /></TableCell>
-                                <TableCell><Skeleton height={20} width={'50%'} /></TableCell>
-                                <TableCell><Skeleton height={20} width={'40%'} /></TableCell>
-                                <TableCell><Skeleton height={20} width={'30%'} /></TableCell>
-                            </TableRow>
+                            <TableSkeleton index={index} />
+
                         ))
                     ) : (
                         appointments?.map((appointment) => (

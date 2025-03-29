@@ -39,10 +39,12 @@ public function index(Request $request)
             : 'asc';
 
         // Get the data
-$data = Payment::query()->with([
-    'folder:id,folder_name,patient_id', // select  folder id and name
-    'folder.patient:id,patient_name' // Select  patient id and name
-]);
+$data = Payment::query()
+
+    ->leftJoin('folders', 'payments.folder_id', '=', 'folders.id')
+    ->leftJoin('patients', 'folders.patient_id', '=', 'patients.id')
+    ->select('payments.*', 'folders.id as folder_id', 'folders.folder_name', 'folders.patient_id', 'patients.patient_name as patient_name');
+
         // Search by patient name
         if (!empty($request_query['search'])) {
             $search = $request_query['search'];

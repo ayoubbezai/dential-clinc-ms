@@ -1,14 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
-const transactions = [
-    { name: "Ayoub bezai", account: "123******78", amount: "$240.00", date: "Jul 12, 2024" },
-    { name: "Ayoub bezai", account: "123******78", amount: "$240.00", date: "Jul 12, 2024" },
-    { name: "Ayoub bezai", account: "123******78", amount: "$240.00", date: "Jul 12, 2024" },
-    { name: "Ayoub bezai", account: "123******78", amount: "$240.00", date: "Jul 12, 2024" },
-
-];
-
 const RecentTransactions = ({ transactions }) => {
 
     console.log(transactions)
