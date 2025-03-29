@@ -1,55 +1,59 @@
 @layer base {
   :root {
-    --background: 0 0% 100%; /* White background */
-    --foreground: 222.2 84% 4.9%; /* Dark gray for text */
-    --card: 0 0% 100%; /* White card background */
-    --card-foreground: 222.2 84% 4.9%; /* Dark gray for card text */
-    --popover: 0 0% 100%; /* White popover background */
-    --popover-foreground: 222.2 84% 4.9%; /* Dark gray for popover text */
-    --primary: 217.2 91.2% 59.8%; /* Tailwind's blue-500 equivalent */
-    --primary-foreground: 210 40% 98%; /* Light gray for text on primary */
-    --secondary: 186.1 100% 38.8%; /* #00ABC6 converted to HSL */
-    --secondary-foreground: 0 0% 100%; /* White text on secondary */
-    --muted: 210 40% 96.1%; /* Light gray for muted elements */
-    --muted-foreground: 215.4 16.3% 44%; /* Gray for muted text */
-    --accent: 210 40% 96.1%; /* Light gray for accents */
-    --accent-foreground: 222.2 47.4% 11.2%; /* Dark gray for accent text */
-    --destructive: 0 72% 51%; /* Red for destructive actions */
-    --destructive-foreground: 210 40% 98%; /* Light gray for text on destructive */
-    --border: 214.3 31.8% 91.4%; /* Light gray for borders */
-    --input: 214.3 31.8% 91.4%; /* Light gray for input fields */
-    --ring: 217.2 91.2% 59.8%; /* Tailwind's blue-500 for focus rings */
-    --chart-1: 217.2 91.2% 59.8%; /* Tailwind's blue-500 for chart 1 */
-    --chart-2: 212 95% 68%; /* Lighter blue for chart 2 */
-    --chart-3: 216 92% 60%; /* Medium blue for chart 3 */
-    --chart-4: 210 98% 78%; /* Light blue for chart 4 */
-    --chart-5: 212 97% 87%; /* Very light blue for chart 5 */
+    --background: 0 0% 100%;
+    --foreground: 222.2 84% 4.9%;
+    --card: 0 0% 100%;
+    --card-foreground: 222.2 84% 4.9%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 222.2 84% 4.9%;
+    --primary: 217.2 91.2% 55%; /* Deep blue */
+    --primary-foreground: 210 40% 98%;
+    --secondary: 158 85% 30%; /* Deep emerald green */
+    --secondary-foreground: 0 0% 100%;
+    --muted: 210 40% 96.1%;
+    --muted-foreground: 215.4 16.3% 44%;
+    --accent: 10 80% 45%; /* Burnt red */
+    --accent-foreground: 0 0% 100%;
+    --destructive: 0 72% 51%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 214.3 31.8% 91.4%;
+    --input: 214.3 31.8% 91.4%;
+    --ring: 217.2 91.2% 55%;
+    
+    /* Chart Colors */
+    --chart-1: 217 88% 52%; /* Strong blue */
+    --chart-2: 158 75% 35%; /* Deep green */
+    --chart-3: 10 70% 40%; /* Burnt red */
+    --chart-4: 200 85% 65%; /* Lighter blue-green */
+    --chart-5: 220 100% 85%; /* Pastel sky blue */
   }
 
   .dark {
-    --background: 240 10% 3.9%; /* Dark background */
-    --foreground: 0 0% 98%; /* Light gray for text */
-    --card: 240 10% 3.9%; /* Dark card background */
-    --card-foreground: 0 0% 98%; /* Light gray for card text */
-    --popover: 240 10% 3.9%; /* Dark popover background */
-    --popover-foreground: 0 0% 98%; /* Light gray for popover text */
-    --primary: 217.2 91.2% 59.8%; /* Tailwind's blue-500 equivalent */
-    --primary-foreground: 210 40% 98%; /* Light gray for text on primary */
-    --secondary: 186.1 100% 38.8%; /* #00ABC6 converted to HSL */
-    --secondary-foreground: 0 0% 100%; /* White text on secondary */
-    --muted: 240 3.7% 15.9%; /* Dark gray for muted elements */
-    --muted-foreground: 240 5% 64.9%; /* Gray for muted text */
-    --accent: 240 3.7% 15.9%; /* Dark gray for accents */
-    --accent-foreground: 0 0% 98%; /* Light gray for accent text */
-    --destructive: 0 72% 51%; /* Red for destructive actions */
-    --destructive-foreground: 210 40% 98%; /* Light gray for text on destructive */
-    --border: 240 3.7% 15.9%; /* Dark gray for borders */
-    --input: 240 3.7% 15.9%; /* Dark gray for input fields */
-    --ring: 217.2 91.2% 59.8%; /* Tailwind's blue-500 for focus rings */
-    --chart-1: 217.2 91.2% 59.8%; /* Tailwind's blue-500 for chart 1 */
-    --chart-2: 212 95% 68%; /* Lighter blue for chart 2 */
-    --chart-3: 216 92% 60%; /* Medium blue for chart 3 */
-    --chart-4: 210 98% 78%; /* Light blue for chart 4 */
-    --chart-5: 212 97% 87%; /* Very light blue for chart 5 */
+    --background: 240 10% 3.9%;
+    --foreground: 0 0% 98%;
+    --card: 240 10% 3.9%;
+    --card-foreground: 0 0% 98%;
+    --popover: 240 10% 3.9%;
+    --popover-foreground: 0 0% 98%;
+    --primary: 217.2 91.2% 50%;
+    --primary-foreground: 210 40% 98%;
+    --secondary: 158 85% 30%; /* Deep emerald green */
+    --secondary-foreground: 0 0% 100%;
+    --muted: 240 3.7% 15.9%;
+    --muted-foreground: 240 5% 64.9%;
+    --accent: 10 75% 40%; /* Burnt red */
+    --accent-foreground: 0 0% 100%;
+    --destructive: 0 72% 51%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 240 3.7% 15.9%;
+    --input: 240 3.7% 15.9%;
+    --ring: 217.2 91.2% 50%;
+
+    /* Dark Mode Chart Colors */
+    --chart-1: 217 85% 45%;
+    --chart-2: 158 75% 32%;
+    --chart-3: 10 65% 38%;
+    --chart-4: 200 75% 60%;
+    --chart-5: 220 90% 80%;
   }
 }

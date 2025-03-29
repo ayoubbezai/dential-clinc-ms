@@ -8,6 +8,8 @@ use App\Models\Patient;
 use App\Models\Payment;
 use Illuminate\Http\Response;
 
+use Illuminate\Support\Facades\Crypt;
+use Carbon\Carbon;
 
 
 class PaymentController extends Controller
@@ -229,34 +231,51 @@ $total_payments = $folder->payments->where("type", "in")->sum('amount') -
 
     //get payments statistic
 
- public function paymentStat(Request $request)
+public function paymentStat(Request $request)
 {
     try {
         // Extract request query parameters
         $request_query = $request->query();
 
         // Default filters
-        $income_date = $request_query["income_date"] ?? "last_month";
-        $expenses_date = $request_query["expenses_date"] ?? "last_month";
-        $net_profit_date = $request_query["net_profit_date"] ?? "last_month";
-        $income_expense_date = $request_query["income_expense_date"] ?? "last_week";
+        $income_date = $request_query["income_date"] ?? "30d";
+        $expenses_date = $request_query["expenses_date"] ?? "30d";
+        $net_profit_date = $request_query["net_profit_date"] ?? "30d";
+        $income_expense_date = $request_query["income_expense_date"] ?? "7d";
 
         // Function to convert filter to actual date
         function getDateFromFilter($filter)
-        {
-            switch ($filter) {
-                case "last_month":
-                    return now()->subMonth()->startOfMonth();
-                case "last_3_months":
-                    return now()->subMonths(3)->startOfMonth();
-                case "last_year":
-                    return now()->subYear()->startOfYear();
-                case "last_week":
-                    return now()->subDays(7)->startOfDay();
-                default:
-                    return null;
-            }
-        }
+{
+    switch ($filter) {
+        case "30d":
+            return now()->subMonth();
+        case "90d":
+            return now()->subMonths(3);
+        case "365d":
+            return now()->subYear();
+        case "7d":
+            return now()->subDays(7);
+        default:
+            return null;
+    }
+}
+
+function getLastPeriodDate($filter)
+{
+    switch ($filter) {
+        case "30d":
+            return now()->subMonths(2);
+        case "90d":
+            return now()->subMonths(6);
+        case "365d":
+            return now()->subYears(2);
+        case "7d":
+            return now()->subDays(14);
+        default:
+            return null;
+    }
+}
+
 
         // Apply the function to get start dates
         $income_start_date = getDateFromFilter($income_date);
@@ -264,28 +283,54 @@ $total_payments = $folder->payments->where("type", "in")->sum('amount') -
         $net_profit_start_date = getDateFromFilter($net_profit_date);
         $income_expense_start_date = getDateFromFilter($income_expense_date);
 
+        // Get last period start date
+        $last_income_start_date = getLastPeriodDate($income_date);
+        $last_expense_start_date = getLastPeriodDate($expenses_date);
+        $last_net_profit_start_date = getLastPeriodDate($net_profit_date);
+
         // Calculate Income (Income - Refunds)
         $income = Payment::where("type", "income")
-            ->when($income_start_date, fn($query) => $query->where("created_at", ">", $income_start_date))
+            ->where("created_at", ">", $income_start_date)
             ->sum("amount")
             - Payment::where("type", "refund")
-                ->when($income_start_date, fn($query) => $query->where("created_at", ">", $income_start_date))
+                ->where("created_at", ">", $income_start_date)
+                ->sum("amount");
+
+        $last_income = Payment::where("type", "income")
+            ->whereBetween("created_at", [$last_income_start_date, $income_start_date])
+            ->sum("amount")
+            - Payment::where("type", "refund")
+                ->whereBetween("created_at", [$last_income_start_date, $income_start_date])
                 ->sum("amount");
 
         // Calculate Expenses
         $expenses = Payment::where("type", "expense")
-            ->when($expenses_start_date, fn($query) => $query->where("created_at", ">", $expenses_start_date))
+            ->where("created_at", ">", $expenses_start_date)
+            ->sum("amount");
+
+        $last_expenses = Payment::where("type", "expense")
+            ->whereBetween("created_at", [$last_expense_start_date, $expenses_start_date])
             ->sum("amount");
 
         // Calculate Net Profit (Income - Expenses - Refunds)
         $net_profit = Payment::where("type", "income")
-            ->when($net_profit_start_date, fn($query) => $query->where("created_at", ">", $net_profit_start_date))
+            ->where("created_at", ">", $net_profit_start_date)
             ->sum("amount")
             - Payment::where("type", "expense")
-                ->when($net_profit_start_date, fn($query) => $query->where("created_at", ">", $net_profit_start_date))
+                ->where("created_at", ">", $net_profit_start_date)
                 ->sum("amount")
             - Payment::where("type", "refund")
-                ->when($net_profit_start_date, fn($query) => $query->where("created_at", ">", $net_profit_start_date))
+                ->where("created_at", ">", $net_profit_start_date)
+                ->sum("amount");
+
+        $last_net_profit = Payment::where("type", "income")
+            ->whereBetween("created_at", [$last_net_profit_start_date, $net_profit_start_date])
+            ->sum("amount")
+            - Payment::where("type", "expense")
+                ->whereBetween("created_at", [$last_net_profit_start_date, $net_profit_start_date])
+                ->sum("amount")
+            - Payment::where("type", "refund")
+                ->whereBetween("created_at", [$last_net_profit_start_date, $net_profit_start_date])
                 ->sum("amount");
 
         // Query Pending Payments (Always All Time)
@@ -293,7 +338,7 @@ $total_payments = $folder->payments->where("type", "in")->sum('amount') -
             - Payment::where("type", "income")->sum("amount")
             + Payment::where("type", "refund")->sum("amount");
         
-        $pending = Max($pending,0);
+        $pending = max($pending, 0);
 
         // Income & Expense Stats (For Graphs)
         $income_expense_stats = Payment::selectRaw('DATE(created_at) as date,
@@ -305,21 +350,64 @@ $total_payments = $folder->payments->where("type", "in")->sum('amount') -
             ->orderBy("date", "ASC")
             ->get();
 
+        // Last transaction for patients
+        $transactions = Payment::where("type", "income")
+            ->with(["folder.patient"])
+            ->join("folders", "payments.folder_id", "=", "folders.id")
+            ->join("patients", "folders.patient_id", "=", "patients.id")
+            ->select([
+                "payments.id",
+                "payments.amount",
+                "patients.id as patient_id",
+                "patients.patient_name",
+                "patients.phone"
+            ])
+            ->limit(4)
+            ->get();
+
+        $decrypted_trans = $transactions->map(function ($tran) {
+            $tran->phone = Crypt::decryptString($tran->phone);
+            $tran->date = Carbon::parse($tran->created_at)->format('M d, Y');
+            return collect($tran)->except(['folder']);
+        });
+
+        function calculatePercentageChange($oldValue, $newValue) {
+    if ($oldValue == 0) {
+        return $newValue > 0 ? 100 : ($newValue < 0 ? -100 : 0);
+    }
+    return round((($newValue - $oldValue) / abs($oldValue)) * 100);
+}
+
+// Calculate percentage changes
+$income_percentage = calculatePercentageChange($last_income, $income);
+$expenses_percentage = calculatePercentageChange($last_expenses, $expenses);
+$net_profit_percentage = calculatePercentageChange($last_net_profit, $net_profit);
+
         // Return response
         return response()->json([
+             "income_percentage" => $income_percentage,
+    "expenses_percentage" => $expenses_percentage,
+    "net_profit_percentage" => $net_profit_percentage,
             "income" => $income,
+            "last_income" => $last_income,
             "expenses" => $expenses,
-            "pending" => $pending,
+            "last_expenses" => $last_expenses,
             "net_profit" => $net_profit,
+            "last_net_profit" => $last_net_profit,
+            "pending" => $pending,
             "income_expense_stats" => $income_expense_stats,
-            "icome_date" =>$income_start_date,
-            "expenses_date"=> $expenses_start_date,
-            "net_profit_date"=>$net_profit_start_date,
-            "income_expense_start_date"=>$income_expense_start_date
-
+            "transactions" => $decrypted_trans,
+            "income_date" => $income_start_date,
+            "last_income_date" => $last_income_start_date,
+            "expenses_date" => $expenses_start_date,
+            "last_expenses_date" => $last_expense_start_date,
+            "net_profit_date" => $net_profit_start_date,
+            "last_net_profit_date" => $last_net_profit_start_date,
+            "income_expense_start_date" => $income_expense_start_date
         ], 200);
     } catch (\Exception $e) {
         return response()->json(["error" => $e->getMessage()], 500);
     }
 }
+
 }

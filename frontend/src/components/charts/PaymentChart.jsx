@@ -23,8 +23,6 @@ import {
     SelectValue,
 } from "@/components/designSystem/select";
 
-import { chartData } from "@/constant/PaymentChartData";
-
 const chartConfig = {
     expand: {
         label: "Expand",
@@ -36,13 +34,11 @@ const chartConfig = {
     },
 };
 
-export default function PaymentChart() {
-    const [timeRange, setTimeRange] = React.useState("90d");
-
-    const filteredData = chartData.filter((item) => {
+export default function PaymentChart({ income_expense_stats, incomeExpenseDate, setIncomeExpenseDate }) {
+    const filteredData = income_expense_stats?.filter((item) => {
         const date = new Date(item.date);
-        const referenceDate = new Date("2024-06-30");
-        let daysToSubtract = timeRange === "30d" ? 30 : timeRange === "7d" ? 7 : 90;
+        const referenceDate = new Date();
+        let daysToSubtract = incomeExpenseDate === "30d" ? 30 : incomeExpenseDate === "7d" ? 7 : 90;
         const startDate = new Date(referenceDate);
         startDate.setDate(startDate.getDate() - daysToSubtract);
         return date >= startDate;
@@ -52,14 +48,14 @@ export default function PaymentChart() {
         <Card className="bg-white shadow-md border-b border-gray-100">
             <CardHeader className="flex items-center gap-3 pb-1 sm:flex-row">
                 <div className="flex-1 text-center sm:text-left">
-                    <CardTitle className={"mb-2"}>Payment Insights</CardTitle>
+                    <CardTitle className="mb-2">Payment Insights</CardTitle>
                     <CardDescription>Tracking expenses & income trends</CardDescription>
                 </div>
-                <Select value={timeRange} onValueChange={setTimeRange}>
+                <Select value={incomeExpenseDate} onValueChange={setIncomeExpenseDate}>
                     <SelectTrigger className="w-[140px] rounded-lg border-gray-200 shadow-sm">
                         <SelectValue placeholder="Last 3 months" />
                     </SelectTrigger>
-                    <SelectContent className={"bg-white border-gray-200"}>
+                    <SelectContent className="bg-white border-gray-200">
                         <SelectItem value="90d">Last 3 months</SelectItem>
                         <SelectItem value="30d">Last 30 days</SelectItem>
                         <SelectItem value="7d">Last 7 days</SelectItem>
@@ -87,13 +83,17 @@ export default function PaymentChart() {
                             axisLine={false}
                             tickMargin={6}
                             minTickGap={20}
-                            tickFormatter={(value) => new Date(value).toLocaleDateString("en-US", { month: "short", day: "numeric" })}
+                            tickFormatter={(value) =>
+                                new Date(value).toLocaleDateString("en-US", { month: "short", day: "numeric" })
+                            }
                         />
                         <ChartTooltip
                             cursor={false}
                             content={
                                 <ChartTooltipContent
-                                    labelFormatter={(value) => new Date(value).toLocaleDateString("en-US", { month: "short", day: "numeric" })}
+                                    labelFormatter={(value) =>
+                                        new Date(value).toLocaleDateString("en-US", { month: "short", day: "numeric" })
+                                    }
                                     indicator="dot"
                                 />
                             }
