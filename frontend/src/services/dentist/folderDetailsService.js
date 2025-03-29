@@ -42,6 +42,7 @@ export const folderDetailsService = {
     search,
     status,
     sortBy,
+    sortDirection,
     page = 1
   ) {
     try {
@@ -54,6 +55,7 @@ export const folderDetailsService = {
       appendParam("status", status);
       appendParam("page", page);
       appendParam("sort_by", sortBy);
+      appendParam("sort_direction", sortDirection);
 
       const response = await api.get(
         `folders/${folder_id}/appointments?${params.toString()}`

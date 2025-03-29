@@ -118,13 +118,13 @@ const useFolder = (folderId) => {
 
     // Function to fetch folder appointments (if needed, can be manually triggered)
     const fetchFolderAppointments = useCallback(
-        _.debounce(async (folder_id, per_page , search = '', status = '', sortBy , page = 1) => {
+        _.debounce(async (folder_id, per_page, search = '', status = '', sortBy = "date", sortDirection = "asc" ,page = 1) => {
             if (!folder_id) return;
             setFolderAppointmentsError(null);
             setLoading(true);
             try {
 
-                const response = await folderDetailsService.getAppointments(folder_id, per_page, search, status, sortBy, page);
+                const response = await folderDetailsService.getAppointments(folder_id, per_page, search, status, sortBy, sortDirection, page);
                 console.log("Folder Appointments:", response.data);
                 setFolderAppointments(response.data.data);
                 setAppsPagination(response.data.pagination);

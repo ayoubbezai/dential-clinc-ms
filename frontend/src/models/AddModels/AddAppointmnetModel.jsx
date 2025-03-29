@@ -9,7 +9,7 @@ import toast from 'react-hot-toast';
 
 const statusOptions = ['pending', 'completed', 'cancelled', 'scheduled', 'rescheduled'];
 
-const AddAppointmentModel = ({ isOpen, onClose, folder_id }) => {
+const AddAppointmentModel = ({ isOpen, onClose, folder_id, fetchFolderAppointments }) => {
     const [date, setDate] = useState('');
     const [status, setStatus] = useState('');
     const [tooth, setTooth] = useState('');
@@ -18,9 +18,7 @@ const AddAppointmentModel = ({ isOpen, onClose, folder_id }) => {
     const [loading, setLoading] = useState(false);
 
     async function handleAdd(e) {
-        e.preventDefault(); // Prevent default form submission
-
-        // Validation: Ensure required fields are filled
+        e.preventDefault(); // 
         if (!date || !status) {
             toast.error("Date and Status are required!");
             return;
@@ -32,6 +30,7 @@ const AddAppointmentModel = ({ isOpen, onClose, folder_id }) => {
 
             if (data?.success) {
                 toast.success("Appointment added successfully!");
+                fetchFolderAppointments(folder_id);
                 onClose();
             } else {
                 toast.error(data?.message || "Failed to add appointment.");

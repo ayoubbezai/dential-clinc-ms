@@ -58,9 +58,9 @@ const FolderAppointments = ({
     useEffect(() => {
         if (isVisible) {
             console.log("Fetching appointments...");
-            fetchFolderAppointments(folderId, perPage, search, status, sortBy, page);
+            fetchFolderAppointments(folderId, perPage, search, status, sortBy, sortDirection, page);
         }
-    }, [perPage, search, status, sortBy, page]);
+    }, [perPage, search, status, sortDirection, page]);
 
     return (
         <div ref={observerRef} className="col-span-12 bg-white p-3 pb-5 shadow-sm rounded-md border border-gray-200 text-sm">
@@ -95,7 +95,7 @@ const FolderAppointments = ({
 
             {isAddAppOpen && (
                 <Suspense fallback={<div>Loading...</div>}>
-                    <AddAppointmentModel isOpen={isAddAppOpen} onClose={() => setIsAddAppOpen(false)} folder_id={folderId} />
+                    <AddAppointmentModel isOpen={isAddAppOpen} onClose={() => setIsAddAppOpen(false)} folder_id={folderId} fetchFolderAppointments={fetchFolderAppointments} />
                 </Suspense>
             )}
         </div>

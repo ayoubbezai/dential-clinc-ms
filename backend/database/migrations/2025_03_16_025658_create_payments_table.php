@@ -16,7 +16,7 @@ return new class extends Migration
             $table->integer("amount");
             $table->unsignedBigInteger("folder_id")->nullable();
             $table->foreign("folder_id")->references('id')->on('folders')->onDelete('cascade');
-            $table->enum("type",["in","out"]);
+        $table->enum("type", ["income", "expense", "refund"])->default("income");
             $table->text("note")->nullable();
             $table->timestamps();
         });
