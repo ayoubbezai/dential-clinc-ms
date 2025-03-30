@@ -47,6 +47,9 @@ return [
     */
 
     'expiration' => null,
+        'stateful' => explode(',', env('SANCTUM_STATEFUL_DOMAINS', 'localhost,127.0.0.1,localhost:5173')),
+    'guard' => ['web'], // Ensure this is set!
+    'expiration' => null,
 
     /*
     |--------------------------------------------------------------------------
@@ -79,5 +82,7 @@ return [
         'encrypt_cookies' => Illuminate\Cookie\Middleware\EncryptCookies::class,
         'validate_csrf_token' => Illuminate\Foundation\Http\Middleware\ValidateCsrfToken::class,
     ],
+
+    
 
 ];
