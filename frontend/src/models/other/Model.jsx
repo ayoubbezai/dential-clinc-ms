@@ -1,24 +1,11 @@
-import React, { useEffect, useRef } from 'react';
+import useClickOutside from '@/hooks/other/useClickOutside';
+import React, {  useRef } from 'react';
 
 const Modal = ({ isOpen, onClose, children }) => {
     const modalRef = useRef(null); // Reference to the modal content
 
-    // Close modal when clicking outside of it
-    useEffect(() => {
-        const handleClickOutside = (event) => {
-            if (modalRef.current && !modalRef.current.contains(event.target)) {
-                onClose();
-            }
-        };
+    useClickOutside(modalRef, onClose)
 
-        if (isOpen) {
-            document.addEventListener("mousedown", handleClickOutside);
-        }
-
-        return () => {
-            document.removeEventListener("mousedown", handleClickOutside);
-        };
-    }, [isOpen, onClose]);
 
     if (!isOpen) return null;
 

@@ -1,17 +1,18 @@
 import React, { useState, useEffect, useRef, lazy, Suspense } from "react";
-import SearchInTable from "@/components/small/SearchInTable";
+import SearchInTable from "@/components/TableComp/SearchInTable";
 import { Button } from "@/components/designSystem/button";
 import { FaPlus } from "react-icons/fa";
 import { selectClassName } from "@/constant/classNames";
 import AppointmentsTable from "../appointments/AppointmentsTable";
-import TableFooter from "@/components/small/TableFooter";
+import TableFooter from "@/components/TableComp/TableFooter";
+import SortDirection from "@/components/TableComp/SortDirection";
+import AddButton from "@/components/small/AddButton";
 
 const FolderAppointments = ({
     folderId,
     folderAppointments,
     fetchFolderAppointments,
     loading,
-    setAppsPagination,
     appsPagination,
 }) => {
     const [search, setSearch] = useState("");
@@ -36,9 +37,7 @@ const FolderAppointments = ({
         setStatus(event.target.value);
     };
 
-    const handleSortChange = (event) => {
-        setSortDirection(event.target.value);
-    };
+
 
     useEffect(() => {
         const observer = new IntersectionObserver(
@@ -75,21 +74,18 @@ const FolderAppointments = ({
                             </option>
                         ))}
                     </select>
-                    <select value={sortDirection} onChange={handleSortChange} className={selectClassName}>
-                        <option value="asc">Ascending</option>
-                        <option value="desc">Descending</option>
-                    </select>
-                    <Button size={"sm"} className="bg-blue-600 text-white mx-2 rounded-lg" onClick={() => setIsAddAppOpen(true)}>
-                        <FaPlus size={12} />
-                    </Button>
+
+                    <SortDirection sortDirection={sortDirection} setSortDirection={setSortDirection} />
+                    
+                    <AddButton onClick={() => setIsAddAppOpen(true)} />
                 </div>
             </div>
 
-                <AppointmentsTable
-                    appointments={folderAppointments}
-                    appointmentloading={loading}
-                    fetchAppointments={() => fetchFolderAppointments(folderId)}
-                />
+            <AppointmentsTable
+                appointments={folderAppointments}
+                appointmentloading={loading}
+                fetchAppointments={() => fetchFolderAppointments(folderId)}
+            />
 
             <TableFooter perPage={perPage} setPerPage={setPerPage} page={appsPagination?.current_page || 1} setPage={setPage} pagination={appsPagination} />
 

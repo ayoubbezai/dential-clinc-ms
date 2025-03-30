@@ -1,12 +1,12 @@
 
 import useAppointment from '@/hooks/lists/useAppointment';
 import AppointmentsTable from '@/components/pagesComp/appointments/AppointmentsTable';
-import PerPage from '@/components/small/PerPage';
-import PageChange from '@/components/small/PageChange';
-import SearchInTable from '@/components/small/SearchInTable';
-import Sort from '@/components/small/Sort';
+import PerPage from '@/components/TableComp/PerPage';
+import PageChange from '@/components/TableComp/PageChange';
+import SearchInTable from '@/components/TableComp/SearchInTable';
+import Sort from '@/components/TableComp/Sort';
 import DateInput from '@/components/inputs/DateInput';
-import SelectStatusAppointment from '@/components/small/SelectStatusAppointment';
+import SelectStatusAppointment from '@/components/pagesComp/appointments/SelectStatusAppointment';
 const AppointmentList = () => {
 
   const { appointments, loading, perPage, setPerPage, setPage, page, pagination, search,

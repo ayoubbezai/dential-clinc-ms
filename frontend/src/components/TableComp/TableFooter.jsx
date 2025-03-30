@@ -1,13 +1,9 @@
 import React from 'react';
-import PerPage from '@/components/small/PerPage';
-import PageChange from '@/components/small/PageChange';
+import PerPage from '@/components/TableComp/PerPage';
+import PageChange from '@/components/TableComp/PageChange';
 
-const TableFooter = ({ perPage, setPerPage, page, setPage, pagination }) => {
+const TableFooter = ({ setPerPage, setPage, pagination }) => {
 
-    console.log(perPage)
-    console.log(pagination)
-    console.log(pagination?.items_per_page)
-    console.log(page)
 
     return (
         <div className="flex justify-between items-center pb-3 px-4 mt-4">

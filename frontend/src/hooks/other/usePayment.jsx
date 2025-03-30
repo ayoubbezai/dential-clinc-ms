@@ -27,7 +27,7 @@ const usePayment = () => {
     const [type, setType] = useState(null);
     const [startDate, setStartDate] = useState(null);
     const [endDate, setEndDate] = useState(null);
-    const [sortBy, setSortBy] = useState('date');
+    const [sortBy, setSortBy] = useState('created_at');
     const [sortDirection, setSortDirection] = useState('desc');
     const [page, setPage] = useState(1);
 

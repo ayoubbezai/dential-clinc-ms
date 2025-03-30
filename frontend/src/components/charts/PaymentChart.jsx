@@ -44,6 +44,9 @@ export default function PaymentChart({ income_expense_stats, incomeExpenseDate, 
         return date >= startDate;
     });
 
+    console.log(filteredData);
+
+
     return (
         <Card className="bg-white shadow-md border-b border-gray-100">
             <CardHeader className="flex items-center gap-3 pb-1 sm:flex-row">
@@ -99,7 +102,7 @@ export default function PaymentChart({ income_expense_stats, incomeExpenseDate, 
                             }
                         />
                         <Area dataKey="income" type="natural" fill="url(#fillincome)" stroke="var(--color-income)" stackId="a" />
-                        <Area dataKey="expand" type="natural" fill="url(#fillexpand)" stroke="var(--color-expand)" stackId="a" />
+                        <Area dataKey="expand" type="natural" fill="url(#fillexpand)" stroke="var(--color-expand)"/>
                         <ChartLegend content={<ChartLegendContent />} />
                     </AreaChart>
                 </ChartContainer>

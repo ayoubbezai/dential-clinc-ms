@@ -1,7 +1,7 @@
 import React, { useState, lazy, Suspense } from 'react'
 import { Button } from '@/components/designSystem/button';
 import { FaTh, FaList, FaPlus } from 'react-icons/fa';
-import SearchInTable from '@/components/small/SearchInTable';
+import SearchInTable from '@/components/TableComp/SearchInTable';
 
 const AddFolderModel = lazy(() => import("@/models/AddModels/AddFolderModel"))
 

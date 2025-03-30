@@ -352,8 +352,8 @@ public function getAllFolderDetails(string $id)
             $note->content = $note->content ? Crypt::decryptString($note->content) : null;
 
         }
-        $total_payments = $folder->payments->where("type", "in")->sum('amount') -
-                  $folder->payments->where("type", "out")->sum('amount');
+$total_payments = $folder->payments->where("type", "income")->sum('amount') -
+                  $folder->payments->where("type", "refund")->sum('amount');
 // Format attachments
 
 

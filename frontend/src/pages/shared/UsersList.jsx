@@ -1,12 +1,12 @@
 
 import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/designSystem/button';
-import SelectRole from '@/components/small/SelectRole';
+import SelectRole from '@/components/TableComp/SelectRole';
 
-import PerPage from '@/components/small/PerPage';
-import PageChange from '@/components/small/PageChange';
-import SearchInTable from '@/components/small/SearchInTable';
-import Sort from '@/components/small/Sort';
+import PerPage from '@/components/TableComp/PerPage';
+import PageChange from '@/components/TableComp/PageChange';
+import SearchInTable from '@/components/TableComp/SearchInTable';
+import Sort from '@/components/TableComp/Sort';
 import DateInput from '@/components/inputs/DateInput';
 import UsersTable from '@/components/pagesComp/users/UsersTable';
 import useUser from '@/hooks/lists/useUser';

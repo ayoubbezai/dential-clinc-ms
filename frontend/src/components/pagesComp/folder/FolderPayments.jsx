@@ -1,5 +1,6 @@
 import React, { useState, Suspense, lazy } from 'react';
-import { FaEllipsisV } from "react-icons/fa";
+import FolderPaymentsMenu from './FolderPaymentsMenu';
+import ThreeDotsV from '@/components/small/ThreeDotsV';
 
 const FolderDetailsModel = lazy(() => import('@/models/DetailsModels/PaymentDetailsModel'));
 const AddPaymentModel = lazy(() => import('@/models/AddModels/AddPaymentModel'));
@@ -8,7 +9,7 @@ const FolderPayments = ({ folderDetails, folderPayments, fetchFolderPayments, fo
     const [isModelOpen, setIsModelOpen] = useState(false);
     const [isAddModelOpen, setIsAddModelOpen] = useState(false);
     const [isMenuOpen, setIsMenuOpen] = useState(false);
-    console.log(folderPayments);
+    console.log("folderPayments",folderPayments);
 
     const totalPrice = folderDetails?.price || 0;
     const totalPaid = folderPayments?.total_payments || 0;
@@ -21,28 +22,11 @@ const FolderPayments = ({ folderDetails, folderPayments, fetchFolderPayments, fo
                     <h3 className="text-[#223354] font-bold text-lg">Payments</h3>
 
                     <div className="relative">
-                        <button
-                            className="text-gray-500 hover:text-gray-700 p-2"
-                            onClick={() => setIsMenuOpen(!isMenuOpen)}
-                        >
-                            <FaEllipsisV />
-                        </button>
+
+                        <ThreeDotsV isMenuOpen={isMenuOpen} setIsMenuOpen={setIsMenuOpen} />
 
                         {isMenuOpen && (
-                            <div className="absolute right-0 mt-2 w-40 bg-white shadow-md rounded-md border border-gray-200 z-10">
-                                <button
-                                    onClick={() => { setIsMenuOpen(false); setIsModelOpen(true); }}
-                                    className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                                >
-                                    View Details
-                                </button>
-                                <button
-                                    onClick={() => { setIsMenuOpen(false); setIsAddModelOpen(true); }}
-                                    className="block w-full text-left px-4 py-2 text-sm text-[#1a75ff] hover:bg-gray-100"
-                                >
-                                    + Add Payment
-                                </button>
-                            </div>
+                            < FolderPaymentsMenu setIsMenuOpen={setIsMenuOpen} setIsModelOpen={setIsModelOpen} setIsAddModelOpen={setIsAddModelOpen}/>
                         )}
                     </div>
                 </div>

@@ -1,32 +1,15 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useRef } from "react";
 import { FaEllipsisH, FaArrowUp, FaArrowDown } from "react-icons/fa";
-
+import { changenumberToText } from "@/utils/dateToText";
+import useClickOutside from "@/hooks/other/useClickOutside";
 const PaymentCard = ({ title, amount, comparison, percentage, isProfit, setDate, hasMenu = true, selectedValue }) => {
     const [isOpen, setIsOpen] = useState(false);
     const menuRef = useRef(null);
 
-    useEffect(() => {
-        const handleClickOutside = (event) => {
-            if (menuRef.current && !menuRef.current.contains(event.target)) {
-                setIsOpen(false);
-            }
-        };
-        document.addEventListener("mousedown", handleClickOutside);
-        return () => {
-            document.removeEventListener("mousedown", handleClickOutside);
-        };
-    }, []);
+    useClickOutside(menuRef, () => setIsOpen(false));
 
-    // Function to map values to labels
-    const changenumberToText = (value) => {
-        const options = {
-            "7d": "Last Week",
-            "30d": "Last Month",
-            "90d": "Last 3 Months",
-            "365d": "Last Year"
-        };
-        return options[value] || "Last Month";
-    };
+
+
 
     const handleSelect = (days) => {
         if (setDate) {
@@ -86,7 +69,7 @@ const PaymentCard = ({ title, amount, comparison, percentage, isProfit, setDate,
                 {/* Percentage Badge with imported arrows */}
                 {hasMenu && (
                     <span className={`flex items-center gap-1 ${isProfit ? "bg-green-100 text-green-600" : "bg-red-100 text-red-600"} text-xs font-bold px-2 py-1 rounded-lg`}>
-                        {isProfit ? <FaArrowUp size={11} /> : <FaArrowDown size={11} />} {percentage}%
+                        {isProfit ? <FaArrowUp size={11} /> : <FaArrowDown size={11} />} {Math.abs(percentage)}%
                     </span>
                 )}
             </div>

@@ -2,6 +2,8 @@ import React, { useState, lazy, Suspense } from "react";
 import { FaEllipsisH } from "react-icons/fa";
 import Swal from "sweetalert2";
 import { folderService } from "@/services/dentist/foldersService";
+import ThreeDotsH from "@/components/small/ThreeDotsH";
+import FolderDetailsMenu from "./FolderDetailsMenu";
 
 const EditFolderModel = lazy(() => import("@/models/EditModels/EditFolderModel"));
 
@@ -46,26 +48,11 @@ const FolderDetailsComp = ({ folderDetails, fetchFolderDetails }) => {
 
                 {/* Menu Icon */}
                 <div className="relative">
-                    <button onClick={() => setIsMenuOpen(!isMenuOpen)} className="text-gray-500 hover:text-gray-700 p-2">
-                        <FaEllipsisH />
-                    </button>
-
+                    <ThreeDotsH isMenuOpen={isMenuOpen} setIsMenuOpen={setIsMenuOpen} />
                     {/* Dropdown Menu */}
                     {isMenuOpen && (
-                        <div className="absolute right-0 mt-2 w-32 bg-white shadow-md rounded-md border border-gray-200 z-10">
-                            <button
-                                onClick={() => { setIsMenuOpen(false); setIsEditOpen(true); }}
-                                className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                            >
-                                Edit
-                            </button>
-                            <button
-                                onClick={() => { setIsMenuOpen(false); handleDelete(folderDetails.id); }}
-                                className="block w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-gray-100"
-                            >
-                                Delete
-                            </button>
-                        </div>
+                        <FolderDetailsMenu onEdit={() => { setIsMenuOpen(false); setIsEditOpen(true); }} onDelete={() => { setIsMenuOpen(false); handleDelete(folderDetails.id); }} />
+
                     )}
                 </div>
             </div>

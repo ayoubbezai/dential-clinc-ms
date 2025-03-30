@@ -1,11 +1,11 @@
 import React, { useState, lazy, Suspense } from 'react';
 import usePatients from '@/hooks/lists/usePatients';
 import { Button } from '@/components/designSystem/button';
-import SelectGender from '@/components/small/SelectGender';
-import PerPage from '@/components/small/PerPage';
-import PageChange from '@/components/small/PageChange';
-import SearchInTable from '@/components/small/SearchInTable';
-import Sort from '@/components/small/Sort';
+import SelectGender from '@/components/TableComp/SelectGender';
+import PerPage from '@/components/TableComp/PerPage';
+import PageChange from '@/components/TableComp/PageChange';
+import SearchInTable from '@/components/TableComp/SearchInTable';
+import Sort from '@/components/TableComp/Sort';
 import DateInput from '@/components/inputs/DateInput';
 
 // Lazy load large components

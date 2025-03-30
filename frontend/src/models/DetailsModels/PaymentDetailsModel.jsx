@@ -21,14 +21,14 @@ const PaymentsDetailsModel = ({ isOpen, onClose, folderPayments, folderDetails }
                                 </p>
                                 <p className="text-sm text-gray-600">
                                     <span className="font-semibold">
-                                        {pay.type === "out" ? "Refunded" : "Paid"}:
+                                        {pay.type === "refund" ? "Refunded" : "Paid"}:
                                     </span>{" "}
-                                    <span className={pay.type === "out" ? "text-red-600" : "text-green-600"}>
+                                    <span className={pay.type === "refund" ? "text-red-600" : "text-green-600"}>
                                         {pay.amount} DA
                                     </span>
                                 </p>
                                 {pay.note && (
-                                    <p className="text-sm text-gray-500 italic">{pay.type === "in" ? "Note :" : "Refund Reason :"}{pay.note}</p>
+                                    <p className="text-sm text-gray-500 italic">{pay.type === "income" ? "Note :" : "Refund Reason :"}{pay.note}</p>
                                 )}
                             </div>
                         ))

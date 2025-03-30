@@ -74,7 +74,7 @@ $data = Payment::query()
                 // Swap the dates if startDate is greater than endDate
                 [$startDate, $endDate] = [$endDate, $startDate];
             }
-            $data->whereBetween('created_at', [$startDate, $endDate]);
+            $data->whereBetween('payments.created_at', [$startDate, $endDate]);
         }
 
         // applay sorting
@@ -145,8 +145,10 @@ public function show(string $id)
     try {
         // Retrieve folder with related patient and payments
         $folder = Folder::with(['patient', 'payments'])->findOrFail($id);
-$total_payments = $folder->payments->where("type", "in")->sum('amount') -
-                  $folder->payments->where("type", "out")->sum('amount');
+        
+$total_payments = $folder->payments->where("type", "income")->sum('amount') -
+                  $folder->payments->where("type", "refund")->sum('amount');
+
         return response()->json([
             "success" => true,
             "message" => "Retrieved payments successfully",
@@ -343,10 +345,10 @@ function getLastPeriodDate($filter)
         $pending = max($pending, 0);
 
         // Income & Expense Stats (For Graphs)
-        $income_expense_stats = Payment::selectRaw('DATE(created_at) as date,
-            SUM(CASE WHEN type = "income" THEN amount ELSE 0 END) -
-            SUM(CASE WHEN type = "refund" THEN amount ELSE 0 END) as income,
-            SUM(CASE WHEN type = "expense" THEN amount ELSE 0 END) as expand')
+  $income_expense_stats = Payment::selectRaw('DATE(created_at) as date,
+            CAST(SUM(CASE WHEN type = "income" THEN amount ELSE 0 END) - 
+                 SUM(CASE WHEN type = "refund" THEN amount ELSE 0 END) AS SIGNED) as income,
+            CAST(SUM(CASE WHEN type = "expense" THEN amount ELSE 0 END) AS SIGNED) as expand')
             ->where("created_at", ">", $income_expense_start_date)
             ->groupBy("date")
             ->orderBy("date", "ASC")

@@ -11,7 +11,7 @@ const AddPaymentModel = ({ isOpen, onClose, folderId, folderDetails, fetchFolder
     const [amount, setAmount] = useState("");
     const [note, setNote] = useState("");
     const [loading, setLoading] = useState(false);
-    const [transactionType, setTransactionType] = useState("in");
+    const [transactionType, setTransactionType] = useState("income");
     const [isNoteRequired, setIsNoteRequired] = useState(false);
 
     const totalPrice = folderDetails?.price || 0;
@@ -21,7 +21,7 @@ const AddPaymentModel = ({ isOpen, onClose, folderId, folderDetails, fetchFolder
     function handleTransactionTypeChange(e) {
         const newType = e.target.value;
         setTransactionType(newType);
-        setIsNoteRequired(newType === "out");
+        setIsNoteRequired(newType === "refund");
     }
 
     async function handleAddPayment(finalAmount) {
@@ -32,7 +32,7 @@ const AddPaymentModel = ({ isOpen, onClose, folderId, folderDetails, fetchFolder
         const { data, error } = await paymentService.addPayment(folderId, finalAmount, note, transactionType);
 
         if (data?.success) {
-            toast.success(transactionType === "in" ? "Payment added successfully!" : "Refund processed successfully!");
+            toast.success(transactionType === "income" ? "Payment added successfully!" : "Refund processed successfully!");
             fetchFolderPayments(folderId);
             setAmount("");
             setNote("");
@@ -44,7 +44,7 @@ const AddPaymentModel = ({ isOpen, onClose, folderId, folderDetails, fetchFolder
     }
 
     async function handleConfirm() {
-        if (transactionType === "out") {
+        if (transactionType === "refund") {
             const refundResult = await Swal.fire({
                 title: "Confirm Refund",
                 text: `Are you sure you want to refund ${amount} DA?`,
@@ -95,8 +95,8 @@ const AddPaymentModel = ({ isOpen, onClose, folderId, folderDetails, fetchFolder
                         onChange={handleTransactionTypeChange}
                         className={`${selectClassName} w-full mt-2`}
                     >
-                        <option value="in">Pay</option>
-                        <option value="out">Refund</option>
+                        <option value="income">Pay</option>
+                        <option value="refund">Refund</option>
                     </select>
                 </div>
 
@@ -114,13 +114,13 @@ const AddPaymentModel = ({ isOpen, onClose, folderId, folderDetails, fetchFolder
 
                 <div>
                     <label className="block text-sm font-medium text-gray-700">
-                        {transactionType === "out" ? "Refund Reason" : "Note (Optional)"}
+                        {transactionType === "refund" ? "Refund Reason" : "Note (Optional)"}
                     </label>
                     <Input
                         type="text"
                         value={note}
                         onChange={(e) => setNote(e.target.value)}
-                        placeholder={transactionType === "out" ? "Enter refund reason" : "Add a note (optional)"}
+                        placeholder={transactionType === "refund" ? "Enter refund reason" : "Add a note (optional)"}
                         className={`${selectClassName} mt-2`}
                         required={isNoteRequired}
                     />
@@ -137,7 +137,7 @@ const AddPaymentModel = ({ isOpen, onClose, folderId, folderDetails, fetchFolder
                         onClick={handleConfirm}
                         disabled={loading || !amount || (isNoteRequired && !note)}
                     >
-                        {loading ? "Processing..." : transactionType === "out" ? "Refund" : "Confirm"}
+                        {loading ? "Processing..." : transactionType === "refund" ? "Refund" : "Confirm"}
                     </Button>
                 </div>
             </form>
