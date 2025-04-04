@@ -28,7 +28,7 @@ const FolderTableBody = ({ loading, folders, handleDelete, isEditFolderOpen, set
         <>
             <TableBody>
                 {loading ? (
-                    Array.from({ length: 5 }).map((_, index) => <FolderTableSkeleton key={index} />)
+                    Array.from({ length: 6 }).map((_, index) => <FolderTableSkeleton index={index} />)
                 ) : (
                     folders?.map((folder, index) => {
                         const statusClass = statusColors[folder.status] || statusColors.default;

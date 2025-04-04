@@ -11,7 +11,7 @@ const PatientTableComp = ({ handleEdit, handleDelete, patientLoading, loading, p
             <PatientTableHeader />
             <TableBody>
                 {patientLoading ? (
-                    Array.from({ length: 5 }).map((_, index) => (
+                    Array.from({ length: 6 }).map((_, index) => (
                         <TableSkeleton index={index} />
                     ))
                 ) : (
