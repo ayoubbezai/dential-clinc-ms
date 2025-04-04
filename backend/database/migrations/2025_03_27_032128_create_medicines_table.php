@@ -15,7 +15,10 @@ return new class extends Migration
             $table->id();
              $table->string("name")->unique();
              $table->text("description")->nullable();
-
+             $table->string("category")->nullable();
+             $table->integer("low_stock_threshold")->nullable();
+             $table->integer("medium_stock_threshold")->nullable();
+             $table->integer("good_stock_threshold")->nullable();
             $table->timestamps();
         });
     }

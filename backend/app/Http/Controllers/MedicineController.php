@@ -25,17 +25,38 @@ class MedicineController extends Controller
             $data = Medicine::query()->select([
         'medicines.id',
         'medicines.name',
-        'medicines.description'
+        'medicines.category',
+        'medicines.description',
+        'medicines.low_stock_threshold',
+        'medicines.medium_stock_threshold',
+        'medicines.good_stock_threshold',
             ]);
+
+
+                  //validate sort by and direction
+
+        $validSortColumns = ['name', 'created_at','updated_at'];
+        $validSortDirection = ["asc","desc"];
+        $sortBy = in_array($request_query['sort_by'] ?? 'created_at', $validSortColumns)
+                ? $request_query['sort_by'] ?? 'created_at'
+                : 'created_at';
+
+        $sortDirection = in_array(strtolower($request_query['sort_direction'] ?? 'asc'), $validSortDirection)
+            ? strtolower($request_query['sort_direction'] ?? 'asc')
+            : 'asc';
+
 
               //search by medicine name
 
             if (!empty($request_query['search'])) {
             $search = $request_query['search'];
             $data->where(function ($query) use ($search) {
-                $query->where('name', 'like', '%' . $search . '%');
+                $query->where('name', 'like', '%' . $search . '%')
+                ->orWhere('category', 'like', '%' . $search . '%');
             });
             }
+
+            $data->orderBy($sortBy, $sortDirection);
 
             //get paginatied data
              $paginatedData = $data->paginate($perPage);
@@ -72,10 +93,15 @@ class MedicineController extends Controller
     public function store(Request $request)
     {
         // Validate the request
-        $data = $request->validate([
-            "name" => "required|string|max:255",
-            "description" => "nullable|string|max:255"
-        ]);
+ $data = $request->validate([
+    "name" => "required|string|max:255",
+    "description" => "nullable|string|max:255",
+    "low_stock_threshold" => "nullable|integer|min:0",
+    "medium_stock_threshold" => "nullable|integer|min:0",
+    "good_stock_threshold" => "nullable|integer|min:0",
+]);
+
+
 
         $medicine = Medicine::create($data);
 
@@ -119,10 +145,23 @@ class MedicineController extends Controller
 
         //then update
                 try{
-            $data = $request->validate([
-            "name" => "nullable|string|max:255",
-            "description" => "nullable|string|max:255"
-        ]);
+$data = $request->validate([
+    "name" => "required|string|max:255",
+    "description" => "nullable|string|max:255",
+    "low_stock_threshold" => "nullable|integer|min:0",
+    "medium_stock_threshold" => "nullable|integer|min:0",
+    "good_stock_threshold" => "nullable|integer|min:0",
+]);
+
+if (isset($data['low_stock_threshold'], $data['medium_stock_threshold'], $data['good_stock_threshold'])) {
+    if ($data['low_stock_threshold'] >= $data['medium_stock_threshold']) {
+        return back()->withErrors(['low_stock_threshold' => 'Low stock threshold must be less than medium stock threshold.']);
+    }
+    
+    if ($data['medium_stock_threshold'] >= $data['good_stock_threshold']) {
+        return back()->withErrors(['medium_stock_threshold' => 'Medium stock threshold must be less than good stock threshold.']);
+    }
+}
             $medicine->update($data);
 
          return response()->json([

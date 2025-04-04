@@ -39,7 +39,7 @@ const SideBarLinksDentist = ({ isOpen }) => {
         { name: "Appointments", link: "/appointments_list", icon: "appointments" },
         { name: "Staff/Users", link: "/users_list", icon: "users" },
         { name: "Payment", link: "/payment", icon: "payment" },
-        { name: "Inventory", link: "/dentist/stock", icon: "inventory" },
+        { name: "Inventory", link: "/inventory", icon: "inventory" },
         { name: "AI Assistant", link: "/dentist/ai-assistant", icon: "ai" },
         { name: "Messenger", link: "/dentist/messenger", icon: "chat" },
         { name: "Settings", link: "/dentist/settings", icon: "settings" }

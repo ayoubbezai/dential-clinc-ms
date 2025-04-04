@@ -16,6 +16,7 @@ const Messanger = lazy(() => import("../pages/shared/Messanger"));
 const Payment = lazy(() => import("../pages/shared/Payment"));
 const PatientDetails = lazy(() => import("@/pages/dentist/PatientDetails"));
 const FolderDetails = lazy(() => import("@/pages/dentist/FolderDetails"));
+const Inventory = lazy(() => import("@/pages/shared/Inventory"));
 
 const AppRoutes = () => {
     return (
@@ -42,6 +43,7 @@ const AppRoutes = () => {
                         <Route path="/appointments_list" element={<AppointmentList />} />
                         <Route path="/payment" element={<Payment />} />
                         <Route path="/messanger" element={<Messanger />} />
+                        <Route path="/inventory" element={<Inventory />} />
                     </Route>
 
                     {/* Receptionist Routes */}
