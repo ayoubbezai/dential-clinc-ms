@@ -12,44 +12,115 @@ class StockController extends Controller
      */
 public function index(Request $request)
 {
-    // Get query parameters
-    $request_query = $request->query();
-    $perPage = filter_var($request_query["per_page"] ?? 15, FILTER_VALIDATE_INT) ?: 15;
-    $perPage = max($perPage, 1);
-
+    
     try {
-        // Fetch stock details with medicine, supplier, and unit details
+        $request_query = $request->query();
+        $perPage = filter_var($request_query["per_page"] ?? 15, FILTER_VALIDATE_INT) ?: 15;
+        $perPage = max($perPage, 1);
+    
         $data = Stock::query()
-            
-            ->select([
-                "stocks.id",
-                "stocks.price",
-                "stocks.quantity",
+        ->select([
+            "stocks.id",
+            "stocks.price",
+            "stocks.quantity",
                 "stocks.expiry_date",
                 "medicines.name as medicine_name",
+                "medicines.low_stock_threshold",
+                "medicines.medium_stock_threshold",
+                "medicines.good_stock_threshold",
                 "suppliers.name as supplier_name",
-                "stock_units.name as unit_name"
+                "stock_units.name as unit_name",
+            "stocks.created_at as created_at"
             ])
             ->leftJoin("medicines", "medicines.id", "=", "stocks.medicine_id")
             ->leftJoin("suppliers", "suppliers.id", "=", "stocks.supplier_id")
-            ->leftJoin("stock_units", "stock_units.id", "=", "stocks.unit_id")
-            ->paginate($perPage);
+            ->leftJoin("stock_units", "stock_units.id", "=", "stocks.unit_id");
+            
+            $validSortColumns = ['name', 'created_at', 'updated_at','medicine_name','supplier_name'];
+            $validSortDirection = ["asc", "desc"];
+           $sortBy = $request_query['sort_by'] ?? 'created_at';
+$sortBy = in_array($sortBy, $validSortColumns) ? $sortBy : 'created_at';
 
-        //  Success Response
+$sortDirection = strtolower($request_query['sort_direction'] ?? 'asc');
+$sortDirection = in_array($sortDirection, $validSortDirection) ? $sortDirection : 'asc';
+        // Search
+        if (!empty($request_query['search'])) {
+            $search = $request_query['search'];
+            $data->where(function ($query) use ($search) {
+                $query->where('medicine_name', 'like', '%' . $search . '%')
+                    ->orWhere('supplier_name', 'like', '%' . $search . '%');
+            });
+        }
+
+     if (!empty($request_query['stock_status'])) {
+    $status = strtolower($request_query['stock_status']);
+
+    if (in_array($status, ['low', 'medium', 'good', 'very_good', 'unknown'])) {
+        $data->where(function ($query) use ($status) {
+            $query->whereRaw("
+                CASE
+                    WHEN medicines.low_stock_threshold IS NULL 
+                      OR medicines.medium_stock_threshold IS NULL 
+                      OR medicines.good_stock_threshold IS NULL THEN 'unknown'
+                    WHEN stocks.quantity <= medicines.low_stock_threshold THEN 'low'
+                    WHEN stocks.quantity <= medicines.medium_stock_threshold THEN 'medium'
+                    WHEN stocks.quantity <= medicines.good_stock_threshold THEN 'good'
+                    ELSE 'very_good'
+                END = ?
+            ", [$status]);
+        });
+    }
+}
+
+
+        // Sorting
+        $data->orderBy($sortBy, $sortDirection);
+
+        // Pagination
+        $paginatedData = $data->paginate($perPage);
+
+        // Append status
+        $stocksWithStatus = $paginatedData->getCollection()->map(function ($item) use ($request_query) {
+            $quantity = $item->quantity;
+
+$hasAllThresholds = isset($item->low_stock_threshold, $item->medium_stock_threshold, $item->good_stock_threshold);
+
+if ($quantity <= $item->low_stock_threshold) {
+    $status = 'low';
+} elseif ($quantity <= $item->medium_stock_threshold) {
+    $status = 'medium';
+} elseif ($quantity <= $item->good_stock_threshold) {
+    $status = 'good';
+} elseif ($hasAllThresholds) {
+    $status = 'very_good';
+} else {
+    $status = 'unkonwn'; 
+}
+
+
+
+            // Optional filter by stock_status query param
+            if (!empty($request_query['stock_status']) && $request_query['stock_status'] !== $status) {
+                return null;
+            }
+
+            $item->status = $status;
+            return $item;
+        })->filter(); // remove nulls
+
         return response()->json([
             "success" => true,
             "message" => "Stocks fetched successfully",
-            "data" => $data->items(), // Paginated data items
+            "data" => $stocksWithStatus->values(),
             "pagination" => [
-                "total_items" => $data->total(), 
-                "items_per_page" => $data->perPage(), 
-                "current_page" => $data->currentPage(), 
-                "total_pages" => $data->lastPage()
+                "total_items" => $paginatedData->total(),
+                "items_per_page" => $paginatedData->perPage(),
+                "current_page" => $paginatedData->currentPage(),
+                "total_pages" => $paginatedData->lastPage()
             ]
         ], Response::HTTP_OK);
 
     } catch (\Exception $e) {
-        //  Error Response
         return response()->json([
             "success" => false,
             "message" => "Failed to fetch stocks",
@@ -57,6 +128,7 @@ public function index(Request $request)
         ], Response::HTTP_INTERNAL_SERVER_ERROR);
     }
 }
+
 
 
     /**
