@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react";
 import Model from "../other/Model";
 import { Button } from "@/components/designSystem/button";
-import {  handleSubmit } from "@/utils/models/editUserModel";
+import { handleSubmit } from "@/utils/models/editUserModel";
 import EmailInput from "@/components/inputs/EmailInput";
 import NameInput from "@/components/inputs/NameInput";
 import PasswordInput from "@/components/inputs/PasswordInput";
 import SelectInput from "@/components/inputs/SelectInput"; // ✅ Import Select Input
-import { handleInputChange } from "@/utils/inputChange";
+import { handleInputChange } from "@/utils/other/inputChange";
 const EditUserModel = ({ isOpen, onClose, currentUser, refreshUsers }) => {
     const [formData, setFormData] = useState({
         email: "",
@@ -32,8 +32,8 @@ const EditUserModel = ({ isOpen, onClose, currentUser, refreshUsers }) => {
         <Model isOpen={isOpen} onClose={onClose}>
             <form onSubmit={(e) => handleSubmit({ e, formData, currentUser, onClose, refreshUsers })}>
                 {/* Reusable Inputs */}
-                <EmailInput value={formData.email}onChange={(e) => handleInputChange(e, setFormData)} />
-                <NameInput value={formData.name}onChange={(e) => handleInputChange(e, setFormData)} />
+                <EmailInput value={formData.email} onChange={(e) => handleInputChange(e, setFormData)} />
+                <NameInput value={formData.name} onChange={(e) => handleInputChange(e, setFormData)} />
 
                 {/* Role Selection
                 <SelectInput
@@ -54,14 +54,14 @@ const EditUserModel = ({ isOpen, onClose, currentUser, refreshUsers }) => {
                     id="password"
                     label="New Password"
                     value={formData.password}
-                   onChange={(e) => handleInputChange(e, setFormData)}
+                    onChange={(e) => handleInputChange(e, setFormData)}
                     placeholder="Enter new password (optional)"
                 />
                 <PasswordInput
                     id="password_confirmation"
                     label="Confirm Password"
                     value={formData.password_confirmation}
-                   onChange={(e) => handleInputChange(e, setFormData)}
+                    onChange={(e) => handleInputChange(e, setFormData)}
                     placeholder="Re-enter new password (optional)"
                 />
 

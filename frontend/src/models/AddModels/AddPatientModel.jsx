@@ -3,7 +3,7 @@ import Model from "../other/Model";
 import { Button } from "@/components/designSystem/button";
 import TextInput from "@/components/inputs/TextInput";
 import TextareaInput from "@/components/inputs/TextareaInput"; // Updated import
-import { handleInputChange } from "@/utils/inputChange";
+import { handleInputChange } from "@/utils/other/inputChange";
 import { initializeFormData, handleSubmit } from "@/utils/models/addPatientModel";
 import SelectInput from "@/components/inputs/SelectInput";
 

@@ -27,4 +27,20 @@ export const suppliersService = {
       }; // Return error message
     }
   },
+  async addSupplier(name, contact_info) {
+    try {
+      const response = await api.post("/suppliers", {
+        name,
+        contact_info,
+      });
+      console.log(response);
+      return { data: response.data, error: null };
+    } catch (error) {
+      console.log(error);
+      return {
+        data: null,
+        error: error.message || "Failed to create supplier",
+      }; // Return error
+    }
+  },
 };

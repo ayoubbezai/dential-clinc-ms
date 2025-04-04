@@ -5,7 +5,7 @@ import DateInput from '@/components/inputs/DateInput';
 import PageChange from '@/components/TableComp/PageChange';
 import PerPage from '@/components/TableComp/PerPage';
 import SortDirection from '@/components/TableComp/SortDirection';
-import {  paymentCardData } from '@/utils/paymentsHelp';
+import { paymentCardData } from '@/utils/help/paymentsHelp';
 import SortByPaymentTable from '@/components/pagesComp/payments/SortByPaymentTable';
 import FilterByTypePayment from '@/components/pagesComp/payments/FilterByTypePayment';
 import PaymentsTable from '@/components/pagesComp/payments/PaymentsTable';

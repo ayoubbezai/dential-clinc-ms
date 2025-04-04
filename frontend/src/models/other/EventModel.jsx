@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { adjestuedTop, adjestuedLeft } from "@/utils/AdjustEvent";
+import { adjestuedTop, adjestuedLeft } from "@/utils/other/AdjustEvent";
 import EventHeader from "@/components/pagesComp/Events/EventHeader";
 import EventDetails from "@/components/pagesComp/Events/EventDetails";
 import EventActions from "@/components/pagesComp/Events/EventActions";
-import { handleSave,handleChange,deleteEvent } from "@/utils/models/eventModel";
+import { handleSave, handleChange, deleteEvent } from "@/utils/models/eventModel";
 
 const EventModel = ({ modalPosition, selectedEvent, handleCloseModal, eventsServicePlugin }) => {
     const [isEdit, setIsEdit] = useState(false);
@@ -51,7 +51,7 @@ const EventModel = ({ modalPosition, selectedEvent, handleCloseModal, eventsServ
                 isEdit={isEdit}
                 setIsEdit={setIsEdit}
                 handleSave={() => handleSave({ editedEvent, eventsServicePlugin, setIsEdit })}
-                deleteEvent={() => deleteEvent({ selectedEvent ,eventsServicePlugin})}
+                deleteEvent={() => deleteEvent({ selectedEvent, eventsServicePlugin })}
                 handleCloseModal={handleCloseModal}
             />
         </div>

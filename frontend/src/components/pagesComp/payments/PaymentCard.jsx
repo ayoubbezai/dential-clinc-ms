@@ -1,6 +1,6 @@
 import React, { useState, useRef } from "react";
 import { FaEllipsisH, FaArrowUp, FaArrowDown } from "react-icons/fa";
-import { changenumberToText } from "@/utils/dateToText";
+import { changenumberToText } from "@/utils/other/dateToText";
 import useClickOutside from "@/hooks/other/useClickOutside";
 const PaymentCard = ({ title, amount, comparison, percentage, isProfit, setDate, hasMenu = true, selectedValue }) => {
     const [isOpen, setIsOpen] = useState(false);

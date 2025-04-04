@@ -5,7 +5,7 @@ import EmailInput from "@/components/inputs/EmailInput";
 import NameInput from "@/components/inputs/NameInput";
 import PasswordInput from "@/components/inputs/PasswordInput";
 import { handleSubmit, initializeFormData } from "@/utils/models/addReceptionistModel";
-import { handleInputChange } from "@/utils/inputChange";
+import { handleInputChange } from "@/utils/other/inputChange";
 
 const AddReceptionistModel = ({ isOpen, onClose }) => {
     const [formData, setFormData] = useState(initializeFormData());

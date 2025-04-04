@@ -26,7 +26,7 @@ const UnitsTable = () => {
                     <h2 className="text-lg font-semibold">Units</h2>
                     <AddButton onClick={() => setIsAddModalOpen(true)} />
                 </div>
-                <UnitTableComp loading={loading} error={error} units={units} />
+                <UnitTableComp loading={loading} error={error} units={units} fetchUnits={fetchUnits} />
 
                 <div className="flex justify-between items-center pb-2 px-4 mt-4">
                     <PageChange page={page} setPage={setPage} total_pages={pagination?.total_pages} loading={loading} />

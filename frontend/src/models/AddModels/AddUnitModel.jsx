@@ -1,27 +1,16 @@
 import React, { useState } from 'react';
-import { toast } from 'react-hot-toast';
 import Model from "../other/Model";
 import { selectClassName } from '@/constant/classNames';
 import { Button } from '@/components/designSystem/button';
-import { UnitsService } from '@/services/shared/UnitsService';
+import { handleAddUnit } from '@/utils/handleAddUnit';
 
 const AddUnitModel = ({ isOpen, onClose, fetchUnits }) => {
   const [unit, setUnit] = useState("");
   const [loading, setLoading] = useState(false);
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
-    setLoading(true);
-    const { data } = await UnitsService.addUnit(unit);
-    if (data) {
-      toast.success("Unit added successfully!");
-      setUnit("");
-      onClose();
-      fetchUnits(1);
-    } else {
-      toast.error("Failed to add unit");
-    }
-    setLoading(false);
+    handleAddUnit(unit, setLoading, setUnit, onClose, fetchUnits);
   };
 
   return (
@@ -38,7 +27,7 @@ const AddUnitModel = ({ isOpen, onClose, fetchUnits }) => {
           className={`${selectClassName} mt-2`}
           required
         />
-        <Button type="submit" className={"text-white ml-2 "} disabled={loading}>
+        <Button type="submit" className="text-white ml-2" disabled={loading}>
           {loading ? "Submitting..." : "Submit"}
         </Button>
       </form>

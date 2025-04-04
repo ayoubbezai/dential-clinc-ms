@@ -6,7 +6,7 @@ import { Button } from "@/components/designSystem/button";
 import DateInput from "@/components/inputs/DateInput";
 import TimeInput from "@/components/inputs/TimeInput";
 import SelectInput from "@/components/inputs/SelectInput";
-import { handleInputChange } from "@/utils/inputChange";
+import { handleInputChange } from "@/utils/other/inputChange";
 import { initializeFormData } from "@/utils/models/addEventModel";
 import TextInput from "@/components/inputs/TextInput";
 import { COLORS } from "@/constant/EventsColor";
@@ -61,7 +61,7 @@ const AddEventModel = ({ isOpen, onClose, eventsServicePlugin }) => {
 
                 <div className="flex">
                     <Input
-                        type="date"                        label="Start Date"
+                        type="date" label="Start Date"
                         name="startDate"
                         value={formData.startDate}
                         onChange={(e) => handleInputChange(e, setFormData)}
@@ -69,7 +69,7 @@ const AddEventModel = ({ isOpen, onClose, eventsServicePlugin }) => {
 
                     />
                     <Input
-                    
+
                         type="time"
                         label="Start Time (Optional)"
                         name="startTime"
@@ -88,7 +88,7 @@ const AddEventModel = ({ isOpen, onClose, eventsServicePlugin }) => {
                         label="End Date"
                         name="endDate"
                         value={formData.endDate}
-                        onChange={(e) => handleInputChange(e, setFormData)}                    />
+                        onChange={(e) => handleInputChange(e, setFormData)} />
                     <Input
                         type="time"
                         className={`${selectClassName} ml-10"`}
@@ -114,7 +114,7 @@ const AddEventModel = ({ isOpen, onClose, eventsServicePlugin }) => {
                 />
                 <Label>people</Label>
                 <Input
-                className={selectClassName}
+                    className={selectClassName}
                     type="text"
                     name="people"
                     value={formData.people ? formData.people.join(", ") : ""}

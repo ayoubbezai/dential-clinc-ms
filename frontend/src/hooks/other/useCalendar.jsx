@@ -6,7 +6,7 @@ import '@schedule-x/theme-default/dist/index.css';
 import UseSchedule from '@/hooks/other/UseSchedule';
 import "../../style/index.css";
 import { Eventscolors } from '@/constant/EventsColor';
-import { syncEvents, DateUpdate } from '@/utils/ScheduleHelp';
+import { syncEvents, DateUpdate } from '@/utils/help/ScheduleHelp';
 
 
 

@@ -37,5 +37,17 @@ export const UnitsService = {
         error: error.message || "Failed to create unit",
       }; // Return error
     }
-  }
+  },  async deleteUnit(UnitId) {
+      try {
+        const response = await api.delete(`/stock_units/${UnitId}`);
+        console.log(response);
+        return { data: response.data, error: null };
+      } catch (error) {
+        console.log(error);
+        return {
+          data: null,
+          error: error.message || "Failed to delete the  stock_unit",
+        };
+      }
+    },
 };

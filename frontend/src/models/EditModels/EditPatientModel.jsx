@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import Model from "../other/Model";
 import { Button } from "@/components/designSystem/button";
 import { initializeFormData, handleSubmit } from "@/utils/models/editPatientsModel";
-import { handleInputChange } from "@/utils/inputChange";
+import { handleInputChange } from "@/utils/other/inputChange";
 import TextInput from "@/components/inputs/TextInput";
 import SelectInput from "@/components/inputs/SelectInput";
 import TextareaInput from "@/components/inputs/TextareaInput";
