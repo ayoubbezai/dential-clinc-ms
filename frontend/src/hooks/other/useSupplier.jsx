@@ -7,7 +7,7 @@ const useSupplier = () => {
     const [pagination, setPagination] = useState({});
     const [page, setPage] = useState(1);
     const [search, setSearch] = useState("");
-    const [sortBy, setSortBy] = useState("name");
+    const [sortBy, setSortBy] = useState("");
     const [sortDirection, setSortDirection] = useState("asc");
     const [perPage, setPerPage] = useState(15);
     const [error, setError] = useState(null);

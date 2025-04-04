@@ -58,7 +58,7 @@ class SupplierController extends Controller
 
             $response = [
                 'success' => true,
-                'message' => 'Data fetched successfully',
+                'message' => 'suppliers fetched successfully',
                 'data' => $paginatedData->items(), // Paginated data items
                 'pagination' => [
                     'total_items' => $paginatedData->total(), // Total number of items

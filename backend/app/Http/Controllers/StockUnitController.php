@@ -11,12 +11,30 @@ class StockUnitController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request )
     {
+        
+        //get per Page
+        $perPage = filter_var($request_query["per_page"] ?? 15, FILTER_VALIDATE_INT) ?: 15;
+        $perPage = max($perPage, 1);
+
+        $data = StockUnit::query()->select([
+                       'stock_units.id',
+                'stock_units.name',
+        ]);
+               //get paginated data
+            $paginatedData = $data->paginate($perPage);
+
         return response()->json([
             "success" => true,
-            "data" => StockUnit::all()
-        ], Response::HTTP_OK);
+                'data' => $paginatedData->items(), // Paginated data items
+                'message' => 'units fetched successfully',
+                'pagination' => [
+                    'total_items' => $paginatedData->total(), // Total number of items
+                    'items_per_page' => $paginatedData->perPage(), // Items per page
+                    'current_page' => $paginatedData->currentPage(), // Current page number
+                    'total_pages' => $paginatedData->lastPage(), // Last page number
+                ]        ], Response::HTTP_OK);
     }
 
     /**

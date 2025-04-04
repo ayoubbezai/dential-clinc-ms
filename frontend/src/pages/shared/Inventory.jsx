@@ -10,7 +10,7 @@ const Inventory = () => {
 
       <MedicinesTable/>
       </div>
-      <div className="grid grid-cols-12 gap-4 mt-[50px]">
+      <div className="grid grid-cols-12 gap-4 mt-[30px]">
       <SuppliersTable/>
         <UnitsTable/>
       </div>

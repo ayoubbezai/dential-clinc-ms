@@ -8,7 +8,6 @@ const TableSkeletonThree = (index) => {
             <TableCell><Skeleton height={20} width={'80%'} /></TableCell>
             <TableCell><Skeleton height={20} width={'60%'} /></TableCell>
             <TableCell><Skeleton height={20} width={'70%'} /></TableCell>
-
         </TableRow>
     )
 }

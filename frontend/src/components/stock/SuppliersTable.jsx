@@ -32,7 +32,7 @@ const SuppliersTable = () => {
                     </div>
 
                 </div>
-                <Table className={"my-2"}>
+            <Table className={"my-2"} divClassName="max-h-[30vh] overflow-y-auto">
                     <TableHeader>
                         <TableRow>
                             <TableHead>Name</TableHead>
