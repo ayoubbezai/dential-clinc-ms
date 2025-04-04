@@ -23,4 +23,19 @@ export const UnitsService = {
       }; // Return error message
     }
   },
+  async addUnit(name){
+     try {
+      const response = await api.post("/stock_units", {
+        name,
+      });
+      console.log(response);
+      return { data: response.data, error: null };
+    } catch (error) {
+      console.log(error);
+      return {
+        data: null,
+        error: error.message || "Failed to create unit",
+      }; // Return error
+    }
+  }
 };
