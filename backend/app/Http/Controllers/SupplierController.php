@@ -28,6 +28,20 @@ class SupplierController extends Controller
                 'suppliers.contact_info'
             ]);
 
+            
+                  //validate sort by and direction
+
+        $validSortColumns = ['name', 'created_at','updated_at'];
+        $validSortDirection = ["asc","desc"];
+        $sortBy = in_array($request_query['sort_by'] ?? 'created_at', $validSortColumns)
+                ? $request_query['sort_by'] ?? 'created_at'
+                : 'created_at';
+
+        $sortDirection = in_array(strtolower($request_query['sort_direction'] ?? 'asc'), $validSortDirection)
+            ? strtolower($request_query['sort_direction'] ?? 'asc')
+            : 'asc';
+
+
             //search by supplier name
             if (!empty($request_query['search'])) {
                 $search = $request_query['search'];
@@ -35,6 +49,9 @@ class SupplierController extends Controller
                     $query->where('name', 'like', '%' . $search . '%');
                 });
             }
+
+                        $data->orderBy($sortBy, $sortDirection);
+
 
             //get paginated data
             $paginatedData = $data->paginate($perPage);

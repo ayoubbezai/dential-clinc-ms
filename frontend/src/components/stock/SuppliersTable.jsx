@@ -2,15 +2,14 @@ import useSupplier from '@/hooks/other/useSupplier'
 import React from 'react'
 import { Table, TableBody, TableCell, TableRow, TableHeader, TableHead } from '@/components/designSystem/table';
 import NoElmentFoundInTable from '@/components/TableComp/NoElmentFoundInTable';
-import TableSkeleton from '@/Skeletons/TableSkeleton';
 import ErrorInTable from '@/components/TableComp/ErrorInTable';
 import SearchInTable from '@/components/TableComp/SearchInTable';
 import TableFooter from '@/components/TableComp/TableFooter';
 import SortDirection from '@/components/TableComp/SortDirection';
-import SortByStock from '@/components/stock/SortByStock';
 import EditAndDelete from '../small/EditAndDelete';
 import AddButton from '../small/AddButton';
 import TableSkeletonThree from '@/Skeletons/TableSkeletonThree';
+import SortBySupplier from './SortBySupplier';
 
 const SuppliersTable = () => {
     const { suppliers, setPerPage, setPage, pagination, loading, error, search,
