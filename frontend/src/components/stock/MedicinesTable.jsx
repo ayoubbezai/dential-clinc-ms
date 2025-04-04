@@ -7,7 +7,7 @@ import ErrorInTable from '@/components/TableComp/ErrorInTable';
 import SearchInTable from '@/components/TableComp/SearchInTable';
 import TableFooter from '@/components/TableComp/TableFooter';
 import SortDirection from '@/components/TableComp/SortDirection';
-import SortByStock from '@/components/stock/SortByStock';
+import SortByMedicne from '@/components/stock/SortByMedicine';
 import EditAndDelete from '../small/EditAndDelete';
 import AddButton from '../small/AddButton';
 
@@ -25,7 +25,7 @@ const MedicinesTable = () => {
                     <SearchInTable setSearch={setSearch} search={search} />
                     <div className='flex gap-3'>
                         <SortDirection sortDirection={sortDirection} setSortDirection={setSortDirection} />
-                        <SortByStock sortBy={sortBy} setSortBy={setSortBy} />
+                    <SortByMedicne sortBy={sortBy} setSortBy={setSortBy} />
                         <AddButton/>
 
                     </div>

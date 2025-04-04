@@ -57,6 +57,9 @@
 .text-primary {
   color: var(--color-primary); /* Custom Primary */
 }
+.text-supporting-2  {
+  color:  var(--color-supporting-2);
+}
 
 .bg-primary-foreground {
   background-color: var(--color-primary-foreground);

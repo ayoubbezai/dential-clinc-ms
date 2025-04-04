@@ -1,24 +1,27 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import _ from 'lodash';
-import { suppliersService } from '@/services/shared/supplierService';
+import { StocksService } from '@/services/shared/StocksService';
 
-const useSupplier = () => {
-    const [suppliers, setSuppliers] = useState();
+const useStock = () => {
+    const [stocks, setStocks] = useState();
     const [pagination, setPagination] = useState({});
+    const [statistics, setStatistics] = useState();
     const [page, setPage] = useState(1);
     const [search, setSearch] = useState("");
+    const [stockStatus, setStockStatus] = useState();
     const [sortBy, setSortBy] = useState("");
     const [sortDirection, setSortDirection] = useState("asc");
     const [perPage, setPerPage] = useState(15);
     const [error, setError] = useState(null);
     const [loading, setLoading] = useState(false);
 
-    const debounceFetchSuppliers = useMemo(() => {
+    const debounceFetchStocks = useMemo(() => {
         return _.debounce(async (page) => {
             setLoading(true);
-            const { data, error } = await suppliersService.getAllSuppliers(
+            const { data, error } = await StocksService.getAllStcok(
                 perPage,
                 search,
+                stockStatus,
                 sortBy,
                 sortDirection,
                 page
@@ -27,30 +30,32 @@ const useSupplier = () => {
             console.log(data)
 
             if (data?.success) {
-                setSuppliers(data.data);
+                setStocks(data.data);
                 setPagination(data.pagination);
+                setStatistics(data.statistics)
+                
             } else {
                 setError(error);
             }
 
             setLoading(false);
         }, 0);
-    }, [page, perPage, search, sortBy, sortDirection]);
+    }, [page, perPage, search, stockStatus, sortBy, sortDirection]);
 
-    const fetchSuppliers = useCallback((page) => {
-        debounceFetchSuppliers(page);
-    }, [debounceFetchSuppliers]);
+    const fetchStocks = useCallback((page) => {
+        debounceFetchStocks(page);
+    }, [debounceFetchStocks]);
 
     useEffect(() => {
-        fetchSuppliers(page);
-    }, [page, fetchSuppliers]);
+        fetchStocks(page);
+    }, [page, fetchStocks]);
 
     useEffect(() => {
         setPage(1);
-    }, [perPage, search, sortBy, sortDirection]);
+    }, [perPage, search, sortBy,stockStatus, sortDirection]);
 
     return {
-        suppliers,
+        stocks,
         pagination,
         page,
         setPage,
@@ -64,8 +69,11 @@ const useSupplier = () => {
         setPerPage,
         loading,
         error,
-        fetchSuppliers,
+        stockStatus,
+        setStockStatus,
+        fetchStocks,
+        statistics
     };
 };
 
-export default useSupplier;
+export default useStock;

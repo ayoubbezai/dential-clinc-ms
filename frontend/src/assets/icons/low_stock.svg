@@ -1,0 +1,13 @@
+<svg width="91" height="84" viewBox="0 0 91 84" fill="none" xmlns="http://www.w3.org/2000/svg">
+<ellipse cx="45.6457" cy="42" rx="44.9504" ry="42" fill="url(#paint0_linear_663_18762)"/>
+<path d="M29.5332 67H61.4522" stroke="#1975FF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M29.5332 17H61.4522" stroke="#1975FF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M56.893 67V56.57C56.8928 55.244 56.4122 53.9725 55.557 53.035L45.4934 42L35.4298 53.035C34.5746 53.9725 34.094 55.244 34.0938 56.57V67" stroke="#1975FF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M34.0938 17V27.43C34.094 28.756 34.5746 30.0275 35.4298 30.965L45.4934 42L55.557 30.965C56.4122 30.0275 56.8928 28.756 56.893 27.43V17" stroke="#1975FF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<defs>
+<linearGradient id="paint0_linear_663_18762" x1="80.4823" y1="2.14197e-06" x2="49.5562" y2="85.4158" gradientUnits="userSpaceOnUse">
+<stop stop-color="#6EDBFB"/>
+<stop offset="1" stop-color="#BAEFFF"/>
+</linearGradient>
+</defs>
+</svg>

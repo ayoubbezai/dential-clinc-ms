@@ -10,39 +10,40 @@ class StockController extends Controller
     /**
      * Display a listing of the resource.
      */
+    
 public function index(Request $request)
 {
-    
     try {
         $request_query = $request->query();
         $perPage = filter_var($request_query["per_page"] ?? 15, FILTER_VALIDATE_INT) ?: 15;
         $perPage = max($perPage, 1);
-    
+
         $data = Stock::query()
         ->select([
             "stocks.id",
             "stocks.price",
             "stocks.quantity",
-                "stocks.expiry_date",
-                "medicines.name as medicine_name",
-                "medicines.low_stock_threshold",
-                "medicines.medium_stock_threshold",
-                "medicines.good_stock_threshold",
-                "suppliers.name as supplier_name",
-                "stock_units.name as unit_name",
+            "stocks.expiry_date",
+            "medicines.name as medicine_name",
+            "medicines.low_stock_threshold",
+            "medicines.medium_stock_threshold",
+            "medicines.good_stock_threshold",
+            "suppliers.name as supplier_name",
+            "stock_units.name as unit_name",
             "stocks.created_at as created_at"
-            ])
-            ->leftJoin("medicines", "medicines.id", "=", "stocks.medicine_id")
-            ->leftJoin("suppliers", "suppliers.id", "=", "stocks.supplier_id")
-            ->leftJoin("stock_units", "stock_units.id", "=", "stocks.unit_id");
-            
-            $validSortColumns = ['name', 'created_at', 'updated_at','medicine_name','supplier_name'];
-            $validSortDirection = ["asc", "desc"];
-           $sortBy = $request_query['sort_by'] ?? 'created_at';
-$sortBy = in_array($sortBy, $validSortColumns) ? $sortBy : 'created_at';
+        ])
+        ->leftJoin("medicines", "medicines.id", "=", "stocks.medicine_id")
+        ->leftJoin("suppliers", "suppliers.id", "=", "stocks.supplier_id")
+        ->leftJoin("stock_units", "stock_units.id", "=", "stocks.unit_id");
 
-$sortDirection = strtolower($request_query['sort_direction'] ?? 'asc');
-$sortDirection = in_array($sortDirection, $validSortDirection) ? $sortDirection : 'asc';
+        $validSortColumns = ['name', 'created_at', 'updated_at', 'medicine_name', 'supplier_name', 'expiry_date'];
+        $validSortDirection = ["asc", "desc"];
+        $sortBy = $request_query['sort_by'] ?? 'created_at';
+        $sortBy = in_array($sortBy, $validSortColumns) ? $sortBy : 'created_at';
+
+        $sortDirection = strtolower($request_query['sort_direction'] ?? 'asc');
+        $sortDirection = in_array($sortDirection, $validSortDirection) ? $sortDirection : 'asc';
+        
         // Search
         if (!empty($request_query['search'])) {
             $search = $request_query['search'];
@@ -52,61 +53,72 @@ $sortDirection = in_array($sortDirection, $validSortDirection) ? $sortDirection 
             });
         }
 
-     if (!empty($request_query['stock_status'])) {
-    $status = strtolower($request_query['stock_status']);
+        if (!empty($request_query['stock_status'])) {
+            $status = strtolower($request_query['stock_status']);
 
-    if (in_array($status, ['low', 'medium', 'good', 'very_good', 'unknown'])) {
-        $data->where(function ($query) use ($status) {
-            $query->whereRaw("
-                CASE
-                    WHEN medicines.low_stock_threshold IS NULL 
-                      OR medicines.medium_stock_threshold IS NULL 
-                      OR medicines.good_stock_threshold IS NULL THEN 'unknown'
-                    WHEN stocks.quantity <= medicines.low_stock_threshold THEN 'low'
-                    WHEN stocks.quantity <= medicines.medium_stock_threshold THEN 'medium'
-                    WHEN stocks.quantity <= medicines.good_stock_threshold THEN 'good'
-                    ELSE 'very_good'
-                END = ?
-            ", [$status]);
-        });
-    }
-}
-
+            if (in_array($status, ['low', 'medium', 'good', 'very_good', 'unknown', 'out_of_stock'])) {
+                $data->where(function ($query) use ($status) {
+                    $query->whereRaw("
+                        CASE
+                            WHEN stocks.quantity = 0 THEN 'out_of_stock'
+                            WHEN medicines.low_stock_threshold IS NULL
+                                OR medicines.medium_stock_threshold IS NULL
+                                OR medicines.good_stock_threshold IS NULL THEN 'unknown'
+                            WHEN stocks.quantity <= medicines.low_stock_threshold THEN 'low'
+                            WHEN stocks.quantity <= medicines.medium_stock_threshold THEN 'medium'
+                            WHEN stocks.quantity <= medicines.good_stock_threshold THEN 'good'
+                            ELSE 'very_good'
+                        END = ?
+                    ", [$status]);
+                });
+            }
+        }
 
         // Sorting
         $data->orderBy($sortBy, $sortDirection);
 
-        // Pagination
+        // Calculate stock statistics using aggregation
+        $statistics = Stock::query()
+            ->selectRaw('
+                COUNT(*) as total_items,
+                SUM(CASE WHEN stocks.quantity = 0 THEN 1 ELSE 0 END) as out_of_stock,
+                SUM(CASE WHEN stocks.quantity <= medicines.low_stock_threshold AND stocks.quantity > 0   THEN 1 ELSE 0 END) as low_stock,
+                SUM(CASE WHEN stocks.expiry_date IS NOT NULL AND stocks.expiry_date < NOW() THEN 1 ELSE 0 END) as expired
+            ')
+            ->leftJoin('medicines', 'medicines.id', '=', 'stocks.medicine_id')
+            ->first(); // Get the aggregated result
+
+        // Paginate the data
         $paginatedData = $data->paginate($perPage);
 
-        // Append status
+        // Append status and calculate per-page data
         $stocksWithStatus = $paginatedData->getCollection()->map(function ($item) use ($request_query) {
             $quantity = $item->quantity;
 
-$hasAllThresholds = isset($item->low_stock_threshold, $item->medium_stock_threshold, $item->good_stock_threshold);
+            $hasAllThresholds = isset($item->low_stock_threshold, $item->medium_stock_threshold, $item->good_stock_threshold);
 
-if ($quantity <= $item->low_stock_threshold) {
-    $status = 'low';
-} elseif ($quantity <= $item->medium_stock_threshold) {
-    $status = 'medium';
-} elseif ($quantity <= $item->good_stock_threshold) {
-    $status = 'good';
-} elseif ($hasAllThresholds) {
-    $status = 'very_good';
-} else {
-    $status = 'unkonwn'; 
-}
-
-
-
-            // Optional filter by stock_status query param
-            if (!empty($request_query['stock_status']) && $request_query['stock_status'] !== $status) {
-                return null;
+            if ($quantity == 0) {
+                $status = 'Out Of Stock';
+            } elseif ($quantity <= $item->low_stock_threshold) {
+                $status = 'Low';
+            } elseif ($quantity <= $item->medium_stock_threshold) {
+                $status = 'Medium';
+            } elseif ($quantity <= $item->good_stock_threshold) {
+                $status = 'Good';
+            } elseif ($hasAllThresholds) {
+                $status = 'Very Good';
+            } else {
+                $status = 'Unknown';
             }
 
+            // Check expiration
+            $expired = ($item->expiry_date && now()->gt($item->expiry_date));
+
             $item->status = $status;
+            $item->expired = $expired;
+
             return $item;
-        })->filter(); // remove nulls
+        });
 
         return response()->json([
             "success" => true,
@@ -117,6 +129,12 @@ if ($quantity <= $item->low_stock_threshold) {
                 "items_per_page" => $paginatedData->perPage(),
                 "current_page" => $paginatedData->currentPage(),
                 "total_pages" => $paginatedData->lastPage()
+            ],
+            "statistics" => [
+                "total_items" => $statistics->total_items,
+                "out_of_stock" => $statistics->out_of_stock,
+                "low_stock" => $statistics->low_stock,
+                "expired" => $statistics->expired,
             ]
         ], Response::HTTP_OK);
 
