@@ -2,7 +2,7 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 import _ from 'lodash';
 import { StocksService } from '@/services/shared/StocksService';
 
-const useStock = () => {
+const useStock = ( onLoaded ) => {
     const [stocks, setStocks] = useState();
     const [pagination, setPagination] = useState({});
     const [statistics, setStatistics] = useState();
@@ -33,12 +33,13 @@ const useStock = () => {
                 setStocks(data.data);
                 setPagination(data.pagination);
                 setStatistics(data.statistics)
-                
             } else {
                 setError(error);
             }
+                onLoaded?.();
+                setLoading(false);
+            
 
-            setLoading(false);
         }, 0);
     }, [page, perPage, search, stockStatus, sortBy, sortDirection]);
 
@@ -50,9 +51,10 @@ const useStock = () => {
         fetchStocks(page);
     }, [page, fetchStocks]);
 
+
     useEffect(() => {
         setPage(1);
-    }, [perPage, search, sortBy,stockStatus, sortDirection]);
+    }, [perPage, search, sortBy, stockStatus, sortDirection]);
 
     return {
         stocks,

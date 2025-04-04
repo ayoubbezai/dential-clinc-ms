@@ -2,7 +2,7 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 import { medicnesService } from '@/services/shared/medicnesService';
 import _ from 'lodash';
 
-const useMedicine = () => {
+const useMedicine = (onLoaded ) => {
     const [medicines, setMedicines] = useState([]);
     const [pagination, setPagination] = useState({});
     const [page, setPage] = useState(1);
@@ -31,6 +31,8 @@ const useMedicine = () => {
             } else {
                 setError(error);
             }
+            onLoaded?.();
+
 
             setLoading(false);
         }, 0);
@@ -40,7 +42,7 @@ const useMedicine = () => {
         debounceFetchMedicines(page);
     }, [debounceFetchMedicines]);
 
-    useEffect(() => {
+    useEffect(()=>{
         fetchMedicines(page);
     }, [page, fetchMedicines]);
 

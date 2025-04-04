@@ -14,7 +14,6 @@ export const StocksService = {
       const appendParam = (key, value) => {
         if (value) params.append(key, value);
       };
-
       appendParam("per_page", per_page);
       appendParam("search", search);
       appendParam("page", page);

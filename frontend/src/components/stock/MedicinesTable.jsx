@@ -11,13 +11,13 @@ import SortByMedicne from '@/components/stock/SortByMedicine';
 import EditAndDelete from '../small/EditAndDelete';
 import AddButton from '../small/AddButton';
 
-const MedicinesTable = () => {
+const MedicinesTable = ({ onLoaded }) => {
     const { medicines, setPerPage, setPage, pagination, loading, error, search,
         setSearch,
         sortBy,
         setSortBy,
         sortDirection,
-        setSortDirection } = useMedicine();
+        setSortDirection } = useMedicine(onLoaded);
 
     return (
             <div className="col-span-12 bg-white  rounded-md shadow-sm py-2  px-6">

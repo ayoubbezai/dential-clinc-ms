@@ -1,7 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import _ from 'lodash';
 import { suppliersService } from '@/services/shared/supplierService';
-
 const useSupplier = () => {
     const [suppliers, setSuppliers] = useState();
     const [pagination, setPagination] = useState({});
@@ -12,6 +11,7 @@ const useSupplier = () => {
     const [perPage, setPerPage] = useState(15);
     const [error, setError] = useState(null);
     const [loading, setLoading] = useState(false);
+
 
     const debounceFetchSuppliers = useMemo(() => {
         return _.debounce(async (page) => {
@@ -38,7 +38,8 @@ const useSupplier = () => {
     }, [page, perPage, search, sortBy, sortDirection]);
 
     const fetchSuppliers = useCallback((page) => {
-        debounceFetchSuppliers(page);
+        debounceFetchSuppliers(page); 
+
     }, [debounceFetchSuppliers]);
 
     useEffect(() => {

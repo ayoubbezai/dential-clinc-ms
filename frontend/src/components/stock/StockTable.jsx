@@ -12,6 +12,7 @@ import { FaExclamationCircle, FaTimes, FaExclamationTriangle, FaCheckCircle, FaT
 import SortByStock from './SortByStock';
 import TableSkeletonStock from '@/Skeletons/TableSkeletonStock';
 import SelectStockTable from './SelectStockTable';
+import StockCards from './StockCards';
 
 const renderStockIcon = (stockLevel) => {
     switch (stockLevel) {
@@ -32,7 +33,7 @@ const renderStockIcon = (stockLevel) => {
     }
 };
 
-const StockTable = () => {
+const StockTable = ({ onLoaded }) => {
     const {
         stocks,
         pagination,
@@ -48,69 +49,80 @@ const StockTable = () => {
         error,
         stockStatus,
         setStockStatus,
-    } = useStock();
+        statistics
+    } = useStock(onLoaded);
+
+
 
     return (
-        <div className="col-span-12 bg-white rounded-md shadow-sm py-4 px-6">
-            <div className="flex justify-between items-center mb-4">
-                <SearchInTable setSearch={setSearch} search={search} />
-                <div className="flex gap-3">
-                    <SelectStockTable stockStatus={stockStatus} setStockStatus={setStockStatus} />
-                    <SortDirection sortDirection={sortDirection} setSortDirection={setSortDirection} />
-                    <SortByStock sortBy={sortBy} setSortBy={setSortBy} />
-                    <AddButton />
+        <>
+            <div className="grid grid-cols-12 gap-4 mt-[10px]">
+                <StockCards statistics={statistics} />
+            </div>
+            <div className="grid grid-cols-12 gap-4 mt-[30px]">
+                <div className="col-span-12 bg-white rounded-md shadow-sm py-4 px-6">
+                    <div className="flex justify-between items-center mb-4">
+                        <SearchInTable setSearch={setSearch} search={search} />
+                        <div className="flex gap-3">
+                            <SelectStockTable stockStatus={stockStatus} setStockStatus={setStockStatus} />
+                            <SortDirection sortDirection={sortDirection} setSortDirection={setSortDirection} />
+                            <SortByStock sortBy={sortBy} setSortBy={setSortBy} />
+                            <AddButton />
+                        </div>
+                    </div>
+
+
+                    <Table>
+                        <TableHeader>
+                            <TableRow>
+                                <TableHead>Medicine</TableHead>
+                                <TableHead>Supplier</TableHead>
+                                <TableHead>Unit</TableHead>
+                                <TableHead>Quantity</TableHead>
+                                <TableHead>Price</TableHead>
+                                <TableHead>Expiry</TableHead>
+                                <TableHead>Status</TableHead>
+                                <TableHead>Actions</TableHead>
+                            </TableRow>
+                        </TableHeader>
+                        <TableBody>
+                            {loading ? (
+                                Array.from({ length: 6 }).map((_, index) => (
+                                    <TableSkeletonStock key={index} />
+                                ))
+                            ) : error ? (
+                                <ErrorInTable error={error} />
+                            ) : stocks?.length > 0 ? (
+                                stocks.map((stock) => (
+                                    <TableRow key={stock.id}>
+                                        <TableCell>{stock.medicine_name || 'N/A'}</TableCell>
+                                        <TableCell>{stock.supplier_name || 'N/A'}</TableCell>
+                                        <TableCell>{stock.unit_name || 'N/A'}</TableCell>
+                                        <TableCell>{stock.quantity}</TableCell>
+                                        <TableCell>${parseFloat(stock.price).toFixed(2)}</TableCell>
+                                        <TableCell>{stock.expiry_date || 'N/A'}</TableCell>
+                                        <TableCell className={"relative"}>
+                                            <span className='flex gap-1 items-center'>
+                                                {renderStockIcon(stock.status)}
+                                                {stock.status} {stock.status !== 'Out Of Stock' && "Status"}
+                                            </span>
+
+                                        </TableCell>
+                                        <TableCell>
+                                            <EditAndDelete />
+                                        </TableCell>
+                                    </TableRow>
+                                ))
+                            ) : (
+                                <NoElmentFoundInTable element={"stocks"} />
+                            )}
+                        </TableBody>
+                    </Table>
+
+                    <TableFooter setPerPage={setPerPage} setPage={setPage} pagination={pagination} />
                 </div>
             </div>
-
-            <Table>
-                <TableHeader>
-                    <TableRow>
-                        <TableHead>Medicine</TableHead>
-                        <TableHead>Supplier</TableHead>
-                        <TableHead>Unit</TableHead>
-                        <TableHead>Quantity</TableHead>
-                        <TableHead>Price</TableHead>
-                        <TableHead>Expiry</TableHead>
-                        <TableHead>Status</TableHead>
-                        <TableHead>Actions</TableHead>
-                    </TableRow>
-                </TableHeader>
-                <TableBody>
-                    {loading ? (
-                        Array.from({ length: 6 }).map((_, index) => (
-                            <TableSkeletonStock key={index} />
-                        ))
-                    ) : error ? (
-                        <ErrorInTable error={error} />
-                    ) : stocks?.length > 0 ? (
-                        stocks.map((stock) => (
-                            <TableRow key={stock.id}>
-                                <TableCell>{stock.medicine_name || 'N/A'}</TableCell>
-                                <TableCell>{stock.supplier_name || 'N/A'}</TableCell>
-                                <TableCell>{stock.unit_name || 'N/A'}</TableCell>
-                                <TableCell>{stock.quantity}</TableCell>
-                                <TableCell>${parseFloat(stock.price).toFixed(2)}</TableCell>
-                                <TableCell>{stock.expiry_date || 'N/A'}</TableCell>
-                                <TableCell className={"relative"}>
-                                    <span className='flex gap-1 items-center'>
-                                        {renderStockIcon(stock.status)}
-                                        {stock.status} {stock.status !== 'Out Of Stock' && "Status"}
-                                    </span>
-
-                                </TableCell>
-                                <TableCell>
-                                    <EditAndDelete />
-                                </TableCell>
-                            </TableRow>
-                        ))
-                    ) : (
-                        <NoElmentFoundInTable element={"stocks"} />
-                    )}
-                </TableBody>
-            </Table>
-
-            <TableFooter setPerPage={setPerPage} setPage={setPage} pagination={pagination} />
-        </div>
+        </>
     );
 };
 
