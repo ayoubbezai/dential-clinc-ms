@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import Model from "../other/Model";
 import { selectClassName } from '@/constant/classNames';
 import { Button } from '@/components/designSystem/button';
-import { handleAddUnit } from '@/utils/handleAddUnit';
+import { handleAddUnit } from '@/utils/models/addUnitModel';
 
 const AddUnitModel = ({ isOpen, onClose, fetchUnits }) => {
   const [unit, setUnit] = useState("");

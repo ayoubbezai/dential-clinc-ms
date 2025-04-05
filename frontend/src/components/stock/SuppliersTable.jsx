@@ -31,7 +31,7 @@ const SuppliersTable = () => {
                     </div>
 
                 </div>
-                <SupplierTableComp loading={loading} error={error} suppliers={suppliers} />
+                <SupplierTableComp loading={loading} error={error} suppliers={suppliers} fetchSuppliers={fetchSuppliers} />
                 <TableFooter setPerPage={setPerPage} setPage={setPage} pagination={pagination} />
             </div>
 

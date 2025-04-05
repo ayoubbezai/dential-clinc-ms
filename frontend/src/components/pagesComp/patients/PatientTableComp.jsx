@@ -36,7 +36,7 @@ const PatientTableComp = ({ handleEdit, handleDelete, patientLoading, loading, p
                                 </Badge>
                             </TableCell>
                             <TableCell>
-                                <EditAndDelete element={patient} loading={loading} handleEdit={handleEdit} handleDelete={handleDelete} />
+                                <EditAndDelete element={patient} loading={loading} handleEdit={handleEdit}handleDelete={handleDelete} />
 
                             </TableCell>
                         </TableRow>

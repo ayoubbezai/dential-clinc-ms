@@ -2,6 +2,7 @@ import api from "../other/api";
 
 export const suppliersService = {
   async getAllSuppliers(per_page, search, sortBy, sortDirection, page = 1) {
+    console.log(per_page)
     try {
       const params = new URLSearchParams();
       const appendParam = (key, value) => {
@@ -40,7 +41,36 @@ export const suppliersService = {
       return {
         data: null,
         error: error.message || "Failed to create supplier",
-      }; // Return error
+      };
+    }
+  },
+  async deleteSupplier(supplierId) {
+    try {
+      const response = await api.delete(`/suppliers/${supplierId}`);
+      console.log(response);
+      return { data: response.data, error: null };
+    } catch (error) {
+      console.log(error);
+      return {
+        data: null,
+        error: error.message || "Failed to delete the  supplier",
+      };
+    }
+  },
+  async editSupplier(supplierId,name, contact_info) {
+    try {
+      const response = await api.put(`/suppliers/${supplierId}`, {
+        name,
+        contact_info,
+      });
+      console.log(response);
+      return { data: response.data, error: null };
+    } catch (error) {
+      console.log(error);
+      return {
+        data: null,
+        error: error.message || "Failed to update supplier",
+      };
     }
   },
 };

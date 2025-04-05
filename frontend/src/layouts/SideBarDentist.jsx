@@ -16,7 +16,7 @@ const SideBarDentist = () => {
 
     return (
         <div className={`${isOpen ? "w-56 " : "w-20"} bg-white/70 max-h-screen overflow-y-auto z-50 min-h-screen flex flex-col justify-between transition-all duration-300 lg:relative absolute shadow-lg`}>
-            <div className='flex justify-center flex-col items-center relative py-4'>
+            <div className='flex justify-center flex-col items-center relative pb-1 pt-3'>
                 <button
                     className={`absolute top-4 ${!isOpen ? "right-6" : "right-4"} bg-gray-100 p-1 rounded-full hover:bg-gray-200 transition-colors`}
                     onClick={toggleSidebar}
@@ -26,7 +26,7 @@ const SideBarDentist = () => {
 
                 {isOpen ? (
                     <>
-                        <div className="flex flex-col items-center mb-4 flex-shrink-0">
+                        <div className="flex flex-col items-center mb-3 flex-shrink-0">
                             <img src={LogoImg} alt="logo" width="56" height="56" className="object-contain" loading="eager" />
                             <h1 className='uppercase text-black font-semibold text-[18px]'>
                                 <span className='text-[#3E7EA1]'>Dr</span> Chabani
