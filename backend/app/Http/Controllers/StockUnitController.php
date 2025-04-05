@@ -13,15 +13,25 @@ class StockUnitController extends Controller
      */
     public function index(Request $request )
     {
+        $request_query = $request->query();
         
         //get per Page
-        $perPage = filter_var($request_query["per_page"] ?? 15, FILTER_VALIDATE_INT) ?: 15;
+        $perPage = filter_var($request_query["per_page"] ?? 4, FILTER_VALIDATE_INT) ?: 4;
         $perPage = max($perPage, 1);
 
         $data = StockUnit::query()->select([
                        'stock_units.id',
                 'stock_units.name',
         ]);
+
+            // Search
+        if (!empty($request_query['search'])) {
+            $search = $request_query['search'];
+            $data->where(function ($query) use ($search) {
+                $query->where('name', 'like', '%' . $search . '%');
+            });
+        }
+
                //get paginated data
             $paginatedData = $data->paginate($perPage);
 

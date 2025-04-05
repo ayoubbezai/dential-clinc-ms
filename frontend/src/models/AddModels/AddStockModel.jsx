@@ -6,16 +6,35 @@ import { selectClassName } from '@/constant/classNames';
 import { Button } from '@/components/designSystem/button';
 import SelectSupplierAsync from '@/components/select/SelectSupplierAsync';
 import ModelNoClickOut from '../other/ModelNoClickOut';
+import SelectUnitAsync from '@/components/select/SelectUnitAsync';
+import SelectMedicineAsync from '@/components/select/SelectMedicineAsync';
 
 const AddStockModel = ({ isOpen, onClose }) => {
     const [quantity, setQuantity] = useState('');
     const [price, setPrice] = useState('');
     const [expireDate, setExpireDate] = useState('');
     const [loading, setLoading] = useState(false);
+    const [selectedSupplier, setSelectedSupplier] = useState(null);
+    const [selectedUnit, setSelectedUnit] = useState(null);
+    const [selectedMedicine, setSelectedMedicine] = useState(null);
+
+    const handleSupplierChange = (newSupplier) => {
+        console.log('Selected Supplier:', newSupplier);
+        setSelectedSupplier(newSupplier);
+    };
+    const handleUnitChange = (newUnit) => {
+        console.log('Selected unit:', newUnit);
+        setSelectedUnit(newUnit);
+    };
+    const handleMedicineChange = (newMedicine) => {
+        console.log('Selected Medicine:', newMedicine);
+        setSelectedMedicine(newMedicine);
+    };
+
 
     const handleAdd = (e) => {
         e.preventDefault();
-        // submit logic to be handled externally
+        console.log(' Supplieris :', selectedSupplier);
     };
 
     return (
@@ -24,7 +43,20 @@ const AddStockModel = ({ isOpen, onClose }) => {
                 <h2 className="text-xl font-semibold mb-4">Add Medicine</h2>
                 <form className="flex flex-col" onSubmit={handleAdd}>
                     <div className="mb-3">
-                        <SelectSupplierAsync/>
+                        <div className='flex flex-col gap-4 mt-2 mb-4'>
+
+                            <SelectSupplierAsync onChange={handleSupplierChange}
+                                value={selectedSupplier} />
+
+                            <SelectUnitAsync
+                                onChange={handleUnitChange}
+                                value={selectedUnit} />
+
+                            <SelectMedicineAsync
+                                onChange={handleMedicineChange}
+                                value={selectedMedicine} />
+
+                        </div>
                         <Label className="mb-2">Quantity</Label>
                         <Input
                             type="number"
