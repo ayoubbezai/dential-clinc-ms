@@ -5,6 +5,7 @@ import { Label } from '@/components/designSystem/label';
 import { selectClassName } from '@/constant/classNames';
 import { Button } from '@/components/designSystem/button';
 import SelectSupplierAsync from '@/components/select/SelectSupplierAsync';
+import ModelNoClickOut from '../other/ModelNoClickOut';
 
 const AddStockModel = ({ isOpen, onClose }) => {
     const [quantity, setQuantity] = useState('');
@@ -18,7 +19,7 @@ const AddStockModel = ({ isOpen, onClose }) => {
     };
 
     return (
-        <Model isOpen={isOpen} onClose={onClose}>
+        <ModelNoClickOut isOpen={isOpen} onClose={onClose}>
             <div className="p-4 py-2">
                 <h2 className="text-xl font-semibold mb-4">Add Medicine</h2>
                 <form className="flex flex-col" onSubmit={handleAdd}>
@@ -65,7 +66,7 @@ const AddStockModel = ({ isOpen, onClose }) => {
                     </Button>
                 </form>
             </div>
-        </Model>
+        </ModelNoClickOut>
     );
 };
 
