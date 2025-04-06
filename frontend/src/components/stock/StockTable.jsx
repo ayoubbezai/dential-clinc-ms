@@ -34,6 +34,7 @@ const StockTable = ({ onLoaded }) => {
 
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
 
+
   return (
     <>
       <div className="grid grid-cols-12 gap-4 mt-[10px]">

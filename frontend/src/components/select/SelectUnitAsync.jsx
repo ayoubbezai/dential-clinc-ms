@@ -28,20 +28,25 @@ const SelectUnitAsync = ({ onChange, value }) => {
                 console.error(err);
             } finally {
                 setIsLoading(false);
+
             }
         },0),
         []
     );
 
     useEffect(() => {
-        loadOptions('', 1, false);
+        if(pageRef.current === 1){
+            loadOptions('', 1, false);
+        }
     }, [loadOptions]);
 
     const handleInputChange = debounce((inputValue) => {
         currentSearch.current = inputValue;
         pageRef.current = 1;
         hasMoreRef.current = true;
-        loadOptions(inputValue, 1, false);
+        if (inputValue){
+            loadOptions(inputValue, 1, false);
+        }
     }, 300);
 
     const handleMenuScrollToBottom = () => {

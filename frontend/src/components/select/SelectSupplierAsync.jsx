@@ -15,6 +15,7 @@ const SelectSupplierAsync = ({ onChange, value }) => {
             if (isLoading) return;
             setIsLoading(true);
             try {
+
                 const { data } = await suppliersService.getAllSuppliers(10, search, '', '', page);
                 const fetched = data?.data.map(supplier => ({
                     label: supplier.name,
@@ -30,9 +31,10 @@ const SelectSupplierAsync = ({ onChange, value }) => {
                 console.error(err);
             } finally {
                 setIsLoading(false);
+                
             }
         }, 300),
-        []
+        [currentSearch, pageRef]
     );
 
     useEffect(() => {
@@ -43,7 +45,10 @@ const SelectSupplierAsync = ({ onChange, value }) => {
         currentSearch.current = inputValue;
         pageRef.current = 1;
         hasMoreRef.current = true;
-        loadOptions(inputValue, 1, false);
+        if (inputValue) {
+
+            loadOptions(inputValue, 1, false);
+        }
     }, 300);
 
     const handleMenuScrollToBottom = () => {

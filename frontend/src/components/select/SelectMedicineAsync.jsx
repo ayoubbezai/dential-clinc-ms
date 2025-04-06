@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import Select from 'react-select'; // ✅ Use Select, not Creatable
+import Select from 'react-select'; 
 import debounce from 'lodash/debounce';
 import { medicnesService } from '@/services/shared/medicnesService';
 
@@ -43,7 +43,9 @@ const SelectMedicineAsync = ({ onChange, value }) => {
         currentSearch.current = inputValue;
         pageRef.current = 1;
         hasMoreRef.current = true;
-        loadOptions(inputValue, 1, false);
+        if (inputValue) {
+            loadOptions(inputValue, 1, false);
+        }
     }, 300);
 
     const handleMenuScrollToBottom = () => {

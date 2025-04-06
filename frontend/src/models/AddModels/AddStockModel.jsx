@@ -32,10 +32,16 @@ const AddStockModel = ({ isOpen, onClose }) => {
 
     const handleAdd = async (e) => {
         e.preventDefault();
+        setLoading(true)
         console.log(quantity)
         console.log(price)
         const { data } = await StocksService.addStock(selectedMedicine.value, selectedSupplier.value, selectedUnit.value, price, quantity, expireDate);
+        console.log(data)
+        setLoading(false)
+
     };
+
+    
 
     return (
         <ModelNoClickOut isOpen={isOpen} onClose={onClose}>
@@ -46,7 +52,7 @@ const AddStockModel = ({ isOpen, onClose }) => {
                         <div className='flex flex-col gap-4 mt-2 mb-4'>
 
                             <SelectSupplierAsync onChange={handleSupplierChange}
-                                value={selectedSupplier} />
+                                value={selectedSupplier}  />
 
                             <SelectUnitAsync
                                 onChange={handleUnitChange}
