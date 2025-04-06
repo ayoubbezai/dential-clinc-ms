@@ -3,7 +3,7 @@ import Select from 'react-select';
 import debounce from 'lodash/debounce';
 import { medicnesService } from '@/services/shared/medicnesService';
 
-const SelectMedicineAsync = ({ onChange, value }) => {
+const SelectMedicineAsync = ({ onChange, value, load }) => {
     const pageRef = useRef(1);
     const currentSearch = useRef('');
     const hasMoreRef = useRef(true);
@@ -36,8 +36,11 @@ const SelectMedicineAsync = ({ onChange, value }) => {
     );
 
     useEffect(() => {
-        loadOptions('', 1, false);
-    }, [loadOptions]);
+        if (load){
+
+            loadOptions('', 1, false);
+        }
+    }, [loadOptions, load]);
 
     const handleInputChange = debounce((inputValue) => {
         currentSearch.current = inputValue;

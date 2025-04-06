@@ -3,7 +3,7 @@ import Select from 'react-select';
 import { suppliersService } from '@/services/shared/supplierService';
 import debounce from 'lodash/debounce';
 
-const SelectSupplierAsync = ({ onChange, value }) => {
+const SelectSupplierAsync = ({ onChange, value, onLoaded }) => {
     const pageRef = useRef(1);
     const currentSearch = useRef('');
     const hasMoreRef = useRef(true);
@@ -31,7 +31,7 @@ const SelectSupplierAsync = ({ onChange, value }) => {
                 console.error(err);
             } finally {
                 setIsLoading(false);
-                
+                onLoaded?.()
             }
         }, 300),
         [currentSearch, pageRef]
@@ -46,7 +46,6 @@ const SelectSupplierAsync = ({ onChange, value }) => {
         pageRef.current = 1;
         hasMoreRef.current = true;
         if (inputValue) {
-
             loadOptions(inputValue, 1, false);
         }
     }, 300);

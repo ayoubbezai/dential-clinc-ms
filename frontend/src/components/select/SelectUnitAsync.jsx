@@ -3,7 +3,7 @@ import Select from 'react-select';
 import debounce from 'lodash/debounce';
 import { UnitsService } from '@/services/shared/UnitsService';
 
-const SelectUnitAsync = ({ onChange, value }) => {
+const SelectUnitAsync = ({ onChange, value, onLoaded, load }) => {
     const pageRef = useRef(1);
     const currentSearch = useRef('');
     const hasMoreRef = useRef(true);
@@ -28,6 +28,7 @@ const SelectUnitAsync = ({ onChange, value }) => {
                 console.error(err);
             } finally {
                 setIsLoading(false);
+                onLoaded?.()
 
             }
         },0),
@@ -35,10 +36,10 @@ const SelectUnitAsync = ({ onChange, value }) => {
     );
 
     useEffect(() => {
-        if(pageRef.current === 1){
+        if (load){
             loadOptions('', 1, false);
         }
-    }, [loadOptions]);
+    }, [loadOptions, load]);
 
     const handleInputChange = debounce((inputValue) => {
         currentSearch.current = inputValue;

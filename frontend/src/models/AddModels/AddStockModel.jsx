@@ -40,7 +40,10 @@ const AddStockModel = ({ isOpen, onClose }) => {
         setLoading(false)
 
     };
-
+  const [loadState, setLoadState] = useState({
+      medicinesLoaded: false,
+      unitsLoaded: false
+  });
     
 
     return (
@@ -52,15 +55,23 @@ const AddStockModel = ({ isOpen, onClose }) => {
                         <div className='flex flex-col gap-4 mt-2 mb-4'>
 
                             <SelectSupplierAsync onChange={handleSupplierChange}
-                                value={selectedSupplier}  />
+                                value={selectedSupplier} 
+                                onLoaded={() => setLoadState(prev => ({ ...prev, unitsLoaded: true }))}
+                                />
 
                             <SelectUnitAsync
                                 onChange={handleUnitChange}
-                                value={selectedUnit} />
+                                value={selectedUnit} 
+                                onLoaded={() => setLoadState(prev => ({ ...prev, medicinesLoaded: true }))}
+                                load={loadState.unitsLoaded}
+                                />
 
                             <SelectMedicineAsync
                                 onChange={handleMedicineChange}
-                                value={selectedMedicine} />
+                                value={selectedMedicine} 
+                                load={loadState.medicinesLoaded}
+
+                                />
 
                         </div>
                         <Label className="mb-2">Quantity</Label>
