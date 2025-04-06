@@ -8,9 +8,10 @@ import SelectSupplierAsync from '@/components/select/SelectSupplierAsync';
 import ModelNoClickOut from '../other/ModelNoClickOut';
 import SelectUnitAsync from '@/components/select/SelectUnitAsync';
 import SelectMedicineAsync from '@/components/select/SelectMedicineAsync';
+import { StocksService } from '@/services/shared/StocksService';
 
 const AddStockModel = ({ isOpen, onClose }) => {
-    const [quantity, setQuantity] = useState('');
+    const [quantity, setQuantity] = useState();
     const [price, setPrice] = useState('');
     const [expireDate, setExpireDate] = useState('');
     const [loading, setLoading] = useState(false);
@@ -19,22 +20,21 @@ const AddStockModel = ({ isOpen, onClose }) => {
     const [selectedMedicine, setSelectedMedicine] = useState(null);
 
     const handleSupplierChange = (newSupplier) => {
-        console.log('Selected Supplier:', newSupplier);
         setSelectedSupplier(newSupplier);
     };
     const handleUnitChange = (newUnit) => {
-        console.log('Selected unit:', newUnit);
         setSelectedUnit(newUnit);
     };
     const handleMedicineChange = (newMedicine) => {
-        console.log('Selected Medicine:', newMedicine);
         setSelectedMedicine(newMedicine);
     };
 
 
-    const handleAdd = (e) => {
+    const handleAdd = async (e) => {
         e.preventDefault();
-        console.log(' Supplieris :', selectedSupplier);
+        console.log(quantity)
+        console.log(price)
+        const { data } = await StocksService.addStock(selectedMedicine.value, selectedSupplier.value, selectedUnit.value, price, quantity, expireDate);
     };
 
     return (

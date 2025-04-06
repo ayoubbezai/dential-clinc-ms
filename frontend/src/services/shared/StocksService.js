@@ -34,4 +34,33 @@ export const StocksService = {
       }; // Return error message
     }
   },
+  async addStock(
+    medicine_id,
+    supplier_id,
+    unit_id,
+    price,
+    quantity,
+    expiry_date
+  ) {
+
+    console.log(unit_id)
+    try {
+      const response = await api.post("/stocks", {
+        medicine_id,
+        supplier_id,
+        unit_id,
+        price,
+        quantity,
+        expiry_date,
+      });
+      console.log(response);
+      return { data: response.data, error: null };
+    } catch (error) {
+      console.log(error);
+      return {
+        data: null,
+        error: error.message || "Failed to create stock",
+      };
+    }
+  },
 };

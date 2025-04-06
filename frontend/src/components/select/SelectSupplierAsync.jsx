@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import Creatable from 'react-select/creatable'; // Import Creatable
+import Select from 'react-select';
 import { suppliersService } from '@/services/shared/supplierService';
 import debounce from 'lodash/debounce';
 
@@ -9,9 +9,6 @@ const SelectSupplierAsync = ({ onChange, value }) => {
     const hasMoreRef = useRef(true);
     const [isLoading, setIsLoading] = useState(false);
     const [options, setOptions] = useState([]);
-
-
-
 
     const loadOptions = useCallback(
         debounce(async (search, page = 1, append = false) => {
@@ -34,41 +31,14 @@ const SelectSupplierAsync = ({ onChange, value }) => {
             } finally {
                 setIsLoading(false);
             }
-
-        }
-
-            , 0), []
-
-    )
-    // const loadOptions = async (search, page = 1, append = false) => {
-    //     if (isLoading) return;
-    //     setIsLoading(true);
-    //     try {
-    //         const { data } = await suppliersService.getAllSuppliers(1, search, '', '', page);
-    //         const fetched = data?.data.map(supplier => ({
-    //             label: supplier.name,
-    //             value: supplier.id,
-    //         })) || [];
-
-    //         hasMoreRef.current = fetched.length > 0;
-
-    //         setOptions(prev =>
-    //             append ? [...prev, ...fetched] : fetched
-    //         );
-    //     } catch (err) {
-    //         console.error(err);
-    //     } finally {
-    //         setIsLoading(false);
-    //     }
-    // };
-
+        }, 300),
+        []
+    );
 
     useEffect(() => {
         loadOptions('', 1, false);
     }, [loadOptions]);
 
-
-    // Debounced search input handler
     const handleInputChange = debounce((inputValue) => {
         currentSearch.current = inputValue;
         pageRef.current = 1;
@@ -83,35 +53,19 @@ const SelectSupplierAsync = ({ onChange, value }) => {
         }
     };
 
-    const handleCreateNewOption = (inputValue) => {
-        const newOption = {
-            label: inputValue,
-            value: inputValue,
-        };
-
-        setOptions((prevOptions) => [...prevOptions, newOption]);
-
-        onChange(newOption);
-
-    };
-
     return (
-        <Creatable
+        <Select
             onInputChange={handleInputChange}
             onMenuScrollToBottom={handleMenuScrollToBottom}
             options={options}
             isLoading={isLoading}
-            onChange={(selected) => {
-                onChange(selected);
-
-            }}
+            onChange={onChange}
             value={value}
             isClearable
-            placeholder="Select or create supplier..."
+            placeholder="Select supplier..."
             noOptionsMessage={() =>
                 isLoading ? 'Loading...' : 'No more options'
             }
-            onCreateOption={handleCreateNewOption}
         />
     );
 };
