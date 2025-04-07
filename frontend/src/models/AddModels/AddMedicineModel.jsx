@@ -4,8 +4,10 @@ import { Input } from '@/components/designSystem/input';
 import { Label } from '@/components/designSystem/label';
 import { selectClassName } from '@/constant/classNames';
 import { Button } from '@/components/designSystem/button';
+import { medicnesService } from '@/services/shared/medicnesService';
+import toast from 'react-hot-toast';
 
-const AddMedicineModel = ({ isOpen, onClose }) => {
+const AddMedicineModel = ({ isOpen, onClose, fetchMedicines }) => {
     const [name, setName] = useState('');
     const [category, setCategory] = useState('');
     const [description, setDescription] = useState('');
@@ -23,10 +25,28 @@ const AddMedicineModel = ({ isOpen, onClose }) => {
         }
     }, [lowStock, mediumStock, goodStock]);
 
-    const handleAdd = (e) => {
-        e.preventDefault();
-        // submit logic to be handled externally
-    };
+
+
+       const handleAdd = async (e) => {
+            e.preventDefault();
+            setLoading(true)
+    
+           const { data, error } = await medicnesService.addMedicine(name,
+               category,
+               description,
+               lowStock,
+               mediumStock,
+               goodStock,);
+            if (data) {
+                toast.success("medicine added successfully!");
+            } else {
+                toast.error(error);
+            }
+            setLoading(false)
+           fetchMedicines?.(1)
+            onClose?.()
+    
+        };
 
     return (
         <Model isOpen={isOpen} onClose={onClose}>

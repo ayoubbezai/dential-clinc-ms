@@ -29,7 +29,8 @@ const StockTable = ({ onLoaded }) => {
     error,
     stockStatus,
     setStockStatus,
-    statistics
+    statistics,
+    fetchStocks
   } = useStock(onLoaded);
 
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
@@ -67,6 +68,7 @@ const StockTable = ({ onLoaded }) => {
           <AddStockModel
             isOpen={isAddModalOpen}
             onClose={() => setIsAddModalOpen(false)}
+            fetchStocks={fetchStocks}
           />
         </Suspense>
       )}

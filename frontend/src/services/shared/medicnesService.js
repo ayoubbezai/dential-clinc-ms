@@ -28,4 +28,31 @@ export const medicnesService = {
       }; // Return error message
     }
   },
+  async addMedicine(
+    name,
+    category,
+    description,
+    low_stock_threshold,
+    medium_stock_threshold,
+    good_stock_threshold
+  ) {
+    try {
+      const response = await api.post("/medicines", {
+        name,
+        category,
+        description,
+        low_stock_threshold,
+        medium_stock_threshold,
+        good_stock_threshold,
+      });
+      console.log(response);
+      return { data: response.data, error: null };
+    } catch (error) {
+      console.log(error);
+      return {
+        data: null,
+        error: error.message || "Failed to create medicine",
+      };
+    }
+  },
 };

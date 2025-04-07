@@ -9,8 +9,9 @@ import ModelNoClickOut from '../other/ModelNoClickOut';
 import SelectUnitAsync from '@/components/select/SelectUnitAsync';
 import SelectMedicineAsync from '@/components/select/SelectMedicineAsync';
 import { StocksService } from '@/services/shared/StocksService';
+import toast from 'react-hot-toast';
 
-const AddStockModel = ({ isOpen, onClose }) => {
+const AddStockModel = ({ isOpen, onClose, fetchStocks }) => {
     const [quantity, setQuantity] = useState();
     const [price, setPrice] = useState('');
     const [expireDate, setExpireDate] = useState('');
@@ -33,11 +34,16 @@ const AddStockModel = ({ isOpen, onClose }) => {
     const handleAdd = async (e) => {
         e.preventDefault();
         setLoading(true)
-        console.log(quantity)
-        console.log(price)
-        const { data } = await StocksService.addStock(selectedMedicine.value, selectedSupplier.value, selectedUnit.value, price, quantity, expireDate);
-        console.log(data)
+
+        const { data,error } = await StocksService.addStock(selectedMedicine.value, selectedSupplier.value, selectedUnit.value, price, quantity, expireDate);
+        if (data) {
+            toast.success("Stock added successfully!");
+        } else {
+            toast.error(error);
+        }
         setLoading(false)
+        fetchStocks?.(1)
+        onClose?.()
 
     };
   const [loadState, setLoadState] = useState({
