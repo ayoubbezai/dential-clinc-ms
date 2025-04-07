@@ -45,7 +45,8 @@ const MedicinesTable = ({ onLoaded }) => {
                 </div>
                 <Table className="my-2">
                     <MedicinesTableHeader />
-                    <MedicinesTableBody loading={loading} error={error} medicines={medicines} />
+                    <MedicinesTableBody loading={loading} error={error} medicines={medicines} fetchMedicines={fetchMedicines}
+ />
                 </Table>
                 <TableFooter setPerPage={setPerPage} setPage={setPage} pagination={pagination} />
             </div>

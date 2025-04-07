@@ -55,4 +55,46 @@ export const medicnesService = {
       };
     }
   },
+
+  async editMedicine(
+    medicineId,
+    name,
+    category,
+    description,
+    low_stock_threshold,
+    medium_stock_threshold,
+    good_stock_threshold
+  ) {
+    try {
+      const response = await api.put(`/medicines/${medicineId}`, {
+        name,
+        category,
+        description,
+        low_stock_threshold,
+        medium_stock_threshold,
+        good_stock_threshold,
+      });
+      console.log(response);
+      return { data: response.data, error: null };
+    } catch (error) {
+      console.log(error);
+      return {
+        data: null,
+        error: error.message || "Failed to edit medicine",
+      };
+    }
+  },
+  async deleteMedicine(medicineId) {
+    try {
+      const response = await api.delete(`/medicines/${medicineId}`);
+      console.log(response);
+      return { data: response.data, error: null };
+    } catch (error) {
+      console.log(error);
+      return {
+        data: null,
+        error: error.message || "Failed to delete the  medicine",
+      };
+    }
+  },
 };
