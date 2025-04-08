@@ -65,6 +65,7 @@ const SelectUnitAsync = ({ onChange, value, onLoaded, load }) => {
             isLoading={isLoading}
             onChange={onChange}
             value={value}
+            defaultInputValue={value}
             isClearable
             placeholder="Select unit..."
             noOptionsMessage={() =>

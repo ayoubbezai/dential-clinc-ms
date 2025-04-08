@@ -66,6 +66,7 @@ const SelectMedicineAsync = ({ onChange, value, load }) => {
             isLoading={isLoading}
             onChange={onChange}
             value={value}
+            defaultInputValue={value}
             isClearable
             placeholder="Select medicine..."
             noOptionsMessage={() =>

@@ -56,7 +56,7 @@ const StockTable = ({ onLoaded }) => {
 
           <Table>
             <StockTableHeader />
-            <StockTableBody loading={loading} error={error} stocks={stocks} />
+            <StockTableBody loading={loading} error={error} stocks={stocks} fetchStocks={fetchStocks}/>
           </Table>
 
           <TableFooter setPerPage={setPerPage} setPage={setPage} pagination={pagination} />

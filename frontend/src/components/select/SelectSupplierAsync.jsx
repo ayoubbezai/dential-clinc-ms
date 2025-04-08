@@ -38,7 +38,10 @@ const SelectSupplierAsync = ({ onChange, value, onLoaded }) => {
     );
 
     useEffect(() => {
+
         loadOptions('', 1, false);
+
+        
     }, [loadOptions]);
 
     const handleInputChange = debounce((inputValue) => {
@@ -65,6 +68,8 @@ const SelectSupplierAsync = ({ onChange, value, onLoaded }) => {
             isLoading={isLoading}
             onChange={onChange}
             value={value}
+            defaultValue={value}
+            defaultInputValue={value}
             isClearable
             placeholder="Select supplier..."
             noOptionsMessage={() =>
