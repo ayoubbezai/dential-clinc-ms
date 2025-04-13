@@ -33,15 +33,14 @@ const SelectSupplierAsync = ({ onChange, value, onLoaded }) => {
                 setIsLoading(false);
                 onLoaded?.()
             }
-        }, 300),
+        },300),
         [currentSearch, pageRef]
     );
 
     useEffect(() => {
-
+        
         loadOptions('', 1, false);
 
-        
     }, [loadOptions]);
 
     const handleInputChange = debounce((inputValue) => {

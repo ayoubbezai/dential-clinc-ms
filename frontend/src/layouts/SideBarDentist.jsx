@@ -29,7 +29,7 @@ const SideBarDentist = () => {
                         <div className="flex flex-col items-center mb-3 flex-shrink-0">
                             <img src={LogoImg} alt="logo" width="56" height="56" className="object-contain" loading="eager" />
                             <h1 className='uppercase text-black font-semibold text-[18px]'>
-                                <span className='text-[#3E7EA1]'>Dr</span> Chabani
+                                <span className='text-[#3E7EA1]'>Dr</span> Chebaani
                             </h1>
                         </div>
                         <Suspense fallback={<p>Loading links...</p>}>

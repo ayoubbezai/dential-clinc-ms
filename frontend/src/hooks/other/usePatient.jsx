@@ -24,7 +24,7 @@ const usePatient = (patientId) => {
             setLoadingPatient(true);
             setErrorPatient(null);
             try {
-                const { data } = await patientService.getPatientDetails(id);
+                const { data  } = await patientService.getPatientDetails(id);
                 console.log(data)
                 setPatient(data);
             } catch (err) {

@@ -11,6 +11,9 @@ export const patientService = {
       return { data: null, error: err.message };
     }
   },
+
+
+
   async createPatientAccount(patientId,email,password){
     try{
       const response = await api.post(`patients/${patientId}/createUser`,{email,password});
