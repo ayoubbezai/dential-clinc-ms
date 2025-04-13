@@ -9,6 +9,8 @@ import {
   ResponsiveContainer,
 } from 'recharts'
 import TopNavBar from '@/layouts/topNavBar'
+import { TooltipDashboard } from '@/components/charts/TooltipDashboard'
+import { VisitTypeBreakdown } from '@/components/charts/VisitTypeBreakdown'
 
 const chartOptions = ['Last 6 Months', 'This Year']
 const stats = [
@@ -152,22 +154,29 @@ const DentistDashboard = () => {
     <>
       <TopNavBar />
 
-    <div className="w-full px-6 sm:px-8 py-4">
-      
-      <div className="grid grid-cols-12 gap-4">
-        {/* Chart */}
-        <div className="col-span-12 lg:col-span-6">
-          <AppointmentsChart selectedRange={selectedRange} setSelectedRange={setSelectedRange} />
-        </div>
+      <div className="w-full px-6 sm:px-8 py-4">
+        <div className="grid grid-cols-12 gap-4">
+          {/* Chart */}
+          <div className="col-span-12 lg:col-span-6">
+            <AppointmentsChart selectedRange={selectedRange} setSelectedRange={setSelectedRange} />
+          </div>
 
-        {/* Stat Cards */}
-        <div className="col-span-12 lg:col-span-6 grid grid-cols-1 sm:grid-cols-2 gap-4">
-          {stats.map((stat, index) => (
-            <StatCard key={index} {...stat} />
-          ))}
+          {/* Stat Cards */}
+          <div className="col-span-12 lg:col-span-6 grid grid-cols-1 sm:grid-cols-2 gap-4">
+            {stats.map((stat, index) => (
+              <StatCard key={index} {...stat} />
+            ))}
+          </div>
+
+          {/* Full-width TooltipDashboard */}
+          <div className="col-span-6">
+            <TooltipDashboard />
+          </div>
+          <div className="col-span-6">
+            <VisitTypeBreakdown />
+          </div>
         </div>
       </div>
-    </div>
     </>
   )
 }
