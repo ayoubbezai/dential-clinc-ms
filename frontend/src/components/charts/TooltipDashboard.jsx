@@ -23,8 +23,8 @@ export function TooltipDashboard() {
     const changePercentage = "+12.5%"
 
     return (
-        <Card className="w-full  rounded-2xl border border-border bg-white border-gray-100  shadow-lg ">
-            <CardHeader className=" py-2 px-5">
+        <Card className="w-full h-full rounded-2xl border border-border bg-white border-gray-100  shadow-lg ">
+            <CardHeader className=" py-1 px-5">
                 <div className="flex justify-between items-center">
                     <CardTitle className="text-base font-semibold text-foreground">
                         Week Appointments
@@ -36,11 +36,11 @@ export function TooltipDashboard() {
                 </div>
             </CardHeader>
 
-            <CardContent className="p-5 pb-2">
+            <CardContent className="p- pb-2">
                 <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
 
 
-                    <div className="h-[120px] w-full ">
+                    <div className="h-[200px] w-full ">
                         <ResponsiveContainer width="100%" height="100%">
                             <BarChart data={appointmentData} barGap={4}>
                                 <XAxis

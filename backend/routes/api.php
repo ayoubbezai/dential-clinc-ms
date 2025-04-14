@@ -14,6 +14,7 @@ use App\Http\Controllers\MedicineController;
 use App\Http\Controllers\StockController;
 use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\AttachmentController;
+use App\Http\Controllers\statController;
 use App\Models\Appointment;
 use Illuminate\Support\Facades\Route;
 
@@ -57,6 +58,7 @@ Route::middleware([$auth, 'role:dentist,receptionist'])->group(function () {
     Route::delete('/attachments/{id}', [AttachmentController::class, 'destroy']);
     Route::get('/payments_stat', [PaymentController::class, 'paymentStat']);
 });
+Route::get('/dashboard_stat', [StatController::class, 'dashboardStat']);
 Route::get('/attachments/{id}/download', [AttachmentController::class, 'download']);
 
 
