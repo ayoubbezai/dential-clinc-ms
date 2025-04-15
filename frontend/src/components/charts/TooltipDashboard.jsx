@@ -1,5 +1,3 @@
-"use client"
-
 import { Bar, BarChart, XAxis, Tooltip, ResponsiveContainer } from "recharts"
 import {
     Card,
@@ -7,7 +5,6 @@ import {
     CardHeader,
     CardTitle,
 } from "@/components/designSystem/card"
-import { TrendingUp } from "lucide-react"
 import { Link } from "react-router-dom"
 
 

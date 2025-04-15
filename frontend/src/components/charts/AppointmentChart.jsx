@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import {
     AreaChart,
     Area,
@@ -28,8 +29,10 @@ const getShiftedMonths = () => {
     return months;
 };
 
-export const AppointmentsChart = ({ selectedRange, setSelectedRange, lastYearAppointems = [] }) => {
+export const AppointmentsChart = ({lastYearAppointems = [] }) => {
     const shiftedMonths = getShiftedMonths()
+    const [selectedRange, setSelectedRange] = useState('Last 6 Months')
+
 
     // Map lastYearAppointems into a lookup
     const countMap = lastYearAppointems.reduce((acc, { month, count }) => {
