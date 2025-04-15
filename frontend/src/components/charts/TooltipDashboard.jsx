@@ -8,30 +8,24 @@ import {
     CardTitle,
 } from "@/components/designSystem/card"
 import { TrendingUp } from "lucide-react"
+import { Link } from "react-router-dom"
 
-const appointmentData = [
-    { day: "Mon", appointments: 12 },
-    { day: "Tue", appointments: 19 },
-    { day: "Wed", appointments: 15 },
-    { day: "Thu", appointments: 22 },
-    { day: "Fri", appointments: 18 },
-    { day: "Sat", appointments: 8 },
-]
 
-export function TooltipDashboard() {
-    const totalAppointments = appointmentData.reduce((sum, d) => sum + d.appointments, 0)
-    const changePercentage = "+12.5%"
+
+export function TooltipDashboard({ appointmentType }) {
+
+    console.log(appointmentType)
+
 
     return (
         <Card className="w-full h-full rounded-2xl border border-border bg-white border-gray-100  shadow-lg ">
-            <CardHeader className=" py-1 px-5">
+            <CardHeader className=" py-1 px-6">
                 <div className="flex justify-between items-center">
                     <CardTitle className="text-base font-semibold text-foreground">
-                        Week Appointments
+                         Appointments Type
                     </CardTitle>
-                    <div className="flex items-center gap-1 text-sm font-medium text-emerald-500">
-                        <TrendingUp size={16} />
-                        {changePercentage}
+                    <div className="flex items-center gap-1 text-sm font-medium text-blue-500">
+                        <Link to={"/appointments_list"}>See All</Link>
                     </div>
                 </div>
             </CardHeader>
@@ -42,9 +36,9 @@ export function TooltipDashboard() {
 
                     <div className="h-[200px] w-full ">
                         <ResponsiveContainer width="100%" height="100%">
-                            <BarChart data={appointmentData} barGap={4}>
+                            <BarChart data={appointmentType} barGap={4}>
                                 <XAxis
-                                    dataKey="day"
+                                    dataKey="type"
                                     axisLine={false}
                                     tickLine={false}
                                     tick={{
@@ -66,7 +60,7 @@ export function TooltipDashboard() {
                                     cursor={{ fill: "hsl(210 20% 95%)" }}
                                 />
                                 <Bar
-                                    dataKey="appointments"
+                                    dataKey="count"
                                     fill="hsl(221.2 83.2% 53.3%)"
                                     radius={[4, 4, 0, 0]}
                                 />

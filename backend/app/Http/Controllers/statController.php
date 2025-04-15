@@ -24,33 +24,45 @@ class StatController extends Controller
             //get appointments fo 6 and 12 montes by month
 
             $lastYearAppointems =  Appointment::select(
-                Db::raw("Month(created_at) as month"),
+                Db::raw("Month(date) as month"),
                 Db::raw("Count(*) as count")
             )->where('created_at', '>=', Carbon::now()->subMonths(12))
-            ->groupBy(DB::raw('MONTH(created_at)'))
-            ->orderBy(DB::raw('MONTH(created_at)'))
+            ->groupBy(DB::raw('MONTH(date)'))
+            ->orderBy(DB::raw('MONTH(date)'))
             ->get();
 
 
-            //convetMonth to name instade of number 
+            //convetMonth to name instade of number
 
-                    $monthNames = function ($collection) {
+            $monthNames = function ($collection) {
             return $collection->map(function ($item) {
                 $item->month = Carbon::create()->month($item->month)->format('M');
                 return $item;
             });
         };
 
+        //get the appointments of last week
 
+$appointmentType = [
+    ["type" => "scheduled", "count" => Appointment::where("status", "scheduled")->count()],
+    ["type" => "completed", "count" => Appointment::where("status", "completed")->count()],
+    ["type" => "pending", "count" => Appointment::where("status", "pending")->count()],
+    ["type" => "cancelled", "count" => Appointment::where("status", "cancelled")->count()],
+    ["type" => "rescheduled", "count" => Appointment::where("status", "rescheduled")->count()],
+];
+        
         
                  return response()->json([
             "success" => true,
             "message" => "stat fetched successfully",
             "data" => [
-            'appointmentsNumber' => $appointmentsNumber,
-            'patientsNumber' => $patientsNumber,
-            'usersNumber' => $usersNumber,
+                'count'=>[
+                    'appointmentsNumber' => $appointmentsNumber,
+                    'patientsNumber' => $patientsNumber,
+                    'usersNumber' => $usersNumber,],
+
             'lastYearAppointems' => $monthNames($lastYearAppointems),
+            "appointmentType"=>$appointmentType
         ]
         ]);
 
