@@ -2,6 +2,7 @@ import { Routes, Route } from "react-router-dom";
 import { lazy, Suspense } from "react";
 import ProtectedRoute from "./ProtectedRoute";
 import RoleBasedRoute from "./RoleBasedRoute";
+import PatientDetailsResp from "@/pages/receptionist/PatientDetailsResp";
 
 // Lazy Load Pages
 const DentistDashboard = lazy(() => import("../pages/dentist/DentistDashboard"));
@@ -31,19 +32,21 @@ const AppRoutes = () => {
                     {/* Dentist Routes */}
                     <Route element={<RoleBasedRoute allowedRoles={["dentist"]} />}>
                         <Route path="/dentist/dashboard" element={<DentistDashboard />} />
+                        <Route path="/payment" element={<Payment />} />
+                        <Route path="/inventory" element={<Inventory />} />
+                        <Route path="/patient/:patientId/folder/:folderId" element={<FolderDetails />} />
+                        <Route path="/patient/:id" element={<PatientDetails />} />
                     </Route>
-
+                    <Route element={<RoleBasedRoute allowedRoles={["receptionist"]} />}>
+                        <Route path="/receptionist/patient/:id" element={<PatientDetailsResp />} />
+                    </Route>
                     {/* Shared Routes for Dentist & Receptionist */}
                     <Route element={<RoleBasedRoute allowedRoles={["dentist", "receptionist"]} />}>
                         <Route path="/patients_list" element={<PatientsList />} />
-                        <Route path="/patient/:id" element={<PatientDetails />} />
-                        <Route path="/patient/:patientId/folder/:folderId" element={<FolderDetails />} />
                         <Route path="/schedule" element={<Schedule />} />
                         <Route path="/users_list" element={<UsersList />} />
                         <Route path="/appointments_list" element={<AppointmentList />} />
-                        <Route path="/payment" element={<Payment />} />
                         <Route path="/messanger" element={<Messanger />} />
-                        <Route path="/inventory" element={<Inventory />} />
                     </Route>
 
                     {/* Receptionist Routes */}

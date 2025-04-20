@@ -4,9 +4,12 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Appointment;
+use App\Models\User;
 use App\Models\Folder;
 use Illuminate\Http\Response;
 use Illuminate\Validation\Rule;
+use Illuminate\Support\Facades\Auth;
+
 
 class AppointmentController extends Controller
 {
@@ -350,4 +353,49 @@ public function store(Request $request)
         ], Response::HTTP_INTERNAL_SERVER_ERROR);
     }
 }
+
+public function getAppointmentsOfPatient(Request $request){
+    //this for mobile app
+try{
+
+    // Get the logged-in user's ID
+    $userId = Auth::id();
+
+    //get appointments via jion
+
+    $appointmentsQuery = Appointment::whereHas("folder.patient",function ($query) use ($userId) {
+        $query->where("user_id",$userId);
+        
+    });
+
+    //get how much element in page
+$request_query = $request->query();
+
+$perPage = !empty($request_query["per_page"]) ? Max($request_query["per_page"],1):15;
+    //filter by the status status
+    if (!empty($request_query['status'])) {
+            $status = $request_query['status'];
+            $appointmentsQuery->where('status', $status);
+        }
+
+
+$appointments = $appointmentsQuery->select('id', 'folder_id', 'title', 'content', 'tooth', 'status')
+            ->paginate($perPage);
+
+        return response()->json([
+            "success" => true,
+            "message" => "Appointments retrieved successfully",
+            "data" => $appointments->items(),
+        ], Response::HTTP_OK);
+    } catch (\Exception $e) {
+        return response()->json([
+            "success" => false,
+            "message" => "Failed to get the appointments in this folder",
+            "error" => $e->getMessage(),
+        ], Response::HTTP_INTERNAL_SERVER_ERROR);
+    }
 }
+
+}
+
+

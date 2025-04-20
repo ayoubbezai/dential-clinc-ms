@@ -19,6 +19,7 @@ const DashboardLayout = ({ children }) => {
         "/appointments_list",
         "/payment",
         "/messanger",
+        "/receptionist/",
         "/patient/",
         "/inventory"
     ];

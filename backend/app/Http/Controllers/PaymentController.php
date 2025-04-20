@@ -345,10 +345,10 @@ function getLastPeriodDate($filter)
         $pending = max($pending, 0);
 
         // Income & Expense Stats (For Graphs)
-  $income_expense_stats = Payment::selectRaw('DATE(created_at) as date,
-            CAST(SUM(CASE WHEN type = "income" THEN amount ELSE 0 END) - 
-                 SUM(CASE WHEN type = "refund" THEN amount ELSE 0 END) AS SIGNED) as income,
-            CAST(SUM(CASE WHEN type = "expense" THEN amount ELSE 0 END) AS SIGNED) as expand')
+        $income_expense_stats = Payment::selectRaw('DATE(created_at) as date,
+            SUM(CASE WHEN type = "income" THEN amount ELSE 0 END) -
+            SUM(CASE WHEN type = "refund" THEN amount ELSE 0 END) as income,
+            SUM(CASE WHEN type = "expense" THEN amount ELSE 0 END) as expand')
             ->where("created_at", ">", $income_expense_start_date)
             ->groupBy("date")
             ->orderBy("date", "ASC")

@@ -25,15 +25,24 @@ $auth = 'auth:sanctum';
 Route::prefix('auth')->group(function () {
     Route::post('/register', [AuthController::class, 'register']);
     Route::post('/login', [AuthController::class, 'login'])->middleware('throttle:login');
-});
+    Route::post('mobile/login', [AuthController::class, 'loginMobile'])->middleware('throttle:login');
 
+});
+Route::middleware($auth)->prefix('auth/mobile')->group(function () {
+    Route::get("/me", [AuthController::class, 'currentUserMobile']);
+
+});
 // Protected authentication routes (Require authentication)
 
 Route::middleware($auth)->prefix('auth')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::get('/me', [AuthController::class, 'currentUser']);
+    
 });
 
+Route::middleware([$auth, 'role:patient'])->group(function () {
+    Route::get('mobile/appointments', [AppointmentController::class, 'getAppointmentsOfPatient']);
+});
 Route::middleware([$auth, 'role:dentist,receptionist'])->group(function () {
     Route::post('users/receptionist', [UserController::class, 'createReceptionist']);
     Route::post('patients/{id}/createUser', [PatientController::class, 'createUser']);

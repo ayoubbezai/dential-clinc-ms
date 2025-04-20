@@ -119,6 +119,11 @@ class AuthController extends Controller
             "message" => "Logged out successfully"
         ], 200);
     }
+
+
+
+
+
       public function currentUser(Request $request){
 
         try{
@@ -149,4 +154,92 @@ class AuthController extends Controller
         }
 
     }
+
+        public function loginMobile(Request $request){
+
+  // Validate the data from the request
+        $data = $request->validate([
+            "email" => "required|email|exists:users,email",
+            "password" => "required|min:6",
+        ]);
+
+        // Get the user with that email with the role eager loaded
+        $user = User::with('role')->where("email", $data["email"])->first();
+
+        // Check if the user exists
+        if (!$user) {
+            return response()->json([
+                "success" => false,
+                "message" => "User not found."
+            ], 404);
+        }
+        if($user->role->name !== "patient"){
+            return response()->json([
+                "success" => false,
+                "message" => "unauth with this role."
+            ], 403);
+        }
+
+        // Check if the password is correct
+        if (!Hash::check($data["password"], $user->password)) {
+            return response()->json([
+                "success" => false,
+                "message" => "The provided credentials are incorrect."
+            ], 401);
+        }
+
+        // Generate a token for the user
+        $token = $user->createToken("auth_token")->plainTextToken;
+
+        // Return the user and the token in the response
+        return response()->json([
+            "success" => true,
+            "message" => "User logged in successfully.",
+            "user" => [
+                "id" => $user->id,
+                "name" => $user->name,
+                "email" => $user->email,
+                "role" => $user->role->name,
+            ],
+            "token" => $token
+        ], 200);
+    }
+
+   public function currentUserMobile(Request $request){
+
+        try{
+            $currentUser = $request->user();
+            if (!$currentUser) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'User not authenticated',
+                ], Response::HTTP_UNAUTHORIZED);
+            }
+                  if($currentUser->role->name !== "patient"){
+            return response()->json([
+                "success" => false,
+                "message" => "unauth with this role."
+            ], 403);
+        }
+           return response()->json([
+            "success" => true,
+            "message" => "User logged in successfully.",
+            "user" => [
+                "id" => $currentUser->id,
+                "name" => $currentUser->name,
+                "email" => $currentUser->email,
+                "role" => $currentUser->role->name,
+            ],
+        ], 200);
+
+        }catch(\Exception $e){
+             return response()->json([
+                'success' => false,
+                'message' => 'faild to get the current user',
+                'error' => $e->getMessage(),
+            ], Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+
+    }
+
 }

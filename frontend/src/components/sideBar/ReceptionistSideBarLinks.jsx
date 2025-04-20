@@ -14,7 +14,6 @@ const SideBarComp = ({ text }) => {
 const ReceptionistSideBarLinks = () => {
     return (
         <>
-
             <SideBarComp text={"Lists"} />
             {sideBarReceptionist?.lists.map((list, index) => (
                 <div key={index} className='my-[5px]'>
@@ -26,7 +25,7 @@ const ReceptionistSideBarLinks = () => {
             <SideBarComp text={"Pages"} />
             {sideBarReceptionist?.pages.map((page, index) => (
                 <div key={index} className='my-[5px]'>
-                    <Link to={page.link} className={`text-[13px]  ${location.pathname === page.link ? "text-blue-500" : ""} `}>
+                    <Link to={page.link} className={`text-[13px]  ${location.pathname === page.link   ? "text-blue-500" : ""} `}>
                         {page.name}
                     </Link>
                 </div>

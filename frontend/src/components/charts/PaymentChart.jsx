@@ -44,7 +44,7 @@ export default function PaymentChart({ income_expense_stats, incomeExpenseDate, 
         return date >= startDate;
     });
 
-    console.log(filteredData);
+    console.log("filteredData", filteredData);
 
 
     return (
