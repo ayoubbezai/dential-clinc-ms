@@ -174,7 +174,6 @@ public function store(Request $request)
         $data['notes'] = !empty($data['notes']) ? Crypt::encryptString($data['notes']) : null;
         $data['diseases'] = !empty($data['diseases']) ? Crypt::encryptString($data['diseases']) : null;
 
-
     
         $patient = Patient::create($data);
 

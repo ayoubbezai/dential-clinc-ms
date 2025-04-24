@@ -73,6 +73,9 @@ class AuthController extends Controller
         ]);
 
         // Get the user with that email with the role eager loaded
+//sql
+
+
         $user = User::with('role')->where("email", $data["email"])->first();
 
         // Check if the user exists

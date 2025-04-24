@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Browser Translation with Transformers.js</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+        }
+        #translation-container {
+            margin-top: 20px;
+            border: 1px solid #ddd;
+            padding: 20px;
+            border-radius: 5px;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        button:disabled {
+            background-color: #cccccc;
+            cursor: not-allowed;
+        }
+        select {
+            padding: 8px;
+            margin-left: 10px;
+        }
+        .loading {
+            color: #666;
+            font-style: italic;
+        }
+    </style>
+</head>
+<body>
+    <h1>Browser-Based Translation</h1>
+    
+    <div>
+        <button id="translate-btn">Translate</button>
+        <select id="language-select">
+            <option value="fr">French</option>
+            <option value="es">Spanish</option>
+            <option value="de">German</option>
+            <option value="it">Italian</option>
+        </select>
+    </div>
+    
+    <div id="translation-container">
+        <h2>Original Text (English):</h2>
+        <p id="original-text">Hello world! This translation is happening directly in your browser using AI. No internet connection to external services is needed after the initial setup.</p>
+        
+        <h2>Translation:</h2>
+        <p id="translated-text"><span class="loading">Translation will appear here...</span></p>
+    </div>
+
+    <!-- Load Transformers.js from CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/@xenova/transformers@2.6.0"></script>
+    
+    <script>
+        // Initialize the translation pipeline
+        let pipeline;
+        
+        // DOM elements
+        const translateBtn = document.getElementById('translate-btn');
+        const languageSelect = document.getElementById('language-select');
+        const originalText = document.getElementById('original-text');
+        const translatedText = document.getElementById('translated-text');
+        
+        // Disable button while loading
+        translateBtn.disabled = true;
+        translatedText.innerHTML = '<span class="loading">Loading translation model (about 20MB)...</span>';
+        
+        // Available models (smaller models load faster but have lower quality)
+        const models = {
+            fr: 'Xenova/nllb-200-distilled-600M',  // French
+            es: 'Xenova/nllb-200-distilled-600M',  // Spanish
+            de: 'Xenova/nllb-200-distilled-600M',  // German
+            it: 'Xenova/nllb-200-distilled-600M'   // Italian
+        };
+        
+        // Initialize the translator when page loads
+        async function initTranslator() {
+            try {
+                // Create translation pipeline
+                pipeline = await transformers.pipeline(
+                    'translation',
+                    models.fr, // Default model
+                    { quantized: true } // Use quantized model for smaller size
+                );
+                
+                translateBtn.disabled = false;
+                translatedText.innerHTML = '<span class="loading">Ready to translate!</span>';
+                console.log('Translation model loaded successfully');
+            } catch (error) {
+                console.error('Failed to load model:', error);
+                translatedText.innerHTML = '<span style="color:red">Error loading translation model. See console for details.</span>';
+            }
+        }
+        
+        // Perform translation when button is clicked
+        async function translateText() {
+            const text = originalText.innerText;
+            const targetLang = languageSelect.value;
+            
+            translateBtn.disabled = true;
+            translatedText.innerHTML = '<span class="loading">Translating... (may take 5-15 seconds)</span>';
+            
+            try {
+                // Note: For different languages, we'd normally need to load different models
+                // This is a simplified version that uses the same multilingual model
+                const result = await pipeline(text, {
+                    src_lang: 'eng_Latn',  // English
+                    tgt_lang: getLanguageCode(targetLang)
+                });
+                
+                translatedText.innerText = result[0].translation_text;
+            } catch (error) {
+                console.error('Translation failed:', error);
+                translatedText.innerHTML = '<span style="color:red">Translation failed. See console for details.</span>';
+            } finally {
+                translateBtn.disabled = false;
+            }
+        }
+        
+        // Helper function to convert language codes
+        function getLanguageCode(lang) {
+            const codes = {
+                fr: 'fra_Latn',
+                es: 'spa_Latn',
+                de: 'deu_Latn',
+                it: 'ita_Latn'
+            };
+            return codes[lang] || 'fra_Latn';
+        }
+        
+        // Set up event listeners
+        translateBtn.addEventListener('click', translateText);
+        
+        // Start loading the model
+        initTranslator();
+    </script>
+</body>
+</html>
