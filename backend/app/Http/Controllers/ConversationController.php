@@ -63,7 +63,6 @@ class ConversationController extends Controller
     {
         try {
             $requestQuery = $request->query();
-            $lastPosition = $requestQuery["lastPosition"] ?: 0;
             $perPage = filter_var($requestQuery['per_page'] ?? 15, FILTER_VALIDATE_INT) ?: 15;
             $perPage = max($perPage, 1);
 
@@ -98,7 +97,6 @@ class ConversationController extends Controller
                 ->whereDoesntHave('conversation')
                 ->limit($missingCount)
                 ->with('role:id,name')
-                ->startWith($lastPosition)
                 ->get();
 
                 foreach ($usersWithoutConversation as $user) {
