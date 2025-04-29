@@ -2,47 +2,32 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
+use App\Models\Message;
+use App\Models\User;
 
 class MessageController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
+    public function sendMessage(Request $request)
     {
-        //
-    }
+        $data = $request->validate([
+            'message' => 'required|string',
+            'reciver_id' => 'required|exists:users,id', 
+        ]);
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
-    }
+        $sender_id = Auth::id();
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
-    }
+        $message = Message::create([
+            'message'     => $data['message'],
+            'sender_id'   => $sender_id,
+            'reciver_id'  => $data['reciver_id'],
+        ]);
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
+        return response()->json([
+            'success' => true,
+            'message' => 'Message sent successfully',
+            'data' => $message
+        ], 201);
     }
 }

@@ -2,15 +2,14 @@ import useConversation from '@/hooks/other/useConversation';
 import React from 'react';
 
 const Messenger = () => {
-  const { conversations ,setPage ,pagination } = useConversation();
+  const { conversations, setPage, pagination, page } = useConversation();
   const conversationList = Array.isArray(conversations) ? conversations : [];
 
-  // Separate conversations into recent and new
-  const recentConversations = conversationList.filter(conv => conv.conversation_id !== null);
-  const newConversations = conversationList.filter(conv => conv.conversation_id === null);
-
+  console.log(conversations);
+  console.log(pagination);
   return (
     <div className="w-full px-8 mb-4 p-6">
+      <button onClick={() => setPage(page + 1)}>add</button>
       <header className="mb-8 w-5/6 mx-auto">
         <h1 className="text-2xl font-bold text-gray-800">Messenger</h1>
         <p className="text-gray-600 mt-2">

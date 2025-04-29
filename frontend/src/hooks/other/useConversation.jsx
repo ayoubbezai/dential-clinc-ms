@@ -19,11 +19,8 @@ const useConversation = () => {
             console.log(data);
 
             if (data) {
-                setConversations(prev => [
-                    ...(page === 1 ? [] : prev),
-                    ...(Array.isArray(data.data) ? data.data : [])
-                ]);
-                setPagination(data?.pagination || {});
+                setConversations(data?.data?.data);
+                setPagination(data?.data?.pagination || {});
 
             } else {
                 console.error(error);

@@ -15,6 +15,8 @@ return new class extends Migration
             $table->id();
             $table->uuid('sender_id')->nullable();
             $table->foreign('sender_id')->references('id')->on('users')->onDelete('cascade');
+            $table->uuid('reciver_id')->nullable();
+            $table->foreign('reciver_id')->references('id')->on('users')->onDelete('cascade');
             $table->string("message");
             $table->timestamps();
         });

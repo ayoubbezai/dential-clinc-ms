@@ -15,6 +15,7 @@ use App\Http\Controllers\StockController;
 use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\AttachmentController;
 use App\Http\Controllers\ConversationController;
+use App\Http\Controllers\MessageController;
 use App\Http\Controllers\statController;
 use App\Models\Appointment;
 use App\Models\Conversation;
@@ -71,6 +72,7 @@ Route::middleware([$auth, 'role:dentist,receptionist'])->group(function () {
     Route::post('/startConversation', [ConversationController::class, 'startConversation']);
     Route::get('/getAllConversation', [ConversationController::class, 'getAllConversation']);
 });
+Route::post('/sendMessage', [MessageController::class, 'sendMessage']);
 Route::get('/dashboard_stat', [StatController::class, 'dashboardStat']);
 Route::get('/attachments/{id}/download', [AttachmentController::class, 'download']);
 

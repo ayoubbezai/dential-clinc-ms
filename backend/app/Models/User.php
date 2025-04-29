@@ -72,7 +72,13 @@ class User extends Authenticatable
     public function events(){
         return $this->hasMany(Event::class);
     }
-    public function conversation(){
-        return $this->hasOne(Conversation::class);
-    }
+public function sentMessages()
+{
+    return $this->hasMany(Message::class, 'sender_id');
+}
+
+public function receivedMessages()
+{
+    return $this->hasMany(Message::class, 'reciver_id');
+}
 }
