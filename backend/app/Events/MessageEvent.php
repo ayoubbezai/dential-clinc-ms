@@ -9,34 +9,26 @@ use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class TestMessageEvent implements ShouldBroadcast
+class MessageEvent implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
     public $message;
+    public $userId;
 
-    public function __construct($message)
+    public function __construct($message, $userId)
     {
         $this->message = $message;
+        $this->userId = $userId;
     }
 
     public function broadcastOn()
     {
-        // Broadcast to a channel like 'test-channel'
-        return new PrivateChannel('test-channel');
+        return new PrivateChannel('chat.'.$this->userId);
     }
 
     public function broadcastAs()
     {
-        return 'message.sent';
-    }
-
-    public function broadcastWith()
-    {
-        // Data sent to the frontend
-        return [
-            'message' => $this->message,
-            'time' => now()->toDateTimeString(),
-        ];
+        return 'private.message';
     }
 }

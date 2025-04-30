@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\ClinicPatientMessage;
 use App\Events\TestMessageEvent;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
@@ -49,8 +50,11 @@ class MessageController extends Controller
                 'reciver_id' => $receiver_id,
             ]);
 
-                    broadcast(new TestMessageEvent($message));
-
+    broadcast(new ClinicPatientMessage(
+        $message,
+        $userId,
+        $receiver_id
+    ));
 
             return response()->json([
                 'success' => true,

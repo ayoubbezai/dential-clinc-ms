@@ -18,24 +18,40 @@ const Conversation = () => {
     const messageList = messages || [];
 
     useEffect(() => {
+        const patientId = id;
+        const token = localStorage.getItem("token");
+
+        if (!patientId || !token) return;
+
         const pusher = new Pusher(import.meta.env.VITE_REVERB_APP_KEY, {
             wsHost: import.meta.env.VITE_REVERB_HOST,
             wsPort: import.meta.env.VITE_REVERB_PORT,
             forceTLS: false,
-            disableStats: true,
             enabledTransports: ["ws", "wss"],
+            authEndpoint: 'http://localhost:8000/api/broadcasting/auth',
             cluster: "",
+            auth: {
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                }
+            }
         });
 
-        const channel = pusher.subscribe(`test-channel`);
+        // Subscribe to the private channel with proper error handling
+        const channel = pusher.subscribe(`private-patient.${patientId}`);
 
         channel.bind('pusher:subscription_succeeded', () => {
-            console.log("✅ Subscribed to chat channel!");
+            console.log(`✅ Connected to patient channel (ID: ${patientId})`);
+        });
+
+        channel.bind('pusher:subscription_error', (error) => {
+            console.error('Failed to subscribe to channel:', error);
+            toast.error('Failed to connect to chat channel');
         });
 
         channel.bind('message.sent', (data) => {
-            console.log(" messaage recived ");
-
+            console.log("New message:", data);
+            // Add your message handling logic here
         });
 
         return () => {

@@ -1,4 +1,3 @@
-
 <?php
 
 use App\Http\Controllers\AuthController;
@@ -19,7 +18,12 @@ use App\Http\Controllers\MessageController;
 use App\Http\Controllers\statController;
 use App\Models\Appointment;
 use App\Models\Conversation;
+use Illuminate\Container\Attributes\Log;
+use Illuminate\Http\Client\Request;
+use Illuminate\Support\Facades\Broadcast;
 use Illuminate\Support\Facades\Route;
+
+// Add broadcasting authentication route
 
 $auth = 'auth:sanctum';
 
@@ -88,3 +92,5 @@ Route::get('/attachments/{id}/download', [AttachmentController::class, 'download
 Route::get('/sanctum/csrf-cookie', function () {
     return response()->json(['message' => 'CSRF cookie set']);
 });
+
+
