@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\TestMessageEvent;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -47,6 +48,7 @@ class MessageController extends Controller
                 'sender_id'  => $userId,
                 'reciver_id' => $receiver_id,
             ]);
+        broadcast(new TestMessageEvent("Test: ".$data['message']));
 
             return response()->json([
                 'success' => true,
@@ -66,7 +68,7 @@ public function getConversation(String $id, Request $request)
 {
     try {
         // Verify the user exists
-        User::findOrFail($id);
+        $user = User::findOrFail($id);
         $requestQuery = $request->query();
 
         $perPage = filter_var($requestQuery['per_page'] ?? 15, FILTER_VALIDATE_INT) ?: 15;
@@ -85,7 +87,7 @@ public function getConversation(String $id, Request $request)
                     ->where('reciver_id', 'clinc');
             })
             ->orWhere('reciver_id', $id)
-            ->orderBy('created_at', 'asc');
+            ->orderBy('created_at', 'desc');
 
         $paginatedMessages = $messages->paginate($perPage);
 
@@ -100,12 +102,14 @@ public function getConversation(String $id, Request $request)
 
         return response()->json([
             'success' => true,
-            'messages' => $transformedMessages,
+            'user'=>$user,
+            'data' => $transformedMessages,
             'pagination' => [
                 'total' => $paginatedMessages->total(),
                 'per_page' => $paginatedMessages->perPage(),
                 'current_page' => $paginatedMessages->currentPage(),
                 'last_page' => $paginatedMessages->lastPage(),
+                'has_more_pages' => $paginatedMessages->hasMorePages(),
                 'from' => $paginatedMessages->firstItem(),
                 'to' => $paginatedMessages->lastItem()
             ]

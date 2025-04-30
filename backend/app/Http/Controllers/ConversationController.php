@@ -17,28 +17,31 @@ class ConversationController extends Controller
         $perPage = filter_var($requestQuery['per_page'] ?? 15, FILTER_VALIDATE_INT) ?: 15;
         $perPage = max($perPage, 1);
 
-  
-
-  
-
         $data = User::select('users.id', 'users.name')
             ->leftJoin('roles', 'users.role_id', '=', 'roles.id')
             ->where('roles.name', 'patient')
             ->leftJoin(DB::raw("
                 (
                     SELECT 
-                        sender_id as user_id,
-                        MAX(created_at) as last_message_at,
-                        'sent' as message_type
-                    FROM messages
-                    GROUP BY sender_id
-                    UNION ALL
-                    SELECT 
-                        reciver_id as user_id, 
-                        MAX(created_at) as last_message_at,
-                        'received' as message_type
-                    FROM messages
-                    GROUP BY reciver_id
+                        user_id,
+                        MAX(last_message_at) as last_message_at,
+                        MAX(message_type) as message_type
+                    FROM (
+                        SELECT 
+                            sender_id as user_id,
+                            MAX(created_at) as last_message_at,
+                            'sent' as message_type
+                        FROM messages
+                        GROUP BY sender_id
+                        UNION
+                        SELECT 
+                            reciver_id as user_id, 
+                            MAX(created_at) as last_message_at,
+                            'received' as message_type
+                        FROM messages
+                        GROUP BY reciver_id
+                    ) as combined_messages
+                    GROUP BY user_id
                 ) as last_messages
             "), 'users.id', '=', 'last_messages.user_id')
             ->orderByDesc('last_messages.last_message_at')
@@ -49,19 +52,14 @@ class ConversationController extends Controller
                 $query->orderBy('created_at', 'desc')->limit(1);
             }]);
 
-
-                  if(!empty($requestQuery["search"])){
-
+        if(!empty($requestQuery["search"])) {
             $search = $requestQuery["search"];
-            $data->where(function($query) use ($search){
+            $data->where(function($query) use ($search) {
                 $query->where('users.name', 'like', '%' . $search . '%');
-            }
-        );
-
+            });
         }
 
-        $paginatedData =$data->paginate($perPage);
-
+        $paginatedData = $data->paginate($perPage);
 
         // Transform the result
         $transformedData = $paginatedData->getCollection()->map(function ($user) {
@@ -91,10 +89,8 @@ class ConversationController extends Controller
                 'id' => $user->id,
                 'name' => $user->name,
                 'last_message' => $lastMessage ? [
-                    'id' => $lastMessage->id,
                     'message' => $lastMessage->message,
                     'created_at' => $lastMessage->created_at,
-                    'updated_at' => $lastMessage->updated_at
                 ] : null,
                 'message_type' => $messageType
             ];
@@ -108,11 +104,9 @@ class ConversationController extends Controller
                 'per_page' => $paginatedData->perPage(),
                 'current_page' => $paginatedData->currentPage(),
                 'last_page' => $paginatedData->lastPage(),
-                'from' => $paginatedData->firstItem(),
-                'to' => $paginatedData->lastItem(),
                 'has_more_pages' => $paginatedData->hasMorePages(),
-                'next_page_url' => $paginatedData->nextPageUrl(),
-                'prev_page_url' => $paginatedData->previousPageUrl(),
+                'from' => $paginatedData->firstItem(),
+                'to' => $paginatedData->lastItem()
             ]
         ], Response::HTTP_OK);
 
