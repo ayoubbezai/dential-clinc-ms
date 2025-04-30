@@ -3,6 +3,7 @@ import { lazy, Suspense } from "react";
 import ProtectedRoute from "./ProtectedRoute";
 import RoleBasedRoute from "./RoleBasedRoute";
 import PatientDetailsResp from "@/pages/receptionist/PatientDetailsResp";
+import Conversation from "@/pages/shared/Conversation";
 
 // Lazy Load Pages
 const DentistDashboard = lazy(() => import("../pages/dentist/DentistDashboard"));
@@ -47,6 +48,7 @@ const AppRoutes = () => {
                         <Route path="/users_list" element={<UsersList />} />
                         <Route path="/appointments_list" element={<AppointmentList />} />
                         <Route path="/messanger" element={<Messanger />} />
+                        <Route path="/messanger/:id" element={<Conversation />} />
                     </Route>
 
                     {/* Receptionist Routes */}

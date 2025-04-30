@@ -1,14 +1,15 @@
 import api from "../other/api";
 
 export const ConversationService = {
-  async getConversations(per_page, page = 1) {
+  async getConversations(perPage, page = 1, search) {
     try {
       const params = new URLSearchParams();
       const appendParam = (key, value) => {
         if (value) params.append(key, value);
       };
 
-      appendParam("per_page", per_page);
+      appendParam("search", search);
+      appendParam("per_page", perPage);
       appendParam("page", page);
 
       // API call using api

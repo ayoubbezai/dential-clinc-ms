@@ -4,30 +4,118 @@ namespace App\Http\Controllers;
 
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use App\Models\Message;
 use App\Models\User;
+use Illuminate\Support\Facades\DB;
 
 class MessageController extends Controller
 {
     public function sendMessage(Request $request)
     {
-        $data = $request->validate([
-            'message' => 'required|string',
-            'reciver_id' => 'required|exists:users,id', 
-        ]);
+        try {
+            $userId = Auth::id();
+            
+            $data = $request->validate([
+                'message' => 'required|string',
+                'reciver_id' => 'nullable|sometimes|exists:users,id',
+            ]);
 
-        $sender_id = Auth::id();
+            // Get user with role
+            $sender = User::with("role")->find($userId);
+            
+            if (!$sender) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'User not found'
+                ], Response::HTTP_NOT_FOUND);
+            }
+            
+            if (!$sender->role) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'User role not found'
+                ], Response::HTTP_NOT_FOUND);
+            }
 
-        $message = Message::create([
-            'message'     => $data['message'],
-            'sender_id'   => $sender_id,
-            'reciver_id'  => $data['reciver_id'],
-        ]);
+            $receiver_id = ($sender->role->name == "patient")
+                ? 'clinc'
+                : $data['reciver_id'];
+
+            $message = Message::create([
+                'message'    => $data['message'],
+                'sender_id'  => $userId,
+                'reciver_id' => $receiver_id,
+            ]);
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Message sent successfully',
+                'data' => $message  // Changed from $userId to $message
+            ], Response::HTTP_CREATED);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to send message',
+                'error' => $e->getMessage(),
+            ], Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+    }
+public function getConversation(String $id, Request $request)
+{
+    try {
+        // Verify the user exists
+        User::findOrFail($id);
+        $requestQuery = $request->query();
+
+        $perPage = filter_var($requestQuery['per_page'] ?? 15, FILTER_VALIDATE_INT) ?: 15;
+        $perPage = max($perPage, 1);
+
+        $messages = Message::select([
+                'message',
+                'created_at',
+                DB::raw('CASE 
+                    WHEN sender_id = "' . $id . '" THEN "sent" 
+                    ELSE "received" 
+                END as type')
+            ])
+            ->where(function($query) use ($id) {
+                $query->where('sender_id', $id)
+                    ->where('reciver_id', 'clinc');
+            })
+            ->orWhere('reciver_id', $id)
+            ->orderBy('created_at', 'asc');
+
+        $paginatedMessages = $messages->paginate($perPage);
+
+        // Transform the collection to match desired structure
+        $transformedMessages = collect($paginatedMessages->items())->map(function ($message) {
+            return [
+                'message' => $message->message,
+                'type' => $message->type,
+                'created_at' => $message->created_at
+            ];
+        });
 
         return response()->json([
             'success' => true,
-            'message' => 'Message sent successfully',
-            'data' => $message
-        ], 201);
+            'messages' => $transformedMessages,
+            'pagination' => [
+                'total' => $paginatedMessages->total(),
+                'per_page' => $paginatedMessages->perPage(),
+                'current_page' => $paginatedMessages->currentPage(),
+                'last_page' => $paginatedMessages->lastPage(),
+                'from' => $paginatedMessages->firstItem(),
+                'to' => $paginatedMessages->lastItem()
+            ]
+        ]);
+
+    }catch (\Exception $e) {
+        return response()->json([
+            'success' => false,
+            'message' => 'An error occurred while fetching conversation',
+            'error' => $e->getMessage()
+        ], 500);
     }
-}
+}}

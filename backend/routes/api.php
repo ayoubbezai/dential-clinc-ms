@@ -45,6 +45,7 @@ Route::middleware($auth)->prefix('auth')->group(function () {
 
 Route::middleware([$auth, 'role:patient'])->group(function () {
     Route::get('mobile/appointments', [AppointmentController::class, 'getAppointmentsOfPatient']);
+
 });
 Route::middleware([$auth, 'role:dentist,receptionist'])->group(function () {
     Route::post('users/receptionist', [UserController::class, 'createReceptionist']);
@@ -71,8 +72,14 @@ Route::middleware([$auth, 'role:dentist,receptionist'])->group(function () {
     Route::get('/payments_stat', [PaymentController::class, 'paymentStat']);
     Route::post('/startConversation', [ConversationController::class, 'startConversation']);
     Route::get('/getAllConversation', [ConversationController::class, 'getAllConversation']);
+
 });
-Route::post('/sendMessage', [MessageController::class, 'sendMessage']);
+
+Route::middleware($auth)->group(function () {
+    Route::post('/sendMessage', [MessageController::class, 'sendMessage']);
+    Route::get('/getConversation/{id}', [MessageController::class, 'getConversation']);
+
+});
 Route::get('/dashboard_stat', [StatController::class, 'dashboardStat']);
 Route::get('/attachments/{id}/download', [AttachmentController::class, 'download']);
 

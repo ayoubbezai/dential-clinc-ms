@@ -1,54 +1,68 @@
-import React, { useCallback, useEffect, useState } from 'react'
-import _ from "lodash";
+import { useState, useEffect } from 'react';
 import { ConversationService } from '@/services/shared/ConcersationsService';
 
 const useConversation = () => {
     const [page, setPage] = useState(1);
-    const [perPage, setPerPage] = useState(5);
+    const [perPage, setPerPage] = useState(1);
+    const [search, setSearch] = useState("");
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
     const [pagination, setPagination] = useState({});
     const [conversations, setConversations] = useState([]);
+    const [prevSearch, setPrevSearch] = useState("");
 
-    const fetchConversation = useCallback(
-        _.debounce(async () => {
-            setLoading(true);
-            setError(null);
+    const fetchConversation = async () => {
+        setLoading(true);
+        setError(null);
 
-            const { data, error } = await ConversationService.getConversations(perPage, page);
-            console.log(data);
+        try {
+            const { data, error } = await ConversationService.getConversations(perPage, page, search);
 
-            if (data) {
-                setConversations(data?.data?.data);
-                setPagination(data?.data?.pagination || {});
-
-            } else {
-                console.error(error);
-                setError(error || 'An error occurred while fetching conversations.');
-
+            if (error) {
+                throw new Error(error);
             }
 
-
+            if (data) {
+                setConversations(prev => {
+                    if (search !== prevSearch || page === 1) {
+                        return data?.data || [];
+                    }
+                    return [...prev, ...(data?.data || [])];
+                });
+                setPagination(data?.pagination || {});
+                setPrevSearch(search); 
+            }
+        } catch (err) {
+            console.error('Fetch error:', err);
+            setError(err.message || 'Error fetching conversations');
+        } finally {
             setLoading(false);
-        }, 0),
-        [perPage, page]
-    );
+        }
+    };
+
+    useEffect(() => {
+        if (search !== prevSearch) {
+            setPage(1);
+        }
+    }, [search]);
 
     useEffect(() => {
         fetchConversation();
-    }, [fetchConversation, page]);
+    }, [page, perPage, search]);
 
     return {
         page,
         setPage,
         perPage,
         setPerPage,
+        search,
+        setSearch,
         loading,
         error,
         conversations,
         pagination,
         fetchConversation,
     };
-}
+};
 
 export default useConversation;
