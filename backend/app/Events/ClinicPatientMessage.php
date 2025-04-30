@@ -26,8 +26,7 @@ class ClinicPatientMessage implements ShouldBroadcast
 
     public function broadcastOn()
     {
-        // Channel name format: clinic.patient.{patientId}
-        return new PrivateChannel('patient.1');
+    return new PrivateChannel("chat.patient.{$this->patientId}");
     }
 
     public function broadcastAs()

@@ -85,7 +85,7 @@ public function getConversation(String $id, Request $request)
                 'created_at',
                 DB::raw('CASE 
                     WHEN sender_id = "' . $id . '" THEN "sent" 
-                    ELSE "received" 
+                    ELSE "received"
                 END as type')
             ])
             ->where(function($query) use ($id) {

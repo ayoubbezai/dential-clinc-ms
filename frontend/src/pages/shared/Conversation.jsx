@@ -5,9 +5,10 @@ import { useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import Echo from 'laravel-echo';
 import Pusher from 'pusher-js';
+import initializePusher from '@/services/other/initializePusher';
 const Conversation = () => {
     const { id } = useParams();
-    const { messages, loading, error, user, mutate, pagination, setPage } = useMessages(id);
+    const { messages, setMessages, loading, error, user, pagination, setPage } = useMessages(id);
     const [message, setMessage] = useState('');
     const [isSending, setIsSending] = useState(false);
     const scrollRef = useRef(null);
@@ -18,30 +19,11 @@ const Conversation = () => {
     const messageList = messages || [];
 
     useEffect(() => {
-        const patientId = id;
-        const token = localStorage.getItem("token");
 
-        if (!patientId || !token) return;
-
-        const pusher = new Pusher(import.meta.env.VITE_REVERB_APP_KEY, {
-            wsHost: import.meta.env.VITE_REVERB_HOST,
-            wsPort: import.meta.env.VITE_REVERB_PORT,
-            forceTLS: false,
-            enabledTransports: ["ws", "wss"],
-            authEndpoint: 'http://localhost:8000/api/broadcasting/auth',
-            cluster: "",
-            auth: {
-                headers: {
-                    'Authorization': `Bearer ${token}`,
-                }
-            }
-        });
-
-        // Subscribe to the private channel with proper error handling
-        const channel = pusher.subscribe(`private-patient.${patientId}`);
-
+        const pusherInstance = initializePusher();
+        const channel = pusherInstance.subscribe(`private-chat.patient.${id}`);
         channel.bind('pusher:subscription_succeeded', () => {
-            console.log(`✅ Connected to patient channel (ID: ${patientId})`);
+            console.log(`✅ Connected to patient channel (ID: ${id})`);
         });
 
         channel.bind('pusher:subscription_error', (error) => {
@@ -51,7 +33,6 @@ const Conversation = () => {
 
         channel.bind('message.sent', (data) => {
             console.log("New message:", data);
-            // Add your message handling logic here
         });
 
         return () => {
@@ -70,8 +51,18 @@ const Conversation = () => {
         try {
             const { data, error } = await ConversationService.sendMessage(id, message);
             if (error) throw new Error(error.message || 'Failed to send message');
+            console.log(data);
+
             if (data) {
-                setMessage('');
+                const newMessage = {
+                    message: message, 
+                    type: 'received',
+                    created_at: new Date().toISOString(), 
+                };
+
+                setMessages(prev => [newMessage, ...prev]);
+
+                setMessage(''); 
             }
         } catch (err) {
             console.error('Send message error:', err);
@@ -80,7 +71,6 @@ const Conversation = () => {
             setIsSending(false);
         }
     };
-
     const handleKeyDown = (e) => {
         if (e.key === 'Enter' && !e.shiftKey) {
             e.preventDefault();
@@ -105,7 +95,7 @@ const Conversation = () => {
         const observer = new IntersectionObserver(
             ([entry]) => {
                 if (entry.isIntersecting && checkLoadMore()) {
-                    // Save scroll height before load
+                    // Save current scroll position
                     if (scrollRef.current) {
                         prevScrollHeight.current = scrollRef.current.scrollHeight;
                     }
@@ -124,6 +114,15 @@ const Conversation = () => {
             observer.disconnect();
         };
     }, [checkLoadMore, setPage]);
+
+    useEffect(() => {
+        if (prevScrollHeight.current && scrollRef.current && !loading) {
+            const newScrollHeight = scrollRef.current.scrollHeight;
+            const scrollDiff = newScrollHeight - prevScrollHeight.current;
+            scrollRef.current.scrollTop = scrollDiff;
+            prevScrollHeight.current = 0;
+        }
+    }, [messages, loading]);
 
     return (
         <div className='w-5/6 mx-auto bg-gray-50 h-screen flex flex-col justify-between'>
@@ -163,19 +162,19 @@ const Conversation = () => {
                             <p className="text-gray-500 text-sm">No messages yet</p>
                         </div>
                     ) : (
-                        messageList.map((msg, index) => (
+                        [...messageList].reverse().map((msg, index) => (
                             <div
-                                key={index}
-                                className={`flex ${msg.type === 'received' ? 'justify-end' : 'justify-start'}`}
+                                key={msg.id || index}
+                                className={`flex ${msg?.type === 'received' ? 'justify-end' : 'justify-start'}`}
                             >
                                 <div
-                                    className={`max-w-xs px-3 py-1.5 rounded-lg text-sm ${msg.type === 'received'
+                                    className={`max-w-xs px-3 py-1.5 rounded-lg text-sm ${msg?.type === 'received'
                                         ? 'bg-blue-500 text-white rounded-br-none'
                                         : 'bg-white border border-gray-200 text-gray-800 rounded-bl-none'}`}
                                 >
-                                    <p className="leading-tight">{msg.message}</p>
+                                    <p className="leading-tight">{msg?.message}</p>
                                     <p className="text-xs mt-0.5 opacity-70 text-right">
-                                        {new Date(msg.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                                        {new Date(msg?.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                                     </p>
                                 </div>
                             </div>

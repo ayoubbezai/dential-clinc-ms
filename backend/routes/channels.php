@@ -12,11 +12,10 @@ Broadcast::channel('App.Models.User.{id}', function ($user, $id) {
     return (int) $user->id === (int) $id;
 });
 
-Broadcast::channel('patient.{id}', function ($user, $patientId) {
-    // Check if user is authenticated and has permission to access this patient's channel
+Broadcast::channel('chat.patient.{id}', function ($user, $patientId) {
     return $user && (
-        $user->hasRole('dentist') || 
-        $user->hasRole('receptionist') || 
+        $user->hasRole('dentist') ||
+        $user->hasRole('receptionist') ||
         $user->id === $patientId
     );
 });

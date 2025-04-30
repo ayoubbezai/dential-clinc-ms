@@ -11,6 +11,8 @@ const useMessages = (id) => {
     const [messages, setMessages] = useState([]);
 
     const fetchMessages = async () => {
+        if (!id) return;
+
         setLoading(true);
         setError(null);
 
@@ -20,14 +22,14 @@ const useMessages = (id) => {
             if (error) {
                 throw new Error(error);
             }
-            console.log(data)
 
             if (data) {
                 setMessages(prev => {
                     if (page === 1) {
                         return data?.data || [];
                     }
-                    return [...(data?.data || []), ...prev];
+                    const newMessages = data?.data || [];
+                    return [...prev, ...newMessages];
                 });
                 setPagination(data?.pagination || {});
                 setUser(data?.user || {});
@@ -40,9 +42,10 @@ const useMessages = (id) => {
         }
     };
 
-
     useEffect(() => {
-        fetchMessages();
+        if (id) {
+            fetchMessages();
+        }
     }, [page, perPage, id]);
 
     return {
@@ -56,6 +59,7 @@ const useMessages = (id) => {
         pagination,
         user,
         fetchMessages,
+        setMessages
     };
 };
 
