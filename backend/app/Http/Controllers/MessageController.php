@@ -48,7 +48,9 @@ class MessageController extends Controller
                 'sender_id'  => $userId,
                 'reciver_id' => $receiver_id,
             ]);
-        broadcast(new TestMessageEvent("Test: ".$data['message']));
+
+                    broadcast(new TestMessageEvent($message));
+
 
             return response()->json([
                 'success' => true,

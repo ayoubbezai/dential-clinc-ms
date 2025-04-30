@@ -17,23 +17,32 @@ const Conversation = () => {
 
     const messageList = messages || [];
 
+    useEffect(() => {
+        const pusher = new Pusher(import.meta.env.VITE_REVERB_APP_KEY, {
+            wsHost: import.meta.env.VITE_REVERB_HOST,
+            wsPort: import.meta.env.VITE_REVERB_PORT,
+            forceTLS: false,
+            disableStats: true,
+            enabledTransports: ["ws", "wss"],
+            cluster: "",
+        });
 
+        const channel = pusher.subscribe(`test-channel`);
 
-    const pusher = new Pusher(import.meta.env.VITE_REVERB_APP_KEY, {
-        wsHost: import.meta.env.VITE_REVERB_HOST,
-        wsPort: import.meta.env.VITE_REVERB_PORT,
-        forceTLS: false,
-        disableStats: true,
-        enabledTransports: ["ws", "wss"],
-        cluster: "",
-    });
+        channel.bind('pusher:subscription_succeeded', () => {
+            console.log("✅ Subscribed to chat channel!");
+        });
 
-    const channel = pusher.subscribe(`test-channel`);
-    channel.bind('pusher:subscription_succeeded', () => {
-        console.log("✅ Subscribed to chat channel!");
-    });
+        channel.bind('message.sent', (data) => {
+            console.log(" messaage recived ");
 
+        });
 
+        return () => {
+            channel.unbind_all();
+            channel.unsubscribe();
+        };
+    }, [id]);
 
 
 
@@ -47,7 +56,6 @@ const Conversation = () => {
             if (error) throw new Error(error.message || 'Failed to send message');
             if (data) {
                 setMessage('');
-                mutate(); // refetch messages
             }
         } catch (err) {
             console.error('Send message error:', err);

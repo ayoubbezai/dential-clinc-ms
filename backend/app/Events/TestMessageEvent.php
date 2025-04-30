@@ -21,6 +21,21 @@ class TestMessageEvent implements ShouldBroadcast
 
     public function broadcastOn()
     {
+        // Broadcast to a channel like 'test-channel'
         return new Channel('test-channel');
+    }
+
+    public function broadcastAs()
+    {
+        return 'message.sent';
+    }
+
+    public function broadcastWith()
+    {
+        // Data sent to the frontend
+        return [
+            'message' => $this->message,
+            'time' => now()->toDateTimeString(),
+        ];
     }
 }
