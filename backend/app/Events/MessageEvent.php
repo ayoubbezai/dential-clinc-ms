@@ -24,11 +24,11 @@ class MessageEvent implements ShouldBroadcast
 
     public function broadcastOn()
     {
-        return new PrivateChannel('chat.'.$this->userId);
+        return new PrivateChannel('patient.'.$this->userId);
     }
 
     public function broadcastAs()
     {
-        return 'private.message';
+        return 'message.sent';
     }
 }

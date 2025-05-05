@@ -44,17 +44,30 @@ class MessageController extends Controller
                 ? 'clinc'
                 : $data['reciver_id'];
 
-            $message = Message::create([
+                            $message = Message::create([
                 'message'    => $data['message'],
                 'sender_id'  => $userId,
                 'reciver_id' => $receiver_id,
             ]);
+            
+                if ($sender->role->name == "patient"){
 
-    broadcast(new ClinicPatientMessage(
+                        broadcast(new ClinicPatientMessage(
         $message,
         $userId,
-        $receiver_id
-    ));
+    ))->toOthers();
+                    
+                }else{
+                        broadcast(new ClinicPatientMessage(
+        $message,
+$receiver_id,
+
+    ))->toOthers();
+                }
+
+
+
+
 
             return response()->json([
                 'success' => true,

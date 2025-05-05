@@ -3,12 +3,12 @@ import Pusher from "pusher-js";
 
 const initializePusher = () => {
   const token = localStorage.getItem("token");
-  const pusher = new Pusher(import.meta.env.VITE_REVERB_APP_KEY, {
-    wsHost: import.meta.env.VITE_REVERB_HOST,
-    wsPort: import.meta.env.VITE_REVERB_PORT,
+  const pusher = new Pusher("xs5n6ysk7wwrglkxyrle", {
+    wsHost: "192.168.1.8",
+    wsPort: 8080,
     forceTLS: false,
     enabledTransports: ["ws", "wss"],
-    authEndpoint: "http://localhost:8000/api/broadcasting/auth",
+    authEndpoint: "http://192.168.1.8:8000/api/broadcasting/auth",
     cluster: "",
     auth: {
       headers: {

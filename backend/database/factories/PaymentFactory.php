@@ -14,7 +14,7 @@ class PaymentFactory extends Factory
         return [
             'folder_id' => Folder::inRandomOrder()->first()->id,
             'amount' => $this->faker->randomFloat(2, 10, 1000), // Random amount
-            'type' => $this->faker->randomElement(['income']),
+            'type' => $this->faker->randomElement(['income','expense']),
             'created_at' => $this->faker->dateTimeThisYear(),
         ];
     }

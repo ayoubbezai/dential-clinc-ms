@@ -33,6 +33,16 @@ const Conversation = () => {
 
         channel.bind('message.sent', (data) => {
             console.log("New message:", data);
+            if (data?.message?.sender_id === id) {
+                const newMessage = {
+                    message: data?.message?.message,
+                    type: 'sent',
+                    created_at: new Date().toISOString(),
+                };
+                setMessages(prev => [newMessage, ...prev]);
+
+                setMessage('');
+            }
         });
 
         return () => {
@@ -55,14 +65,14 @@ const Conversation = () => {
 
             if (data) {
                 const newMessage = {
-                    message: message, 
+                    message: message,
                     type: 'received',
-                    created_at: new Date().toISOString(), 
+                    created_at: new Date().toISOString(),
                 };
 
                 setMessages(prev => [newMessage, ...prev]);
 
-                setMessage(''); 
+                setMessage('');
             }
         } catch (err) {
             console.error('Send message error:', err);

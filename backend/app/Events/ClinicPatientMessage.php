@@ -14,13 +14,11 @@ class ClinicPatientMessage implements ShouldBroadcast
     use InteractsWithSockets, SerializesModels;
 
     public $message;
-    public $senderId;
     public $patientId;
 
-    public function __construct($message, $senderId, $patientId)
+    public function __construct($message, $patientId)
     {
         $this->message = $message;
-        $this->senderId = $senderId;
         $this->patientId = $patientId;
     }
 
