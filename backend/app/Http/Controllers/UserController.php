@@ -3,10 +3,13 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use App\Models\Role;
+use Illuminate\Contracts\Encryption\DecryptException;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Log; // For logging errors
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Crypt;
 
 class UserController extends Controller
 {
@@ -252,6 +255,44 @@ class UserController extends Controller
                 'error' => $e->getMessage(),
             ], Response::HTTP_INTERNAL_SERVER_ERROR); // 500 Internal Server Error
         }
+    }
+    public function userProfile(){
+        try{
+                $userId = Auth::id();
+
+            $user = User::with("patient:id,user_id,phone,gender,age")->select(["id","name","email"])->findOrFail($userId);
+            try{
+
+                $user->patient->phone = $user->patient->phone ?   Crypt::decryptString($user->patient->phone) : null ;
+            }catch (DecryptException $e) {
+
+            return response()->json([
+        "success" => false,
+        "message" => "Failed to dycript patient phone  number",
+        "error" => "Decryption failed due to invalid data."
+    ], Response::HTTP_INTERNAL_SERVER_ERROR);
+        
+    }
+
+    
+
+        return response()->json([
+            'success' => true,
+            'message' => 'User retrived successfully',
+            'data' => $user,
+        ], Response::HTTP_OK); // 200 OK
+
+
+        
+    }catch (\Exception $e) {
+            
+            return response()->json([
+                'success' => false,
+                'message' => 'An error occurred',
+                'error' => $e->getMessage(),
+            ], Response::HTTP_INTERNAL_SERVER_ERROR); // 500 Internal Server Error
+        }
+
     }
 
   

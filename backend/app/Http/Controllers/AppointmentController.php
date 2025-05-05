@@ -379,14 +379,19 @@ $perPage = !empty($request_query["per_page"]) ? Max($request_query["per_page"],1
         }
 
 
-$appointments = $appointmentsQuery->select('id', 'folder_id', 'title', 'content', 'tooth', 'status')
+$appointments = $appointmentsQuery->select('id', 'folder_id', 'title', 'content', 'tooth', 'status','date')->orderBy("date","desc")
             ->paginate($perPage);
 
         return response()->json([
             "success" => true,
             "message" => "Appointments retrieved successfully",
             "data" => $appointments->items(),
-        ], Response::HTTP_OK);
+            'pagination' => [
+        'total_items' => $appointments->total(), // Total number of items
+        'items_per_page' => $appointments->perPage(), // Items per page
+        'current_page' => $appointments->currentPage(), // Current page number
+        'total_pages' => $appointments->lastPage(), // Last page number
+        ], Response::HTTP_OK]);
     } catch (\Exception $e) {
         return response()->json([
             "success" => false,
