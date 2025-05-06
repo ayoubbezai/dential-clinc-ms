@@ -50,6 +50,7 @@ Route::middleware($auth)->prefix('auth')->group(function () {
 Route::middleware([$auth, 'role:patient'])->group(function () {
     Route::get('mobile/appointments', [AppointmentController::class, 'getAppointmentsOfPatient']);
     Route::get('profile', [UserController::class, 'userProfile']);
+    Route::get('getConversation', [MessageController::class, 'getConversationPatient']);
 
 });
 Route::middleware([$auth, 'role:dentist,receptionist'])->group(function () {

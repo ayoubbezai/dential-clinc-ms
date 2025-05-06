@@ -19,8 +19,11 @@ const Conversation = () => {
     const messageList = messages || [];
 
     useEffect(() => {
+        //first link the web socket
 
         const pusherInstance = initializePusher();
+
+        //subscrib to the channel 
         const channel = pusherInstance.subscribe(`private-chat.patient.${id}`);
         channel.bind('pusher:subscription_succeeded', () => {
             console.log(`✅ Connected to patient channel (ID: ${id})`);
@@ -30,6 +33,7 @@ const Conversation = () => {
             console.error('Failed to subscribe to channel:', error);
             toast.error('Failed to connect to chat channel');
         });
+        //listen to the message 
 
         channel.bind('message.sent', (data) => {
             console.log("New message:", data);
@@ -52,7 +56,7 @@ const Conversation = () => {
     }, [id]);
 
 
-
+    //function to send the message
     const handleSendMessage = async (e) => {
         e.preventDefault();
         if (!message.trim() || isSending) return;
@@ -81,6 +85,7 @@ const Conversation = () => {
             setIsSending(false);
         }
     };
+    //use keyborad to send
     const handleKeyDown = (e) => {
         if (e.key === 'Enter' && !e.shiftKey) {
             e.preventDefault();
@@ -88,10 +93,13 @@ const Conversation = () => {
         }
     };
 
+    //check of there are more 
+
     const checkLoadMore = useCallback(() => {
         return !loading && pagination?.has_more_pages;
     }, [loading, pagination]);
 
+    //check if the visible part is full or not 
     useEffect(() => {
         if (!initialLoadDone && !loading && scrollRef.current?.scrollHeight > scrollRef.current?.clientHeight) {
             setInitialLoadDone(true);
@@ -125,15 +133,29 @@ const Conversation = () => {
         };
     }, [checkLoadMore, setPage]);
 
+    //this is to keep potion when add new messages
     useEffect(() => {
-        if (prevScrollHeight.current && scrollRef.current && !loading) {
+        if (!scrollRef.current) return;
+
+        // When loading older messages (pagination)
+        if (prevScrollHeight.current && !loading) {
             const newScrollHeight = scrollRef.current.scrollHeight;
             const scrollDiff = newScrollHeight - prevScrollHeight.current;
-            scrollRef.current.scrollTop = scrollDiff;
+            scrollRef.current.scrollTop += scrollDiff;
             prevScrollHeight.current = 0;
         }
-    }, [messages, loading]);
+        // When new messages arrive (real-time)
+        else if (!loading && !prevScrollHeight.current) {
+            // Only auto-scroll if we were near bottom before new message
+            const { scrollTop, scrollHeight, clientHeight } = scrollRef.current;
+            const wasNearBottom = scrollHeight - (scrollTop + clientHeight) < 50;
 
+            if (wasNearBottom) {
+                scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
+            }
+        }
+    }, [messages, loading]);
+    
     return (
         <div className='w-5/6 mx-auto bg-gray-50 h-screen flex flex-col justify-between'>
             {/* Header */}

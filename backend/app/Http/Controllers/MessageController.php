@@ -141,4 +141,63 @@ public function getConversation(String $id, Request $request)
             'error' => $e->getMessage()
         ], 500);
     }
-}}
+}
+public function getConversationPatient( Request $request)
+{
+    try {
+                $user = Auth::user();
+                $user_id = $user->id;
+
+        $requestQuery = $request->query();
+
+        $perPage = filter_var($requestQuery['per_page'] ?? 15, FILTER_VALIDATE_INT) ?: 15;
+        $perPage = max($perPage, 1);
+
+        $messages = Message::select([
+                'message',
+                'created_at',
+                DB::raw('CASE 
+                    WHEN reciver_id = "' . $user_id . '" THEN "received" 
+                    ELSE "sent"
+                END as type')
+            ])
+            ->where(function($query) use ($user_id) {
+                $query->where('reciver_id', $user_id);
+            })
+            ->orWhere('sender_id', $user_id)
+            ->orderBy('created_at', 'desc');
+
+        $paginatedMessages = $messages->paginate($perPage);
+
+        // Transform the collection to match desired structure
+        $transformedMessages = collect($paginatedMessages->items())->map(function ($message) {
+            return [
+                'message' => $message->message,
+                'type' => $message->type,
+                'created_at' => $message->created_at
+            ];
+        });
+
+        return response()->json([
+            'success' => true,
+            'data' => $transformedMessages,
+            'pagination' => [
+                'total' => $paginatedMessages->total(),
+                'per_page' => $paginatedMessages->perPage(),
+                'current_page' => $paginatedMessages->currentPage(),
+                'last_page' => $paginatedMessages->lastPage(),
+                'has_more_pages' => $paginatedMessages->hasMorePages(),
+                'from' => $paginatedMessages->firstItem(),
+                'to' => $paginatedMessages->lastItem()
+            ]
+        ]);
+
+    }catch (\Exception $e) {
+        return response()->json([
+            'success' => false,
+            'message' => 'An error occurred while fetching conversation',
+            'error' => $e->getMessage()
+        ], 500);
+    }
+}
+}
