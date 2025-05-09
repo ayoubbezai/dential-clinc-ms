@@ -35,6 +35,7 @@
     "axios": "^1.8.4",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
+    "framer-motion": "^12.10.5",
     "laravel-echo": "^2.0.2",
     "lodash": "^4.17.21",
     "lodash.debounce": "^4.0.8",
