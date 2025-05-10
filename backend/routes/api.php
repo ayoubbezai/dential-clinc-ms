@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AgentController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\PatientController;
@@ -78,6 +79,8 @@ Route::middleware([$auth, 'role:dentist,receptionist'])->group(function () {
     Route::get('/payments_stat', [PaymentController::class, 'paymentStat']);
     Route::post('/startConversation', [ConversationController::class, 'startConversation']);
     Route::get('/getAllConversation', [ConversationController::class, 'getAllConversation']);
+    Route::post('/ask', [AgentController::class, 'ask']);
+
 
 });
 
