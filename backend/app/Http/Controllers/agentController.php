@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Auth;
+
 
 class AgentController extends Controller
 {
@@ -16,10 +18,13 @@ class AgentController extends Controller
         ]);
 
         try {
+            $userId = Auth::id();
+
             // Make the HTTP request to the external API
             $response = Http::post('http://127.0.0.1:8000/ask', [
                 'question' => $validated['question'],
                 "deepSearch" => $validated['deepSearch'] ?? false,
+                "userId" => $userId,
             ]);
 
             if ($response->successful()) {
