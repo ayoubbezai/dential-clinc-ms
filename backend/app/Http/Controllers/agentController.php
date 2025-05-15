@@ -12,18 +12,19 @@ class AgentController extends Controller
         // Validate the incoming request
         $validated = $request->validate([
             'question' => 'required|string',
+            'deepSearch' => 'nullable|boolean',
         ]);
 
         try {
             // Make the HTTP request to the external API
-            $response = Http::post('http://192.168.1.8:8001/ask', [
+            $response = Http::post('http://127.0.0.1:8000/ask', [
                 'question' => $validated['question'],
+                "deepSearch" => $validated['deepSearch'] ?? false,
             ]);
 
-            // Check if the request was successful
             if ($response->successful()) {
                 return response()->json([
-                    'answer' => $response->json(), // or $response->json()['answer'] if structured
+                    'answer' => $response->json(),
                     'status' => 'success',
                 ]);
             } else {
