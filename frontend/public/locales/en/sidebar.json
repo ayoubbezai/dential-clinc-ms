@@ -1,0 +1,12 @@
+{
+  "overview": "Overview",
+  "schedule": "Schedule",
+  "patients": "Patients List",
+  "appointments": "Appointments",
+  "users": "Staff/Users",
+  "payment": "Payment",
+  "inventory": "Inventory",
+  "chat": "Messenger",
+  "logout": "Logout",
+  "loadingLinks": "Loading links..."
+}

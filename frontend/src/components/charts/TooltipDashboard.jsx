@@ -6,34 +6,52 @@ import {
     CardTitle,
 } from "@/components/designSystem/card"
 import { Link } from "react-router-dom"
+import { useTranslation } from "react-i18next"
 
+export function TooltipDashboard({ appointmentType = [] }) {
+    const { t } = useTranslation("overview")
 
+    // Map for translating appointment types (optional)
+    const typeLabels = {
+        scheduled: t('appointments.scheduled', 'Scheduled'),
+        completed: t('appointments.completed', 'Completed'),
+        pending: t('appointments.pending', 'Pending'),
+        cancelled: t('appointments.cancelled', 'Cancelled'),
+        rescheduled: t('appointments.rescheduled', 'Rescheduled'),
+    }
 
-export function TooltipDashboard({ appointmentType }) {
+    // Transform data to use translated labels
+    const translatedData = appointmentType.map(({ type, count }) => ({
+        type: typeLabels[type] || type,
+        count,
+    }))
 
-    console.log(appointmentType)
-
+    if (!appointmentType.length) {
+        return (
+            <Card className="w-full h-full rounded-2xl border border-border bg-white border-gray-100 shadow-lg flex items-center justify-center">
+                <p className="text-gray-500">No appointment data available.</p>
+            </Card>
+        )
+    }
 
     return (
-        <Card className="w-full h-full rounded-2xl border border-border bg-white border-gray-100  shadow-lg ">
-            <CardHeader className=" py-1 px-6">
+        <Card className="w-full h-full rounded-2xl border border-border bg-white border-gray-100 shadow-lg">
+            <CardHeader className="py-1 px-6">
                 <div className="flex justify-between items-center">
                     <CardTitle className="text-base font-semibold text-foreground">
-                         Appointments Type
+                        {t('appointments.type_title', 'Appointments Type')}
                     </CardTitle>
                     <div className="flex items-center gap-1 text-sm font-medium text-blue-500">
-                        <Link to={"/appointments_list"}>See All</Link>
+                        <Link to={"/appointments_list"}>{t('common.see_all', 'See All')}</Link>
                     </div>
                 </div>
             </CardHeader>
 
             <CardContent className="p- pb-2">
                 <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
-
-
-                    <div className="h-[200px] w-full ">
+                    <div className="h-[200px] w-full">
                         <ResponsiveContainer width="100%" height="100%">
-                            <BarChart data={appointmentType} barGap={4}>
+                            <BarChart data={translatedData} barGap={4}>
                                 <XAxis
                                     dataKey="type"
                                     axisLine={false}
@@ -55,6 +73,7 @@ export function TooltipDashboard({ appointmentType }) {
                                     }}
                                     labelStyle={{ display: "none" }}
                                     cursor={{ fill: "hsl(210 20% 95%)" }}
+                                    formatter={(value, name, props) => [`${value}`, t('appointments.count', 'count')]}
                                 />
                                 <Bar
                                     dataKey="count"

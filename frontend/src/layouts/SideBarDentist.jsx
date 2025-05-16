@@ -3,12 +3,14 @@ import { MdMenu, MdMenuOpen, MdLogout } from "react-icons/md";
 import LogoImg from '../assets/logos/logo_1-removebg-preview.webp';
 import { Button } from '@/components/designSystem/button';
 import { useAuth } from '@/hooks/Auth/useAuth';
+import { useTranslation } from 'react-i18next';
 
 const SideBarLinks = lazy(() => import('@/components/sideBar/SideBarLinksDentist'));
 
 const SideBarDentist = () => {
     const [isOpen, setIsOpen] = useState(true);
     const { logout } = useAuth();
+    const { t } = useTranslation("sidebar");
 
     const toggleSidebar = useCallback(() => {
         setIsOpen((prev) => !prev);
@@ -20,6 +22,7 @@ const SideBarDentist = () => {
                 <button
                     className={`absolute top-4 ${!isOpen ? "right-6" : "right-4"} bg-gray-100 p-1 rounded-full hover:bg-gray-200 transition-colors`}
                     onClick={toggleSidebar}
+                    aria-label={t('sidebar.toggle')}
                 >
                     {isOpen ? <MdMenuOpen size={20} className="text-gray-600" /> : <MdMenu size={20} className="text-gray-600" />}
                 </button>
@@ -32,14 +35,14 @@ const SideBarDentist = () => {
                                 <span className='text-[#3E7EA1]'>Dr</span> Chebaani
                             </h1>
                         </div>
-                        <Suspense fallback={<p>Loading links...</p>}>
+                        <Suspense fallback={<p>{t('loadingLinks')}</p>}>
                             <SideBarLinks isOpen={isOpen} />
                         </Suspense>
                     </>
                 ) : (
                     <div className="flex flex-col items-center mt-8">
                         <img src={LogoImg} alt="logo" width="40" height="40" className="object-contain mb-6" loading="eager" />
-                        <Suspense fallback={<p>Loading links...</p>}>
+                        <Suspense fallback={<p>{t('loadingLinks')}</p>}>
                             <SideBarLinks isOpen={isOpen} />
                         </Suspense>
                     </div>
@@ -48,17 +51,20 @@ const SideBarDentist = () => {
 
             {isOpen ? (
                 <Button
-                    className="flex items-center justify-center gap-2 text-white text-sm py-2 w-5/12 mb-6 mx-auto bg-blue-500 hover:bg-blue-600 transition-colors"
+                    variant="outline"
+                    className="flex items-center justify-center gap-2 text-blue-600 text-sm py-2  mb-6 mx-auto hover:bg-blue-50 transition-colors"
                     onClick={logout}
+                    aria-label={t('logout')}
                 >
                     <MdLogout size={16} />
-                    Logout
+                    {t('logout')}
                 </Button>
             ) : (
                 <button
                     onClick={logout}
-                    className="flex items-center justify-center mb-6 mx-auto p-2 text-red-500 hover:bg-red-50 rounded-full transition-colors"
-                    title="Logout"
+                    className="flex items-center justify-center mb-6 mx-auto p-2 text-blue-500 hover:bg-red-50 rounded-full transition-colors"
+                    title={t('sidebar.logout')}
+                    aria-label={t('sidebar.logout')}
                 >
                     <MdLogout size={20} />
                 </button>

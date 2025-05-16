@@ -3,6 +3,7 @@ import AuthProvider from "./context/AuthContext";
 import { Toaster } from 'react-hot-toast';
 import "./style/index.css";
 import React, { lazy, Suspense } from "react";
+import './i18n';
 
 // Lazy load components
 const DashboardLayout = lazy(() => import("./layouts/DashboardLayout"));

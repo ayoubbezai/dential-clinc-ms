@@ -1,0 +1,36 @@
+{
+  "header": {
+    "title": "AI Assistant",
+    "clear_chat": "Clear Chat",
+    "close": "Close Chat"
+  },
+  "deep_search": {
+    "mode_active": "Deep Search is ON — responses will take longer",
+    "label": "Deep Search",
+    "enable": "Enable Deep Search",
+    "disable": "Disable Deep Search"
+  },
+  "input": {
+    "placeholder": "Type your question here...",
+    "aria_label": "Type your question",
+    "send": "Send"
+  },
+  "typing": {
+    "thinking": "Thinking...",
+    "analyzing": "Analyzing...",
+    "processing": "Processing..."
+  },
+  "bot": {
+    "unable_to_process": "Sorry, I couldn't process your request.",
+    "connection_issue": "Connection issue. Please try again later."
+  },
+  "empty": {
+    "placeholder": "Start a conversation by typing your question below."
+  },
+  "error": {
+    "prefix": "Error:"
+  },
+  "button": {
+    "open_chat": "Open Chat"
+  }
+}

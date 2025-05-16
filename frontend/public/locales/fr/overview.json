@@ -1,0 +1,34 @@
+{
+  "appointments_chart": {
+    "title": "Tous les rendez-vous",
+    "subtitle": "Aperçu de {{range}}",
+    "last_6": "les 6 derniers mois",
+    "this_year": "cette année",
+    "tooltip": "{{count}} rendez-vous"
+  },
+  "stat_cards": {
+    "total_patients": "Nombre total de patients",
+    "todays_appointments": "Rendez-vous d'aujourd'hui",
+    "new_users": "Nouveaux utilisateurs",
+    "visits": "Visites"
+  },
+  "appointments": {
+    "scheduled": "Planifié",
+    "completed": "Terminé",
+    "pending": "En attente",
+    "cancelled": "Annulé",
+    "rescheduled": "Replanifié",
+    "type_title": "Type de rendez-vous",
+    "count": "nombre"
+  },
+  "common": {
+    "see_all": "Voir tout"
+  },
+  "visit_type_breakdown": {
+    "title": "Répartition des types de visite",
+    "groupA": "Groupe A",
+    "groupB": "Groupe B",
+    "groupC": "Groupe C",
+    "groupD": "Groupe D"
+  }
+}

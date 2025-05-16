@@ -1,0 +1,36 @@
+{
+  "header": {
+    "title": "Assistant IA",
+    "clear_chat": "Effacer la conversation",
+    "close": "Fermer la conversation"
+  },
+  "deep_search": {
+    "mode_active": "Recherche approfondie ACTIVÉE — les réponses peuvent prendre plus de temps",
+    "label": "Recherche approfondie",
+    "enable": "Activer la recherche approfondie",
+    "disable": "Désactiver la recherche approfondie"
+  },
+  "input": {
+    "placeholder": "Tapez votre question ici...",
+    "aria_label": "Tapez votre question",
+    "send": "Envoyer"
+  },
+  "typing": {
+    "thinking": "Réflexion en cours...",
+    "analyzing": "Analyse en cours...",
+    "processing": "Traitement en cours..."
+  },
+  "bot": {
+    "unable_to_process": "Désolé, je n'ai pas pu traiter votre demande.",
+    "connection_issue": "Problème de connexion. Veuillez réessayer plus tard."
+  },
+  "empty": {
+    "placeholder": "Commencez une conversation en tapant votre question ci-dessous."
+  },
+  "error": {
+    "prefix": "Erreur :"
+  },
+  "button": {
+    "open_chat": "Ouvrir la conversation"
+  }
+}

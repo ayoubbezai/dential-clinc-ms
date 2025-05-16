@@ -1,0 +1,12 @@
+{
+  "overview": "Aperçu",
+  "schedule": "Calendrier",
+  "patients": "Liste des patients",
+  "appointments": "Rendez-vous",
+  "users": "Personnel/Utilisateurs",
+  "payment": "Paiement",
+  "inventory": "Inventaire",
+  "chat": "Messagerie",
+  "logout": "Déconnexion",
+  "loadingLinks": "Chargement des liens..."
+}

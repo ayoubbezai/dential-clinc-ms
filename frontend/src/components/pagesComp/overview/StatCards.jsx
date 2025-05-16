@@ -1,4 +1,5 @@
 import React from 'react'
+import { useTranslation } from 'react-i18next'
 import { User, Clock, Users, Bell } from 'lucide-react'
 
 const StatCard = ({ label, value, icon }) => (
@@ -14,35 +15,36 @@ const StatCard = ({ label, value, icon }) => (
 )
 
 const StatCards = ({ stat }) => {
+  const { t } = useTranslation('overview')
 
-    const stats = [
-        {
-          label: 'Total Patients',
-          value: stat?.count?.patientsNumber ?? '—',
-          icon: <User className="text-blue-600" size={28} />,
-        },
-        {
-          label: "Today's Appointments",
-          value: stat?.count?.appointmentsNumber ?? '—',
-          icon: <Clock className="text-blue-600" size={28} />,
-        },
-        {
-          label: 'New Users',
-          value: stat?.count?.usersNumber ?? '—',
-          icon: <Users className="text-blue-600" size={28} />,
-        },
-        {
-          label: 'Visits',
-          value: 'N/A',
-          icon: <Bell className="text-blue-600" size={28} />,
-        },
-      ]
+  const stats = [
+    {
+      label: t('stat_cards.total_patients'),
+      value: stat?.count?.patientsNumber ?? '—',
+      icon: <User className="text-blue-600" size={28} />,
+    },
+    {
+      label: t('stat_cards.todays_appointments'),
+      value: stat?.count?.appointmentsNumber ?? '—',
+      icon: <Clock className="text-blue-600" size={28} />,
+    },
+    {
+      label: t('stat_cards.new_users'),
+      value: stat?.count?.usersNumber ?? '—',
+      icon: <Users className="text-blue-600" size={28} />,
+    },
+    {
+      label: t('stat_cards.visits'),
+      value: 'N/A',
+      icon: <Bell className="text-blue-600" size={28} />,
+    },
+  ]
+
   return (
     <>
-          {stats.map((stat, index) => (
-              <StatCard key={index} {...stat} />
-          ))}
-      
+      {stats.map((stat, index) => (
+        <StatCard key={index} {...stat} />
+      ))}
     </>
   )
 }

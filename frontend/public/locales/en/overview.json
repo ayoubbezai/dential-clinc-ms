@@ -1,0 +1,34 @@
+{
+  "appointments_chart": {
+    "title": "All Appointments",
+    "subtitle": "Overview of {{range}}",
+    "last_6": "last 6 months",
+    "this_year": "this year",
+    "tooltip": "{{count}} appointments"
+  },
+  "stat_cards": {
+    "total_patients": "Total Patients",
+    "todays_appointments": "Today's Appointments",
+    "new_users": "New Users",
+    "visits": "Visits"
+  },
+  "appointments": {
+    "scheduled": "Scheduled",
+    "completed": "Completed",
+    "pending": "Pending",
+    "cancelled": "Cancelled",
+    "rescheduled": "Rescheduled",
+    "type_title": "Appointments Type",
+    "count": "count"
+  },
+  "common": {
+    "see_all": "See All"
+  },
+  "visit_type_breakdown": {
+    "title": "Visit Type Breakdown",
+    "groupA": "Group A",
+    "groupB": "Group B",
+    "groupC": "Group C",
+    "groupD": "Group D"
+  }
+}

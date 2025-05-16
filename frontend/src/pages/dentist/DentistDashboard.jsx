@@ -11,9 +11,9 @@ import StatCards from '@/components/pagesComp/overview/StatCards'
 
 const DentistDashboard = () => {
   const [selectedRange, setSelectedRange] = useState('Last 6 Months')
-  const { stat, statsLoading, statsError } = useDashboardStat()
+  const { stat } = useDashboardStat()
 
-  
+
 
   return (
     <>
@@ -31,7 +31,7 @@ const DentistDashboard = () => {
 
           {/* Stat Cards */}
           <div className="col-span-12 row-span-1 lg:col-span-6 grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <StatCards stat={stat}/>
+            <StatCards stat={stat} />
           </div>
 
           {/* TooltipDashboard and VisitTypeBreakdown */}
