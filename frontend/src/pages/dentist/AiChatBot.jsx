@@ -151,7 +151,7 @@ const AiChatBot = () => {
     };
 
     return (
-        <div className="fixed bottom-5 right-5 z-50">
+        <div className="fixed bottom-5 right-8 z-50">
             {isOpen && (
                 <motion.div
                     initial={{ opacity: 0, scale: 0.8 }}

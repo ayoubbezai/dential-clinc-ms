@@ -1,4 +1,4 @@
-import React, { Suspense, lazy } from 'react';
+import React, { Suspense, lazy, useState } from 'react';
 import usePayment from '@/hooks/other/usePayment';
 import SearchInTable from '@/components/TableComp/SearchInTable';
 import DateInput from '@/components/inputs/DateInput';
@@ -15,6 +15,7 @@ import AddButton from '@/components/small/AddButton';
 const PaymentChart = lazy(() => import('@/components/charts/PaymentChart'));
 const PaymentCard = lazy(() => import('@/components/pagesComp/payments/PaymentCard'));
 const RecentTransactions = lazy(() => import('@/components/pagesComp/payments/RecentTransactions'));
+const AddPaymentModel = lazy(() => import('@/models/AddModels/AddPaymentExpense'));
 
 const Payment = () => {
     const {
@@ -47,8 +48,10 @@ const Payment = () => {
         page,
         setPage,
         pagination,
+        fetchAllPayments
     } = usePayment();
     console.log(allPayments)
+    const [isPaymentModelOpen, setIsPaymentModelOpen] = useState(false);
 
     const cardData = paymentCardData(paymentsStat,
         netProfitDate,
@@ -62,75 +65,79 @@ const Payment = () => {
 
 
     return (
-        <div className="w-full px-8 mb-4">
-            {/* Payment Summary Cards */}
+        <>
+            <div className="w-full px-8 mb-4">
+                {/* Payment Summary Cards */}
 
 
-            <div className="grid grid-cols-12 gap-4 my-4">
-                {cardData?.map((card, index) => (
-                    <div key={index} className="col-span-3">
-                        <Suspense fallback={<div>Loading...</div>}>
-                            <PaymentCard
-                                title={card.title}
-                                amount={card.amount}
-                                comparison={card.comparison}
-                                selectedValue={card.selectedValue}
-                                percentage={card.percentage}
-                                isProfit={card.isProfit}
-                                setDate={card.setter}
-                                hasMenu={card.hasMenu}
+                <div className="grid grid-cols-12 gap-4 my-4">
+                    {cardData?.map((card, index) => (
+                        <div key={index} className="col-span-3">
+                            <Suspense fallback={<div>Loading...</div>}>
+                                <PaymentCard
+                                    title={card.title}
+                                    amount={card.amount}
+                                    comparison={card.comparison}
+                                    selectedValue={card.selectedValue}
+                                    percentage={card.percentage}
+                                    isProfit={card.isProfit}
+                                    setDate={card.setter}
+                                    hasMenu={card.hasMenu}
+                                />
+                            </Suspense>
+                        </div>
+                    ))}
+                </div>
+                {/* Chart & Recent Transactions */}
+                <div className="grid grid-cols-12 gap-4">
+                    <div className="col-span-8">
+                        <Suspense fallback={<div>Loading chart...</div>}>
+                            <PaymentChart
+                                income_expense_stats={paymentsStat?.income_expense_stats}
+                                incomeExpenseDate={incomeExpenseDate}
+                                setIncomeExpenseDate={setIncomeExpenseDate}
                             />
                         </Suspense>
                     </div>
-                ))}
-            </div>
-            {/* Chart & Recent Transactions */}
-            <div className="grid grid-cols-12 gap-4">
-                <div className="col-span-8">
-                    <Suspense fallback={<div>Loading chart...</div>}>
-                        <PaymentChart
-                            income_expense_stats={paymentsStat?.income_expense_stats}
-                            incomeExpenseDate={incomeExpenseDate}
-                            setIncomeExpenseDate={setIncomeExpenseDate}
-                        />
-                    </Suspense>
-                </div>
-                <div className="col-span-4">
-                    <Suspense fallback={<div>Loading transactions...</div>}>
-                        <RecentTransactions transactions={paymentsStat?.transactions} />
-                    </Suspense>
-                </div>
-            </div>
-
-            {/* Payments Table */}
-
-
-            <div className='w-full bg-white mx-auto px-8 my-6  rounded-lg shadow-md '>
-                <div className='flex flex-wrap items-center justify-between gap-4 py-4 mt-6 '>
-                    <SearchInTable search={search} setSearch={setSearch} />
-                    <div className='flex flex-wrap items-center gap-2'>
-                        <DateInput startDate={startDate} endDate={endDate} setStartDate={setStartDate} setEndDate={setEndDate} />
-                        <FilterByTypePayment type={type} setType={setType} />
-                        <SortByPaymentTable sortBy={sortBy} setSortBy={setSortBy} />
-                        <SortDirection sortDirection={sortDirection} setSortDirection={setSortDirection} />
-                        <AddButton />
-
-
-
-
+                    <div className="col-span-4">
+                        <Suspense fallback={<div>Loading transactions...</div>}>
+                            <RecentTransactions transactions={paymentsStat?.transactions} />
+                        </Suspense>
                     </div>
-                    <PaymentsTable allPayments={allPayments} paymentsLoading={paymentsLoading} paymentsError={paymentsError} />
                 </div>
 
+                {/* Payments Table */}
 
-                <div className='flex justify-between items-center pb-3 px-4 mt-4'>
-                    <PageChange page={page} setPage={setPage} total_pages={pagination.total_pages} loading={paymentsLoading} />
-                    <p className='text-[#223354] text-sm '>Page <span className='font-semibold'>{pagination.current_page || 1}</span> of <span className='font-semibold'>{pagination.total_pages || 1}</span></p>
-                    <PerPage perPage={perPage} setPerPage={setPerPage} />
+
+                <div className='w-full bg-white mx-auto px-8 my-6  rounded-lg shadow-md '>
+                    <div className='flex flex-wrap items-center justify-between gap-4 py-4 mt-6 '>
+                        <SearchInTable search={search} setSearch={setSearch} />
+                        <div className='flex flex-wrap items-center gap-2'>
+                            <DateInput startDate={startDate} endDate={endDate} setStartDate={setStartDate} setEndDate={setEndDate} />
+                            <FilterByTypePayment type={type} setType={setType} />
+                            <SortByPaymentTable sortBy={sortBy} setSortBy={setSortBy} />
+                            <SortDirection sortDirection={sortDirection} setSortDirection={setSortDirection} />
+                            <AddButton onClick={() => setIsPaymentModelOpen(true)} />
+
+                        </div>
+                        <PaymentsTable allPayments={allPayments} paymentsLoading={paymentsLoading} paymentsError={paymentsError} />
+                    </div>
+
+
+                    <div className='flex justify-between items-center pb-3 px-4 mt-4'>
+                        <PageChange page={page} setPage={setPage} total_pages={pagination.total_pages} loading={paymentsLoading} />
+                        <p className='text-[#223354] text-sm '>Page <span className='font-semibold'>{pagination.current_page || 1}</span> of <span className='font-semibold'>{pagination.total_pages || 1}</span></p>
+                        <PerPage perPage={perPage} setPerPage={setPerPage} />
+                    </div>
                 </div>
+
             </div>
-
-        </div>
+            {isPaymentModelOpen && (
+                <Suspense fallback={<p>Loading...</p>}>
+                    <AddPaymentModel isOpen={isPaymentModelOpen} onClose={() => setIsPaymentModelOpen(false)} refetch={fetchAllPayments} />
+                </Suspense>
+            )}
+        </>
     );
 };
 

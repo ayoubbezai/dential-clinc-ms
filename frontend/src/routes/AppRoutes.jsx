@@ -31,6 +31,7 @@ const AppRoutes = () => {
                 <Route element={<ProtectedRoute />}>
 
                     {/* Dentist Routes */}
+
                     <Route element={<RoleBasedRoute allowedRoles={["dentist"]} />}>
                         <Route path="/dentist/dashboard" element={<DentistDashboard />} />
                         <Route path="/payment" element={<Payment />} />

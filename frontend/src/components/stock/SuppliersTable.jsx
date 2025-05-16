@@ -8,7 +8,7 @@ import AddButton from '../small/AddButton';
 import SortBySupplier from './SortBySupplier';
 import SupplierTableComp from './SupplierTableComp';
 
-const AddSupplierModel = lazy(() => import('@/models/AddModels/AddStockModel'));
+const AddSupplierModel = lazy(() => import('@/models/AddModels/AddSupplierModel'));
 
 const SuppliersTable = () => {
     const [isAddModalOpen, setIsAddModalOpen] = useState(false)

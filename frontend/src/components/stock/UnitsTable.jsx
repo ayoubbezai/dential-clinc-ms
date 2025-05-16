@@ -36,7 +36,7 @@ const UnitsTable = () => {
                 </div>
             </div>
             {isAddModalOpen && (
-                <Suspense fallback={<div>Loading Edit Modal...</div>}>
+                <Suspense fallback={<div>Loading add Modal...</div>}>
                     <AddUnitModel
                         isOpen={isAddModalOpen}
                         onClose={() => setIsAddModalOpen(false)}

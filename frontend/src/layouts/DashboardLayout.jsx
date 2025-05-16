@@ -5,6 +5,7 @@ import { AuthContext } from "../context/AuthContext";
 // Lazy load sidebars
 const SideBarDentist = lazy(() => import("../layouts/SideBarDentist"));
 const SideBarReceptionist = lazy(() => import("../layouts/SideBarReceptionist"));
+const AiChatBot = lazy(() => import("../pages/dentist/AiChatBot"));
 
 const DashboardLayout = ({ children }) => {
     const location = useLocation();
@@ -37,18 +38,34 @@ const DashboardLayout = ({ children }) => {
         }
         return null;
     }, [user?.role]);
+    const AiChatBotComp = useMemo(() => {
+        if (user?.role === "dentist") {
+            return AiChatBot;
+        }
+        return null;
+    }, [user?.role]);
 
     return (
-        <div className="flex">
-            {showSidebar && SidebarComponent && (
-                <Suspense fallback={<p>Loading sidebar...</p>}>
-                    <SidebarComponent />
+        <>
+            {AiChatBotComp && (
+                <Suspense fallback={<p>Loading AiChatBot...</p>}>
+                    <AiChatBotComp />
                 </Suspense>
             )}
-            <div className="flex-grow w-1/2 max-h-screen overflow-auto">
-                {children}
+
+            <div className="flex">
+
+                {showSidebar && SidebarComponent && (
+                    <Suspense fallback={<p>Loading sidebar...</p>}>
+                        <SidebarComponent />
+                    </Suspense>
+                )}
+                <div className="flex-grow w-1/2 max-h-screen overflow-auto pb-12">
+
+                    {children}
+                </div>
             </div>
-        </div>
+        </>
     );
 };
 

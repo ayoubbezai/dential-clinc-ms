@@ -124,7 +124,7 @@ const usePayment = () => {
         setSortDirection,
         page,
         setPage,
-        pagination
+        pagination, fetchAllPayments
     };
 };
 
