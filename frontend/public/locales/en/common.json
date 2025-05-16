@@ -1,5 +1,25 @@
 {
   "welcome": "Welcome",
   "user": "User",
-  "toggle_theme": "Toggle Theme"
+  "toggle_theme": "Toggle Theme",
+  "row_per_page": "Rows per page",
+  "loading": "Loading...",
+  "search": "Search",
+  "search_placeholder": "Search...",
+  "search_no_results": "No results found",
+  "enter": "Enter",
+  "page": "Page",
+  "of": "of",
+  "gender": {
+    "all_genders": "All genders",
+    "male": "Male",
+    "female": "Female"
+  },
+  "sort": {
+    "ascending": "Ascending",
+    "descending": "Descending",
+    "created_at": "Created At",
+    "name": "Name",
+    "age": "Age"
+  }
 }

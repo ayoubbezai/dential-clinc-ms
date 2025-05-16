@@ -1,0 +1,29 @@
+{
+  "patients_list": {
+    "title": "Patients list",
+    "description": "This is patients list admin panel",
+    "add_patient_button": "+ Add Patient",
+    "loading_patients": "Loading patients..."
+  },
+  "patients_table": {
+    "name": "Name",
+    "phone": "Phone",
+    "email": "Email",
+    "age": "Age",
+    "gender": "Gender",
+    "actions": "Actions"
+  },
+  "add_patient": {
+    "title": "Add New Patient",
+    "patient_name": "Patient Name",
+    "phone": "Phone",
+    "gender": "Gender",
+    "select_gender": "Select Gender",
+    "male": "Male",
+    "female": "Female",
+    "age": "Age",
+    "diseases": "Diseases",
+    "note": "Note",
+    "submit": "Submit"
+  }
+}

@@ -1,21 +1,21 @@
 import React, { useState } from "react";
 import Model from "../other/Model";
 import { EventsService } from "@/services/shared/EventsService";
-import { toast, Toaster } from "react-hot-toast";
+import { toast } from "react-hot-toast";
 import { Button } from "@/components/designSystem/button";
-import DateInput from "@/components/inputs/DateInput";
-import TimeInput from "@/components/inputs/TimeInput";
+import { Input } from "@/components/designSystem/input";
+import { Label } from "@/components/designSystem/label";
+import TextInput from "@/components/inputs/TextInput";
 import SelectInput from "@/components/inputs/SelectInput";
 import { handleInputChange } from "@/utils/other/inputChange";
 import { initializeFormData } from "@/utils/models/addEventModel";
-import TextInput from "@/components/inputs/TextInput";
 import { COLORS } from "@/constant/EventsColor";
-import { Input } from "@/components/designSystem/input";
-import { Label } from "@/components/designSystem/label";
 import { selectClassName } from "@/constant/classNames";
-const AddEventModel = ({ isOpen, onClose, eventsServicePlugin }) => {
-    const [formData, setFormData] = useState(initializeFormData());
+import { useTranslation } from "react-i18next";
 
+const AddEventModel = ({ isOpen, onClose, eventsServicePlugin }) => {
+    const { t } = useTranslation("schedule");
+    const [formData, setFormData] = useState(initializeFormData());
     const formattedPeople = formData.people.length ? formData.people : null;
 
     const handleSubmit = async (e) => {
@@ -40,10 +40,11 @@ const AddEventModel = ({ isOpen, onClose, eventsServicePlugin }) => {
                 people: formattedPeople,
                 calendarId: formData.calendarId,
             });
-            toast.success("Event created successfully!");
+            toast.success(t("add_event.success"));
         } else {
-            toast.error(error?.message || "Error! Something went wrong.");
+            toast.error(error?.message || t("add_event.error"));
         }
+
         onClose();
     };
 
@@ -51,9 +52,8 @@ const AddEventModel = ({ isOpen, onClose, eventsServicePlugin }) => {
         <Model isOpen={isOpen} onClose={onClose}>
             <form onSubmit={handleSubmit} className="space-y-4">
                 <TextInput
-
                     id="title"
-                    label="Title"
+                    label={t("add_event.title")}
                     value={formData.title}
                     onChange={(e) => handleInputChange(e, setFormData)}
                     required
@@ -61,65 +61,64 @@ const AddEventModel = ({ isOpen, onClose, eventsServicePlugin }) => {
 
                 <div className="flex">
                     <Input
-                        type="date" label="Start Date"
+                        type="date"
+                        label={t("add_event.start_date")}
                         name="startDate"
                         value={formData.startDate}
                         onChange={(e) => handleInputChange(e, setFormData)}
                         className={selectClassName}
-
                     />
                     <Input
-
                         type="time"
-                        label="Start Time (Optional)"
+                        label={t("add_event.start_time")}
                         name="startTime"
                         value={formData.startTime}
                         onChange={(e) => handleInputChange(e, setFormData)}
-                        className={`${selectClassName} ml-10"`}
+                        className={`${selectClassName} ml-10`}
                     />
                 </div>
 
                 <div className="flex">
                     <Input
-                        className={selectClassName}
-
                         type="date"
-
-                        label="End Date"
+                        label={t("add_event.end_date")}
                         name="endDate"
                         value={formData.endDate}
-                        onChange={(e) => handleInputChange(e, setFormData)} />
+                        onChange={(e) => handleInputChange(e, setFormData)}
+                        className={selectClassName}
+                    />
                     <Input
                         type="time"
-                        className={`${selectClassName} ml-10"`}
-
-                        label="End Time (Optional)"
+                        label={t("add_event.end_time")}
                         name="endTime"
                         value={formData.endTime}
                         onChange={(e) => handleInputChange(e, setFormData)}
+                        className={`${selectClassName} ml-10`}
                     />
                 </div>
 
                 <SelectInput
-                    className={selectClassName}
-
                     id="calendarId"
-                    label="Event Color"
+                    label={t("add_event.event_color")}
                     value={formData.calendarId}
                     options={COLORS.map((color) => ({
                         value: color.value,
-                        label: color.label,
+                        label: t(`colors.${color.id}`),
                     }))}
                     onChange={(value) => setFormData({ ...formData, calendarId: value })}
-                />
-                <Label>people</Label>
-                <Input
                     className={selectClassName}
+                />
+
+                <Label>{t("add_event.people")}</Label>
+                <Input
                     type="text"
                     name="people"
+                    className={selectClassName}
                     value={formData.people ? formData.people.join(", ") : ""}
                     onChange={(e) => {
-                        const peopleArray = e.target.value.split(",").map((person) => person.trim());
+                        const peopleArray = e.target.value
+                            .split(",")
+                            .map((person) => person.trim());
                         setFormData((prev) => ({
                             ...prev,
                             people: peopleArray,
@@ -129,7 +128,7 @@ const AddEventModel = ({ isOpen, onClose, eventsServicePlugin }) => {
 
                 <div>
                     <Button type="submit" className="w-full text-white">
-                        Submit
+                        {t("add_event.submit")}
                     </Button>
                 </div>
             </form>

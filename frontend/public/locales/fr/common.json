@@ -1,5 +1,25 @@
 {
   "welcome": "Bienvenue",
   "user": "Utilisateur",
-  "toggle_theme": "Changer le thème"
+  "toggle_theme": "Changer le thème",
+  "row_per_page": "Lignes par page",
+  "loading": "Chargement...",
+  "search": "Rechercher",
+  "search_placeholder": "Rechercher...",
+  "search_no_results": "Aucun résultat trouvé",
+  "enter": "Saisisser",
+  "page": "Page",
+  "of": "de",
+  "gender": {
+    "all_genders": "Tous les genres",
+    "male": "Homme",
+    "female": "Femme"
+  },
+  "sort": {
+    "ascending": "Ascendant",
+    "descending": "Descendant",
+    "created_at": "Date de création",
+    "name": "Nom",
+    "age": "Âge"
+  }
 }

@@ -291,56 +291,100 @@ const AiChatBot = () => {
                     {/* Input */}
                     <form onSubmit={handleSendMessage} className="p-3 border-t border-gray-200 bg-white">
                         <div className="flex items-center space-x-2">
-                            <input
-                                type="text"
-                                aria-label={t('input.aria_label')}
-                                placeholder={t('input.placeholder')}
-                                className="flex-grow px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
-                                value={inputValue}
-                                onChange={(e) => setInputValue(e.target.value)}
-                                disabled={isLoading}
-                            />
-                            <button
-                                type="button"
-                                onClick={toggleDeepSearch}
-                                title={deepSearch ? t('deep_search.disable') : t('deep_search.enable')}
-                                className={`px-3 py-2 rounded-lg border transition-colors ${deepSearch
-                                    ? 'bg-blue-600 text-white border-blue-600 hover:bg-blue-700'
-                                    : 'bg-white text-gray-600 border-gray-300 hover:bg-gray-50'
-                                    } ${isLoading ? 'opacity-50 cursor-not-allowed' : ''}`}
-                                disabled={isLoading}
-                            >
-                                <span className="text-xs font-medium">{t('deep_search.label')}</span>
-                            </button>
-                            <button
-                                type="submit"
-                                disabled={isLoading || inputValue.trim() === ''}
-                                className={`bg-blue-600 text-white px-3 py-2 rounded-lg transition-colors flex items-center justify-center ${isLoading || inputValue.trim() === '' ? 'opacity-50 cursor-not-allowed' : 'hover:bg-blue-700'}`}
-                            >
-                                {isLoading ? (
-                                    <svg className="w-5 h-5 animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <circle
-                                            className="opacity-25"
-                                            cx="12"
-                                            cy="12"
-                                            r="10"
-                                            strokeWidth="4"
-                                            stroke="currentColor"
+                            <div className="relative flex-grow">
+                                <input
+                                    type="text"
+                                    aria-label={t('input.aria_label')}
+                                    placeholder={t('input.placeholder')}
+                                    className="w-full pl-4 pr-12 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                                    value={inputValue}
+                                    onChange={(e) => setInputValue(e.target.value)}
+                                    disabled={isLoading}
+                                />
+                                <div className="absolute right-2 top-1/2 transform -translate-y-1/2 flex items-center space-x-1">
+                                    <button
+                                        type="button"
+                                        onClick={toggleDeepSearch}
+                                        title={deepSearch ? t('deep_search.disable') : t('deep_search.enable')}
+                                        className={`p-1.5 rounded-md transition-colors flex items-center ${deepSearch
+                                            ? 'bg-blue-100 text-blue-600'
+                                            : 'text-gray-500 hover:bg-gray-100'
+                                            } ${isLoading ? 'opacity-50 cursor-not-allowed' : ''}`}
+                                        disabled={isLoading}
+                                    >
+                                        <svg
+                                            className="w-4 h-4"
                                             fill="none"
-                                        />
-                                        <path
-                                            className="opacity-75"
-                                            fill="currentColor"
-                                            d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"
-                                        />
-                                    </svg>
-                                ) : (
-                                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
-                                    </svg>
-                                )}
-                            </button>
+                                            stroke="currentColor"
+                                            viewBox="0 0 24 24"
+                                        >
+                                            <path
+                                                strokeLinecap="round"
+                                                strokeLinejoin="round"
+                                                strokeWidth={deepSearch ? 2 : 1.5}
+                                                d="M13 10V3L4 14h7v7l9-11h-7z"
+                                            />
+                                        </svg>
+                                        {deepSearch && (
+                                            <span className="ml-1 text-xs font-medium">Deep</span>
+                                        )}
+                                    </button>
+
+                                    <div className="h-5 w-px bg-gray-300"></div>
+
+                                    <button
+                                        type="submit"
+                                        disabled={isLoading || inputValue.trim() === ''}
+                                        className={`p-1 rounded-md transition-colors ${isLoading || inputValue.trim() === ''
+                                            ? 'text-gray-400 cursor-not-allowed'
+                                            : 'text-blue-600 hover:bg-blue-100'
+                                            }`}
+                                    >
+                                        {isLoading ? (
+                                            <svg className="w-5 h-5 animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <circle
+                                                    className="opacity-25"
+                                                    cx="12"
+                                                    cy="12"
+                                                    r="10"
+                                                    strokeWidth="4"
+                                                    stroke="currentColor"
+                                                    fill="none"
+                                                />
+                                                <path
+                                                    className="opacity-75"
+                                                    fill="currentColor"
+                                                    d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"
+                                                />
+                                            </svg>
+                                        ) : (
+                                            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path
+                                                    strokeLinecap="round"
+                                                    strokeLinejoin="round"
+                                                    strokeWidth="2"
+                                                    d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"
+                                                />
+                                            </svg>
+                                        )}
+                                    </button>
+                                </div>
+                            </div>
                         </div>
+
+                        {/* {deepSearch && (
+                            <div className="mt-1 text-xs text-blue-600 flex items-center justify-end">
+                                <svg className="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path
+                                        strokeLinecap="round"
+                                        strokeLinejoin="round"
+                                        strokeWidth="2"
+                                        d="M13 10V3L4 14h7v7l9-11h-7z"
+                                    />
+                                </svg>
+                                {t('deep_search.mode_active')}
+                            </div>
+                        )} */}
                     </form>
                 </motion.div>
             )}

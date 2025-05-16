@@ -1,0 +1,23 @@
+{
+  "add_event_button": "Add Event",
+  "add_event": {
+    "title": "Title",
+    "start_date": "Start Date",
+    "start_time": "Start Time (Optional)",
+    "end_date": "End Date",
+    "end_time": "End Time (Optional)",
+    "event_color": "Event Color",
+    "people": "People",
+    "submit": "Submit",
+    "success": "Event created successfully!",
+    "error": "Error! Something went wrong."
+  },
+  "colors": {
+    "yellow": "Yellow",
+    "red": "Red",
+    "green": "Green",
+    "blue": "Blue",
+    "purple": "Purple",
+    "orange": "Orange"
+  }
+}

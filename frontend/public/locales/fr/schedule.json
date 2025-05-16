@@ -1,0 +1,23 @@
+{
+  "add_event_button": "Ajouter un événement",
+  "add_event": {
+    "title": "Titre",
+    "start_date": "Date de début",
+    "start_time": "Heure de début (optionnel)",
+    "end_date": "Date de fin",
+    "end_time": "Heure de fin (optionnel)",
+    "event_color": "Couleur de l'événement",
+    "people": "Participants",
+    "submit": "Soumettre",
+    "success": "Événement créé avec succès !",
+    "error": "Erreur ! Une erreur s'est produite."
+  },
+  "colors": {
+    "yellow": "Jaune",
+    "red": "Rouge",
+    "green": "Vert",
+    "blue": "Bleu",
+    "purple": "Violet",
+    "orange": "Orange"
+  }
+}

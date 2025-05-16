@@ -14,6 +14,8 @@ const DateInput = ({ startDate, endDate, setStartDate, setEndDate }) => {
         onChange={(e) => setStartDate(e.target.value)}
         placeholder='Start Date'
       />
+      <span className="text-gray-400">→</span>
+
       <Input
         className={selectClassName}
 

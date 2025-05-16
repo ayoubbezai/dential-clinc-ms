@@ -8,9 +8,8 @@ import "../../style/index.css";
 import { Eventscolors } from '@/constant/EventsColor';
 import { syncEvents, DateUpdate } from '@/utils/help/ScheduleHelp';
 
-
-
-const useCalendar = (setSelectedEvent) => {
+// Accept t and i18n as parameters for translation
+const useCalendar = (setSelectedEvent, t, i18n) => {
     const eventsServicePlugin = useState(() => createEventsServicePlugin())[0];
     const [prevEvents, setPrevEvents] = useState([]);
     const { events, setStart, setEnd } = UseSchedule();
@@ -24,6 +23,8 @@ const useCalendar = (setSelectedEvent) => {
         views: [createViewMonthGrid(), createViewDay()],
         calendars: Eventscolors,
         events: events,
+        // 👇 Localize calendar
+        locale: i18n.language === 'fr' ? 'fr-FR' : 'en-US',
         plugins: [eventsServicePlugin],
         callbacks: {
             onRangeUpdate(range) {

@@ -3,8 +3,10 @@ import { Input } from '@/components/designSystem/input';
 import { Label } from '@/components/designSystem/label';
 import { Search } from "lucide-react";
 import { debounce } from 'lodash';
+import { useTranslation } from 'react-i18next';
 
 const SearchInTable = ({ search, setSearch }) => {
+    const {t} = useTranslation('common');
 
     const handleSearchChange = useCallback(
         debounce((value) => {
@@ -27,7 +29,7 @@ const SearchInTable = ({ search, setSearch }) => {
                 id="search"
                 defaultValue={search}
                 onChange={onChange}
-                placeholder="Search ..."
+                placeholder={t("search_placeholder")}
             />
         </div>
     );

@@ -1,0 +1,32 @@
+{
+  "patients_list": {
+    "title": "Liste des patients",
+    "description": "Ceci est le panneau d'administration de la liste des patients",
+    "add_patient_button": "+ Ajouter un patient",
+    "loading_patients": "Chargement des patients...",
+    "page": "Page",
+    "of": "sur",
+    "loading_modal": "Chargement..."
+  },
+  "patients_table": {
+    "name": "Nom",
+    "phone": "Téléphone",
+    "email": "E-mail",
+    "age": "Âge",
+    "gender": "Sexe",
+    "actions": "Actions"
+  },
+  "add_patient": {
+    "title": "Ajouter un nouveau patient",
+    "patient_name": "Nom du patient",
+    "phone": "Téléphone",
+    "gender": "Genre",
+    "select_gender": "Sélectionnez le genre",
+    "male": "Homme",
+    "female": "Femme",
+    "age": "Âge",
+    "diseases": "Maladies",
+    "note": "Note",
+    "submit": "Envoyer"
+  }
+}
