@@ -1,5 +1,5 @@
-
 import React, { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Button } from '@/components/designSystem/button';
 import SelectRole from '@/components/TableComp/SelectRole';
 
@@ -11,7 +11,10 @@ import DateInput from '@/components/inputs/DateInput';
 import UsersTable from '@/components/pagesComp/users/UsersTable';
 import useUser from '@/hooks/lists/useUser';
 import AddReceptionistModel from '@/models/AddModels/AddReceptionistModel';
+
 const UsersList = () => {
+  const { t } = useTranslation('users');
+  const { t: t2 } = useTranslation('common');
   const {
     users,
     pagination,
@@ -45,10 +48,12 @@ const UsersList = () => {
     <>
       <div className='flex justify-between w-5/6 mt-10 mx-auto items-center'>
         <div className='flex flex-col'>
-          <h3 className='text-[#223354] font-bold text-xl'>Users list</h3>
-          <p className='text-[#223354] font-semibold mt-1'>This is Users list admin panel</p>
+          <h3 className='text-[#223354] font-bold text-xl'>{t('users_list')}</h3>
+          <p className='text-[#223354] font-semibold mt-1'>{t('admin_panel_desc')}</p>
         </div>
-        <Button className={"text-white text-[13px]"} onClick={() => setIsModelOpen(true)}>+ Add Receptionist</Button>
+        <Button className={"text-white text-[13px]"} onClick={() => setIsModelOpen(true)}>
+          + {t('add_receptionist_title')}
+        </Button>
       </div>
 
       <div className='w-5/6 bg-white mx-auto px-4'>
@@ -65,13 +70,14 @@ const UsersList = () => {
 
         <div className='flex justify-between items-center pb-3 px-4 mt-4'>
           <PageChange page={page} setPage={setPage} total_pages={pagination.total_pages} loading={loading} />
-          <p className='text-[#223354] text-sm '>Page <span className='font-semibold'>{pagination.current_page || 1}</span> of <span className='font-semibold'>{pagination.total_pages || 1}</span></p>
+          <p className='text-[#223354] text-sm '>
+            {t2('page')} <span className='font-semibold'>{pagination.current_page || 1}</span> {t2('of')} <span className='font-semibold'>{pagination.total_pages || 1}</span>
+          </p>
           <PerPage perPage={perPage} setPerPage={setPerPage} />
         </div>
       </div>
 
       <AddReceptionistModel isOpen={isModelOpen} onClose={() => setIsModelOpen(false)} />
-
     </>
   );
 };

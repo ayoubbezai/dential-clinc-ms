@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useTranslation } from 'react-i18next';
 import Model from "../other/Model";
 import { Button } from "@/components/designSystem/button";
 import EmailInput from "@/components/inputs/EmailInput";
@@ -8,32 +9,48 @@ import { handleSubmit, initializeFormData } from "@/utils/models/addReceptionist
 import { handleInputChange } from "@/utils/other/inputChange";
 
 const AddReceptionistModel = ({ isOpen, onClose }) => {
+    const { t } = useTranslation('users');
     const [formData, setFormData] = useState(initializeFormData());
 
     return (
         <Model isOpen={isOpen} onClose={onClose}>
-            <form onSubmit={(e) => handleSubmit(e, formData, onClose)} className="space-y-0 flex flex-col">
+            <div className="mb-4 text-center">
+                <h2 className="text-xl font-bold text-[#223354]">{t('add_receptionist_title')}</h2>
+            </div>
+
+            <form onSubmit={(e) => handleSubmit(e, formData, onClose)} className="space-y-4 flex flex-col w-full">
                 {/* Name Input */}
-                <NameInput value={formData.name} onChange={(e) => handleInputChange(e, setFormData)} />
+                <NameInput
+                    value={formData.name}
+                    onChange={(e) => handleInputChange(e, setFormData)}
+                    className="w-full"
+                    label={t('add_receptionist.name')}
+                />
 
                 {/* Email Input */}
-                <EmailInput value={formData.email} onChange={(e) => handleInputChange(e, setFormData)} />
+                <EmailInput
+                    value={formData.email}
+                    onChange={(e) => handleInputChange(e, setFormData)}
+                    className="w-full"
+                    label={t('add_receptionist.email')}
+                />
 
                 {/* Password Input */}
                 <PasswordInput
                     id="password"
-                    label="Password"
+                    label={t('add_receptionist.password')}
                     value={formData.password}
                     onChange={(e) => handleInputChange(e, setFormData)}
-                    placeholder="Enter your password"
+                    placeholder={t('add_receptionist.enter_password')}
                     required
                     minLength={6}
+                    className="w-full"
                 />
 
                 {/* Submit Button */}
                 <div className="w-full self-center text-center mt-4">
-                    <Button type="submit" className="w-1/2 mx-auto text-white mt-1">
-                        Submit
+                    <Button type="submit" className="w-full max-w-xs mx-auto text-white mt-1">
+                        {t('add_receptionist.submit')}
                     </Button>
                 </div>
             </form>

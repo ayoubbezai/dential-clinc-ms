@@ -1,0 +1,19 @@
+{
+  "users_list": "Users list",
+  "admin_panel_desc": "This is Users list admin panel",
+  "add_receptionist_title": "Add Receptionist",
+  "add_receptionist": {
+    "name": "Name",
+    "email": "Email",
+    "password": "Password",
+    "enter_password": "Enter your password",
+    "submit": "Submit"
+  },
+  "header":{
+    "name": "Name",
+    "email": "Email",
+    "role": "Role",
+    "created_date": "Created Date",
+    "actions": "Actions"
+  }
+}

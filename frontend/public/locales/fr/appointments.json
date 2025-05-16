@@ -1,0 +1,20 @@
+{
+  "appointments_list": "Liste des rendez-vous",
+  "appointments_list_description": "Ceci est le panneau d'administration des rendez-vous",
+  "status": {
+    "all_status": "Tous les statuts",
+    "scheduled": "Planifié",
+    "pending": "En attente",
+    "completed": "Terminé",
+    "rescheduled": "Reprogrammé",
+    "cancelled": "Annulé"
+  },
+  "header": {
+    "title": "Titre",
+    "tooth": "Dent",
+    "content": "Contenu",
+    "date": "Date",
+    "status": "Statut",
+    "actions": "Actions"
+  }
+}

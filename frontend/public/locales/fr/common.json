@@ -21,5 +21,9 @@
     "created_at": "Date de création",
     "name": "Nom",
     "age": "Âge"
-  }
+  },
+  "name": "Nom",
+  "email": "Email",
+  "password": "Mot de passe"
+
 }

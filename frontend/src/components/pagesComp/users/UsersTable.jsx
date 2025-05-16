@@ -9,7 +9,7 @@ import { UsersService } from '@/services/shared/UsersService';
 import { useState } from 'react';
 import toast from 'react-hot-toast';
 import EditUserModel from '@/models/EditModels/EditUserModel';
-
+import UserTableHeader from './UserTableHeader';
 const UsersTable = ({ users, fetchUsers, userLoading }) => {
 
 
@@ -39,15 +39,8 @@ const UsersTable = ({ users, fetchUsers, userLoading }) => {
     return (
         <>
             <Table>
-                <TableHeader>
-                    <TableRow>
-                        <TableHead>NAME</TableHead>
-                        <TableHead>EMAIL</TableHead>
-                        <TableHead>ROLE</TableHead>
-                        <TableHead>CREATED DATE</TableHead>
-                        <TableHead>ACTIONS</TableHead>
-                    </TableRow>
-                </TableHeader>
+                <UserTableHeader />
+
                 <TableBody>
                     {userLoading ? (
                         // Skeleton loading state

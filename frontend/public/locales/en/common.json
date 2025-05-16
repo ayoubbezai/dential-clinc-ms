@@ -21,5 +21,8 @@
     "created_at": "Created At",
     "name": "Name",
     "age": "Age"
-  }
+  },
+  "name": "Name",
+  "email": "Email",
+  "password": "Password"
 }

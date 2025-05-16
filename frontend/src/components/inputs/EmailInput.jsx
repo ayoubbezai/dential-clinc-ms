@@ -2,8 +2,10 @@ import React from "react";
 import { Input } from "@/components/designSystem/input";
 import { Label } from "@/components/designSystem/label";
 import { selectClassName } from "@/constant/classNames";
+import { useTranslation } from "react-i18next";
 
 const EmailInput = ({ value, onChange }) => {
+    const { t } = useTranslation('common');
     return (
         <div className="">
             <Label htmlFor="email" className="mb-2 mt-3">Email</Label>
@@ -15,7 +17,7 @@ const EmailInput = ({ value, onChange }) => {
                 value={value}
                 onChange={onChange}
                 required
-                placeholder={`Enter email ...`}
+                placeholder={`${t("enter")} ${t("email")}...`}
 
             />
         </div>

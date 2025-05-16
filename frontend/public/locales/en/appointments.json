@@ -1,0 +1,20 @@
+{
+  "appointments_list": "Appointments List",
+  "appointments_list_description": "This is the appointments list admin panel",
+  "status": {
+    "all_status": "All Status",
+    "scheduled": "Scheduled",
+    "pending": "Pending",
+    "completed": "Completed",
+    "rescheduled": "Rescheduled",
+    "cancelled": "Cancelled"
+  },
+  "header":{
+    "title": "Title",
+    "tooth": "Tooth",
+    "content": "Content",
+    "date": "Date",
+    "status": "Status",
+    "actions": "Actions"
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "users_list": "Liste des utilisateurs",
+  "admin_panel_desc": "Ceci est le panneau d'administration de la liste des utilisateurs",
+  "add_receptionist_title": "Ajouter un réceptionniste",
+  "add_receptionist": {
+    "name": "Nom",
+    "email": "Email",
+    "password": "Mot de passe",
+    "enter_password": "Entrez votre mot de passe",
+    "submit": "Soumettre"
+  },
+  "header": {
+    "name": "Nom",
+    "email": "E-mail",
+    "role": "Rôle",
+    "created_date": "Date de création",
+    "actions": "Actions"
+  }
+}
