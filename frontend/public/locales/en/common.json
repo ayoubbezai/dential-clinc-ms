@@ -24,5 +24,13 @@
   },
   "name": "Name",
   "email": "Email",
-  "password": "Password"
+  "password": "Password",
+  "status": {
+    "pending": "Pending",
+    "completed": "Completed",
+    "cancelled": "Cancelled",
+    "rescheduled": "Rescheduled",
+    "scheduled": "Scheduled",
+    "unknown": "Unknown"
+  }
 }

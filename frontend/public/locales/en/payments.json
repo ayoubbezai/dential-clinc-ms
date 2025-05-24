@@ -1,0 +1,34 @@
+{
+  "net_earnings": "Net Earnings",
+  "total_revenue": "Total Revenue",
+  "total_expenses": "Total Expenses",
+  "pending_payments": "Pending Payments",
+  "last_week": "Last Week",
+  "last_month": "Last Month",
+  "last_3_months": "Last 3 Months",
+  "last_year": "Last Year",
+  "all_time": "All Time",
+  "vs": "Vs",
+  "recent_transactions": {
+    "recent_transactions_title": "Recent Transactions",
+    "no_transactions_found": "No transactions found"
+  },
+  "payment_chart": {
+    "payment_insights": "Payment Insights",
+    "tracking_trends": "Tracking expenses & income trends",
+    "expenses": "Expenses",
+    "income": "Income",
+    "last_3_months": "Last 3 months",
+    "last_30_days": "Last 30 days",
+    "last_7_days": "Last 7 days"
+  },
+  "all_types": "All Types",
+  "income": "Income",
+  "expense": "Expense",
+  "refund": "Refund",
+  "sort": {
+    "patient_name": "Patient Name",
+    "amount": "Amount",
+    "date": "Date"
+  }
+}

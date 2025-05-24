@@ -9,11 +9,16 @@
     "enter_password": "Enter your password",
     "submit": "Submit"
   },
-  "header":{
+  "header": {
     "name": "Name",
     "email": "Email",
     "role": "Role",
     "created_date": "Created Date",
     "actions": "Actions"
+  },
+  "edit_user_model": {
+    "title": "Edit User",
+    "password_placeholder": "Enter new password (optional)",
+    "confirm_placeholder": "Re-enter new password (optional)"
   }
 }

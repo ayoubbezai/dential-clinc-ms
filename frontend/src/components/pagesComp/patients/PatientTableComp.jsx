@@ -6,14 +6,14 @@ import PatientTableHeader from './PatientTableHeader';
 import TableSkeleton from '@/Skeletons/TableSkeleton';
 import EditAndDelete from '@/components/small/EditAndDelete';
 import { useRole } from '@/hooks/Auth/useRole';
-const PatientTableComp = ({ handleEdit, handleDelete, patientLoading, loading, patients }) => {
-    const {role} = useRole();
+const PatientTableComp = ({ handleEdit, handleDelete, patientLoading, loading, patients, t }) => {
+    const { role } = useRole();
 
-    const getLink=(id)=>{
+    const getLink = (id) => {
 
-        if (role == "receptionist" ){
+        if (role == "receptionist") {
             return `/receptionist/patient/${id}`
-        }else{
+        } else {
             return `/patient/${id}`
         }
     }
@@ -43,11 +43,11 @@ const PatientTableComp = ({ handleEdit, handleDelete, patientLoading, loading, p
                                             : "text-[#FF1975] bg-[#FFE8ED] text-[11px]" // Female styles
                                     }
                                 >
-                                    {patient.gender}
+                                    {patient.gender === "male" ? t("gender.male") : t("gender.female")}
                                 </Badge>
                             </TableCell>
                             <TableCell>
-                                <EditAndDelete element={patient} loading={loading} handleEdit={handleEdit}handleDelete={handleDelete} />
+                                <EditAndDelete element={patient} loading={loading} handleEdit={handleEdit} handleDelete={handleDelete} />
 
                             </TableCell>
                         </TableRow>

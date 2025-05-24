@@ -66,7 +66,7 @@ const PatientsList = () => {
 
         {/* Use Suspense to show fallback loading UI */}
         <Suspense fallback={<p>{t('patients_list.loading_patients')}</p>}>
-          <PatientsTable patients={patients} fetchPatients={fetchPatients} patientLoading={loading} />
+          <PatientsTable patients={patients} fetchPatients={fetchPatients} patientLoading={loading} t={t} tCommon={t2} />
         </Suspense>
 
         <div className='flex justify-between items-center pb-3 px-4 mt-4'>

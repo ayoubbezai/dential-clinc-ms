@@ -5,9 +5,13 @@ import { handleSubmit } from "@/utils/models/editUserModel";
 import EmailInput from "@/components/inputs/EmailInput";
 import NameInput from "@/components/inputs/NameInput";
 import PasswordInput from "@/components/inputs/PasswordInput";
-import SelectInput from "@/components/inputs/SelectInput"; // ✅ Import Select Input
 import { handleInputChange } from "@/utils/other/inputChange";
+import { useTranslation } from "react-i18next";
+
 const EditUserModel = ({ isOpen, onClose, currentUser, refreshUsers }) => {
+    const { t } = useTranslation("common");
+    const { t: tUser } = useTranslation("users");
+
     const [formData, setFormData] = useState({
         email: "",
         role_name: "",
@@ -30,44 +34,36 @@ const EditUserModel = ({ isOpen, onClose, currentUser, refreshUsers }) => {
 
     return (
         <Model isOpen={isOpen} onClose={onClose}>
+            <h2 className="text-lg font-semibold mb-4">{tUser("edit_user_model.title")}</h2>
             <form onSubmit={(e) => handleSubmit({ e, formData, currentUser, onClose, refreshUsers })}>
-                {/* Reusable Inputs */}
-                <EmailInput value={formData.email} onChange={(e) => handleInputChange(e, setFormData)} />
-                <NameInput value={formData.name} onChange={(e) => handleInputChange(e, setFormData)} />
-
-                {/* Role Selection
-                <SelectInput
-                    id="role_name"
-                    label="User Role"
-                    value={formData.role_name}
-                   onChange={(e) => handleInputChange(e, setFormData)}
-                    options={[
-                        { value: "", label: "Select a Role" },
-                        { value: "admin", label: "Admin" },
-                        { value: "editor", label: "Editor" },
-                        { value: "viewer", label: "Viewer" },
-                    ]}
-                /> */}
-
-                {/* Password Inputs */}
+                <EmailInput
+                    value={formData.email}
+                    onChange={(e) => handleInputChange(e, setFormData)}
+                    label={t("email")}
+                />
+                <NameInput
+                    value={formData.name}
+                    onChange={(e) => handleInputChange(e, setFormData)}
+                    label={t("name")}
+                />
                 <PasswordInput
                     id="password"
-                    label="New Password"
+                    label={t("password")}
                     value={formData.password}
                     onChange={(e) => handleInputChange(e, setFormData)}
-                    placeholder="Enter new password (optional)"
+                    placeholder={tUser("edit_user_model.password_placeholder")}
                 />
                 <PasswordInput
                     id="password_confirmation"
-                    label="Confirm Password"
+                    label={t("confirm")}
                     value={formData.password_confirmation}
                     onChange={(e) => handleInputChange(e, setFormData)}
-                    placeholder="Re-enter new password (optional)"
+                    placeholder={tUser("edit_user_model.confirm_placeholder")}
                 />
-
-                {/* Submit Button */}
                 <div>
-                    <Button type="submit" className="w-full text-white mt-4">Submit</Button>
+                    <Button type="submit" className="w-full text-white mt-4">
+                        {t("submit")}
+                    </Button>
                 </div>
             </form>
         </Model>

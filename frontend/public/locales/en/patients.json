@@ -13,8 +13,9 @@
     "gender": "Gender",
     "actions": "Actions"
   },
-  "add_patient": {
-    "title": "Add New Patient",
+  "patient_model": {
+    "add_patient_title": "Add New Patient",
+    "edit_patient_title": "Edit New Patient",
     "patient_name": "Patient Name",
     "phone": "Phone",
     "gender": "Gender",
@@ -25,5 +26,14 @@
     "diseases": "Diseases",
     "note": "Note",
     "submit": "Submit"
+  },
+  "toast": {
+    "delete_success": "Success! Patient deleted successfully.",
+    "delete_error": "Error! Something went wrong."
+  },
+  "swal": {
+    "confirm_title": "Are you sure?",
+    "confirm_text": "This action cannot be undone!",
+    "confirm_button": "Yes, delete it!"
   }
 }

@@ -23,18 +23,18 @@ import {
     SelectValue,
 } from "@/components/designSystem/select";
 
-const chartConfig = {
+const chartConfig = (t) => ({
     expand: {
-        label: "Expand",
+        label: t("payment_chart.expenses"),
         color: "hsl(var(--chart-1))",
     },
     income: {
-        label: "Income",
+        label: t("payment_chart.income"),
         color: "hsl(var(--chart-2))",
     },
-};
+});
 
-export default function PaymentChart({ income_expense_stats, incomeExpenseDate, setIncomeExpenseDate }) {
+export default function PaymentChart({ income_expense_stats, incomeExpenseDate, setIncomeExpenseDate, t }) {
     const filteredData = income_expense_stats?.filter((item) => {
         const date = new Date(item.date);
         const referenceDate = new Date();
@@ -44,30 +44,27 @@ export default function PaymentChart({ income_expense_stats, incomeExpenseDate, 
         return date >= startDate;
     });
 
-    console.log("filteredData", filteredData);
-
-
     return (
         <Card className="bg-white shadow-md border-b border-gray-100">
             <CardHeader className="flex items-center gap-3 pb-1 sm:flex-row">
                 <div className="flex-1 text-center sm:text-left">
-                    <CardTitle className="mb-2">Payment Insights</CardTitle>
-                    <CardDescription>Tracking expenses & income trends</CardDescription>
+                    <CardTitle className="mb-2">{t("payment_chart.payment_insights")}</CardTitle>
+                    <CardDescription>{t("payment_chart.tracking_trends")}</CardDescription>
                 </div>
                 <Select value={incomeExpenseDate} onValueChange={setIncomeExpenseDate}>
                     <SelectTrigger className="w-[140px] rounded-lg border-gray-200 shadow-sm">
-                        <SelectValue placeholder="Last 3 months" />
+                        <SelectValue placeholder={t("payment_chart.last_3_months")} />
                     </SelectTrigger>
                     <SelectContent className="bg-white border-gray-200">
-                        <SelectItem value="90d">Last 3 months</SelectItem>
-                        <SelectItem value="30d">Last 30 days</SelectItem>
-                        <SelectItem value="7d">Last 7 days</SelectItem>
+                        <SelectItem value="90d">{t("payment_chart.last_3_months")}</SelectItem>
+                        <SelectItem value="30d">{t("payment_chart.last_30_days")}</SelectItem>
+                        <SelectItem value="7d">{t("payment_chart.last_7_days")}</SelectItem>
                     </SelectContent>
                 </Select>
             </CardHeader>
 
             <CardContent className="px-3 pt-3 sm:px-5">
-                <ChartContainer config={chartConfig} className="aspect-auto h-[160px] w-full">
+                <ChartContainer config={chartConfig(t)} className="aspect-auto h-[160px] w-full">
                     <AreaChart data={filteredData}>
                         <defs>
                             <linearGradient id="fillexpand" x1="0" y1="0" x2="0" y2="1">
@@ -102,7 +99,7 @@ export default function PaymentChart({ income_expense_stats, incomeExpenseDate, 
                             }
                         />
                         <Area dataKey="income" type="natural" fill="url(#fillincome)" stroke="var(--color-income)" stackId="a" />
-                        <Area dataKey="expand" type="natural" fill="url(#fillexpand)" stroke="var(--color-expand)"/>
+                        <Area dataKey="expand" type="natural" fill="url(#fillexpand)" stroke="var(--color-expand)" />
                         <ChartLegend content={<ChartLegendContent />} />
                     </AreaChart>
                 </ChartContainer>

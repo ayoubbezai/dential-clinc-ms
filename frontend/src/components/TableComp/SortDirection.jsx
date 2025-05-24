@@ -1,19 +1,19 @@
-import React from 'react'
-import { selectClassName } from '@/constant/classNames'
-
+import React from 'react';
+import { selectClassName } from '@/constant/classNames';
+import { useTranslation } from 'react-i18next';
 const SortDirection = ({ sortDirection, setSortDirection }) => {
-  return (
-      <select
-          className={selectClassName}
+    const { t } = useTranslation("common");
+    return (
+        <select
+            className={selectClassName}
+            name="sort_direction"
+            value={sortDirection}
+            onChange={(e) => setSortDirection(e.target.value)}
+        >
+            <option value="asc">{t("sort.ascending")}</option>
+            <option value="desc">{t("sort.descending")}</option>
+        </select>
+    );
+};
 
-          name="sort_direction"
-          value={sortDirection}
-          onChange={(e) => setSortDirection(e.target.value)}
-      >
-          <option value="asc">Ascending</option>
-          <option value="desc">Descending</option>
-      </select>
-  )
-}
-
-export default SortDirection
+export default SortDirection;

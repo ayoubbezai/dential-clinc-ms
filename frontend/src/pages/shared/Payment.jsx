@@ -10,6 +10,7 @@ import SortByPaymentTable from '@/components/pagesComp/payments/SortByPaymentTab
 import FilterByTypePayment from '@/components/pagesComp/payments/FilterByTypePayment';
 import PaymentsTable from '@/components/pagesComp/payments/PaymentsTable';
 import AddButton from '@/components/small/AddButton';
+import { useTranslation } from 'react-i18next';
 
 // Lazy load components
 const PaymentChart = lazy(() => import('@/components/charts/PaymentChart'));
@@ -52,14 +53,15 @@ const Payment = () => {
     } = usePayment();
     console.log(allPayments)
     const [isPaymentModelOpen, setIsPaymentModelOpen] = useState(false);
-
+    const { t } = useTranslation("payments");
+    const { t: tCommon } = useTranslation("common");
     const cardData = paymentCardData(paymentsStat,
         netProfitDate,
         setNetProfitDate,
         incomeDate,
         setIncomeDate,
         expensesDate,
-        setExpensesDate)
+        setExpensesDate, t)
 
 
 
@@ -72,7 +74,7 @@ const Payment = () => {
 
                 <div className="grid grid-cols-12 gap-4 my-4">
                     {cardData?.map((card, index) => (
-                        <div key={index} className="col-span-3">
+                        <div key={index} className="col-span-3 flex">
                             <Suspense fallback={<div>Loading...</div>}>
                                 <PaymentCard
                                     title={card.title}
@@ -96,12 +98,13 @@ const Payment = () => {
                                 income_expense_stats={paymentsStat?.income_expense_stats}
                                 incomeExpenseDate={incomeExpenseDate}
                                 setIncomeExpenseDate={setIncomeExpenseDate}
+                                t={t}
                             />
                         </Suspense>
                     </div>
                     <div className="col-span-4">
                         <Suspense fallback={<div>Loading transactions...</div>}>
-                            <RecentTransactions transactions={paymentsStat?.transactions} />
+                            <RecentTransactions transactions={paymentsStat?.transactions} isLoading={paymentsLoading} t={t} />
                         </Suspense>
                     </div>
                 </div>
@@ -110,12 +113,12 @@ const Payment = () => {
 
 
                 <div className='w-full bg-white mx-auto px-8 my-6  rounded-lg shadow-md '>
-                    <div className='flex flex-wrap items-center justify-between gap-4 py-4 mt-6 '>
+                    <div className='flex flex-wrap items-center justify-between  py-4 mt-6 '>
                         <SearchInTable search={search} setSearch={setSearch} />
-                        <div className='flex flex-wrap items-center gap-2'>
+                        <div className='flex  items-center gap-1'>
                             <DateInput startDate={startDate} endDate={endDate} setStartDate={setStartDate} setEndDate={setEndDate} />
-                            <FilterByTypePayment type={type} setType={setType} />
-                            <SortByPaymentTable sortBy={sortBy} setSortBy={setSortBy} />
+                            <FilterByTypePayment type={type} setType={setType} t={t} />
+                            <SortByPaymentTable sortBy={sortBy} setSortBy={setSortBy} t={t} />
                             <SortDirection sortDirection={sortDirection} setSortDirection={setSortDirection} />
                             <AddButton onClick={() => setIsPaymentModelOpen(true)} />
 
@@ -126,7 +129,7 @@ const Payment = () => {
 
                     <div className='flex justify-between items-center pb-3 px-4 mt-4'>
                         <PageChange page={page} setPage={setPage} total_pages={pagination.total_pages} loading={paymentsLoading} />
-                        <p className='text-[#223354] text-sm '>Page <span className='font-semibold'>{pagination.current_page || 1}</span> of <span className='font-semibold'>{pagination.total_pages || 1}</span></p>
+                        <p className='text-[#223354] text-sm '>{tCommon("Page")} <span className='font-semibold'>{pagination.current_page || 1}</span> {tCommon("of")} <span className='font-semibold'>{pagination.total_pages || 1}</span></p>
                         <PerPage perPage={perPage} setPerPage={setPerPage} />
                     </div>
                 </div>

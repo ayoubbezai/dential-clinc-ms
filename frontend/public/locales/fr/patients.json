@@ -16,8 +16,9 @@
     "gender": "Sexe",
     "actions": "Actions"
   },
-  "add_patient": {
-    "title": "Ajouter un nouveau patient",
+  "patient_model": {
+    "add_patient_title": "Ajouter un nouveau patient",
+    "edit_patient_title": "Modifier le patient",
     "patient_name": "Nom du patient",
     "phone": "Téléphone",
     "gender": "Genre",
@@ -28,5 +29,14 @@
     "diseases": "Maladies",
     "note": "Note",
     "submit": "Envoyer"
+  },
+  "toast": {
+    "delete_success": "Succès ! Le patient a été supprimé avec succès.",
+    "delete_error": "Erreur ! Une erreur s'est produite."
+  },
+  "swal": {
+    "confirm_title": "Êtes-vous sûr ?",
+    "confirm_text": "Cette action est irréversible !",
+    "confirm_button": "Oui, supprimer !"
   }
 }

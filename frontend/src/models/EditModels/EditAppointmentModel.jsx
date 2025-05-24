@@ -1,76 +1,75 @@
 import React, { useEffect, useState } from "react";
 import Model from "../other/Model";
 import { Button } from "@/components/designSystem/button";
-import { initializeFormData, handleSubmit } from "@/utils/models/editAppointmentModel";
+import { initializeFormData, handleSubmit } from "@/utils/models/editPatientsModel";
 import { handleInputChange } from "@/utils/other/inputChange";
-import SelectInput from "@/components/inputs/SelectInput";
 import TextInput from "@/components/inputs/TextInput";
-import TextAreaInput from "@/components/inputs/TextAreaInput";
+import SelectInput from "@/components/inputs/SelectInput";
+import TextareaInput from "@/components/inputs/TextareaInput";
+import { useTranslation } from "react-i18next";
 
-const statusOptions = [
-    { value: "pending", label: "Pending" },
-    { value: "completed", label: "Completed" },
-    { value: "rescheduled", label: "Rescheduled" },
-    { value: "cancelled", label: "Cancelled" },
-    { value: "scheduled", label: "Scheduled" },
-];
-
-const EditAppointmentModel = ({ isOpen, onClose, currentAppointment, refreshAppointments }) => {
-    const [formData, setFormData] = useState(() => initializeFormData(currentAppointment));
+const EditPatientModel = ({ isOpen, onClose, currentPatient, refreshpatient_model }) => {
+    const { t } = useTranslation("patients");
+    const [formData, setFormData] = useState(initializeFormData(currentPatient));
 
     useEffect(() => {
-        setFormData(initializeFormData(currentAppointment));
-    }, [currentAppointment]);
+        setFormData(initializeFormData(currentPatient));
+    }, [currentPatient]);
 
     return (
         <Model isOpen={isOpen} onClose={onClose}>
-            <form
-                onSubmit={(e) => handleSubmit(e, formData, currentAppointment, onClose, refreshAppointments)}
-                className="p-4 space-y-4"
-            >
+            <h2 className="text-lg font-semibold mb-4">{t("patient_model.edit_patient_title")}</h2>
+
+            <form onSubmit={(e) => handleSubmit(e, formData, currentPatient, onClose, refreshpatient_model)}>
                 <TextInput
-                    id="title"
-                    label="Appointment Title"
-                    value={formData.title}
+                    id="patient_name"
+                    label={t("patient_model.patient_name")}
+                    value={formData.patient_name}
                     onChange={(e) => handleInputChange(e, setFormData)}
                     required
                 />
-
                 <TextInput
-                    id="date"
-                    label="Date"
-                    type="date"
-                    value={formData.date}
+                    id="phone"
+                    label={t("patient_model.phone")}
+                    type="tel"
+                    value={formData.phone}
                     onChange={(e) => handleInputChange(e, setFormData)}
                     required
                 />
-
-                <TextInput
-                    id="tooth"
-                    type="number"
-                    label="Tooth (Optional)"
-                    value={formData.tooth}
-                    onChange={(e) => handleInputChange(e, setFormData)}
-                />
-
                 <SelectInput
-                    id="status"
-                    label="Status"
-                    value={formData.status}
-                    onChange={(value) => setFormData({ ...formData, status: value })}
-                    options={statusOptions}
+                    id="gender"
+                    label={t("patient_model.gender")}
+                    value={formData.gender}
+                    options={[
+                        { value: "male", label: t("patient_model.male") },
+                        { value: "female", label: t("patient_model.female") }
+                    ]}
+                    onChange={(value) => setFormData({ ...formData, gender: value })}
                 />
-
-                <TextAreaInput
-                    id="content"
-                    label="Content (Optional)"
-                    value={formData.content}
+                <TextInput
+                    id="age"
+                    label={t("patient_model.age")}
+                    type="number"
+                    value={formData.age}
+                    onChange={(e) => handleInputChange(e, setFormData)}
+                    required
+                />
+                <TextInput
+                    id="diseases"
+                    label={t("patient_model.diseases")}
+                    value={formData.diseases}
+                    onChange={(e) => handleInputChange(e, setFormData)}
+                />
+                <TextareaInput
+                    id="note"
+                    label={t("patient_model.note")}
+                    value={formData.note}
                     onChange={(e) => handleInputChange(e, setFormData)}
                 />
 
-                <div className="pt-4">
-                    <Button type="submit" className="w-full text-white text-lg py-2">
-                        Submit
+                <div>
+                    <Button type="submit" className="w-full text-white">
+                        {t("patient_model.submit")}
                     </Button>
                 </div>
             </form>
@@ -78,4 +77,4 @@ const EditAppointmentModel = ({ isOpen, onClose, currentAppointment, refreshAppo
     );
 };
 
-export default EditAppointmentModel;
+export default EditPatientModel;

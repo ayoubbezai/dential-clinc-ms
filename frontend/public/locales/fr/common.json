@@ -18,12 +18,19 @@
   "sort": {
     "ascending": "Ascendant",
     "descending": "Descendant",
-    "created_at": "Date de création",
+    "created_at": "Date ",
     "name": "Nom",
     "age": "Âge"
   },
   "name": "Nom",
   "email": "Email",
-  "password": "Mot de passe"
-
+  "password": "Mot de passe",
+  "status": {
+    "pending": "En attente",
+    "completed": "Terminé",
+    "cancelled": "Annulé",
+    "rescheduled": "Replanifié",
+    "scheduled": "Planifié",
+    "unknown": "Inconnu"
+  }
 }

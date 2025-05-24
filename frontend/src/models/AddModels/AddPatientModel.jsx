@@ -14,18 +14,18 @@ const AddPatientModel = ({ isOpen, onClose }) => {
 
     return (
         <Model isOpen={isOpen} onClose={onClose}>
-            <h2 className="text-xl font-semibold mb-4 ">{t("add_patient.title")}</h2>
+            <h2 className="text-xl font-semibold mb-4 ">{t("patient_model.add_patient_title")}</h2>
             <form onSubmit={(e) => handleSubmit(e, formData, onClose)} className="space-y-0">
                 <TextInput
                     id="patient_name"
-                    label={t("add_patient.patient_name")}
+                    label={t("patient_model.patient_name")}
                     value={formData.patient_name}
                     onChange={(e) => handleInputChange(e, setFormData)}
                     required
                 />
                 <TextInput
                     id="phone"
-                    label={t("add_patient.phone")}
+                    label={t("patient_model.phone")}
                     type="tel"
                     value={formData.phone}
                     onChange={(e) => handleInputChange(e, setFormData)}
@@ -33,18 +33,18 @@ const AddPatientModel = ({ isOpen, onClose }) => {
                 />
                 <SelectInput
                     id="gender"
-                    label={t("add_patient.gender")}
+                    label={t("patient_model.gender")}
                     value={formData.gender}
                     options={[
-                        { value: "", label: t("add_patient.select_gender") },
-                        { value: "male", label: t("add_patient.male") },
-                        { value: "female", label: t("add_patient.female") }
+                        { value: "", label: t("patient_model.select_gender") },
+                        { value: "male", label: t("patient_model.male") },
+                        { value: "female", label: t("patient_model.female") }
                     ]}
                     onChange={(value) => setFormData({ ...formData, gender: value })}
                 />
                 <TextInput
                     id="age"
-                    label={t("add_patient.age")}
+                    label={t("patient_model.age")}
                     type="number"
                     value={formData.age}
                     onChange={(e) => handleInputChange(e, setFormData)}
@@ -52,19 +52,19 @@ const AddPatientModel = ({ isOpen, onClose }) => {
                 />
                 <TextInput
                     id="diseases"
-                    label={t("add_patient.diseases")}
+                    label={t("patient_model.diseases")}
                     value={formData.diseases}
                     onChange={(e) => handleInputChange(e, setFormData)}
                 />
                 <TextareaInput
                     id="note"
-                    label={t("add_patient.note")}
+                    label={t("patient_model.note")}
                     value={formData.note}
                     onChange={(e) => handleInputChange(e, setFormData)}
                 />
                 <div>
                     <Button type="submit" className="w-full text-white">
-                        {t("add_patient.submit")}
+                        {t("patient_model.submit")}
                     </Button>
                 </div>
             </form>

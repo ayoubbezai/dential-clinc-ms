@@ -15,5 +15,10 @@
     "role": "Rôle",
     "created_date": "Date de création",
     "actions": "Actions"
+  },
+  "edit_user_model": {
+    "title": "Modifier l'utilisateur",
+    "password_placeholder": "Entrez un nouveau mot de passe (facultatif)",
+    "confirm_placeholder": "Confirmez le nouveau mot de passe (facultatif)"
   }
 }

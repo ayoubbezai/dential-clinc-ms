@@ -7,7 +7,7 @@ import TextInput from "@/components/inputs/TextInput";
 import SelectInput from "@/components/inputs/SelectInput";
 import TextareaInput from "@/components/inputs/TextareaInput";
 
-const EditPatientModel = ({ isOpen, onClose, currentPatient, refreshPatients }) => {
+const EditPatientModel = ({ isOpen, onClose, currentPatient, refreshpatient_model, t }) => {
     const [formData, setFormData] = useState(initializeFormData(currentPatient));
 
     useEffect(() => {
@@ -16,32 +16,32 @@ const EditPatientModel = ({ isOpen, onClose, currentPatient, refreshPatients }) 
 
     return (
         <Model isOpen={isOpen} onClose={onClose}>
-            <form onSubmit={(e) => handleSubmit(e, formData, currentPatient, onClose, refreshPatients)}>
-                {/* Reusable Inputs */}
-                <TextInput id="patient_name" label="Patient Name" value={formData.patient_name} onChange={(e) => handleInputChange(e, setFormData)} required />
-                <TextInput id="phone" label="Phone" type="tel" value={formData.phone} onChange={(e) => handleInputChange(e, setFormData)} required />
+            {/* Title */}
+            <h2 className="text-lg font-semibold mb-4">{t("patient_model.edit_patient_title")}</h2>
 
-                {/* Gender Selection */}
+            <form onSubmit={(e) => handleSubmit(e, formData, currentPatient, onClose, refreshpatient_model)}>
+                <TextInput id="patient_name" label={t("patient_model.patient_name")} value={formData.patient_name} onChange={(e) => handleInputChange(e, setFormData)} required />
+                <TextInput id="phone" label={t("patient_model.phone")} type="tel" value={formData.phone} onChange={(e) => handleInputChange(e, setFormData)} required />
+
                 <SelectInput
                     id="gender"
-                    label="Gender"
+                    label={t("patient_model.gender")}
                     value={formData.gender}
                     options={[
-                        { value: "male", label: "Male" },
-                        { value: "female", label: "Female" }
+                        { value: "male", label: t("patient_model.male") },
+                        { value: "female", label: t("patient_model.female") }
                     ]}
                     onChange={(value) => setFormData({ ...formData, gender: value })}
                 />
 
-                <TextInput id="age" label="Age" type="number" value={formData.age} onChange={(e) => handleInputChange(e, setFormData)} required />
-                <TextInput id="diseases" label="Diseases" value={formData.diseases} onChange={(e) => handleInputChange(e, setFormData)} />
+                <TextInput id="age" label={t("patient_model.age")} type="number" value={formData.age} onChange={(e) => handleInputChange(e, setFormData)} required />
+                <TextInput id="diseases" label={t("patient_model.diseases")} value={formData.diseases} onChange={(e) => handleInputChange(e, setFormData)} />
+                <TextareaInput id="note" label={t("patient_model.note")} value={formData.note} onChange={(e) => handleInputChange(e, setFormData)} />
 
-                {/* Note Field */}
-                <TextareaInput id="note" label="Note" value={formData.note} onChange={(e) => handleInputChange(e, setFormData)} />
-
-                {/* Submit Button */}
                 <div>
-                    <Button type="submit" className="w-full text-white">Submit</Button>
+                    <Button type="submit" className="w-full text-white">
+                        {t("patient_model.submit")}
+                    </Button>
                 </div>
             </form>
         </Model>
