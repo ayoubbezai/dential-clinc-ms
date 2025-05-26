@@ -30,5 +30,18 @@
     "patient_name": "Patient Name",
     "amount": "Amount",
     "date": "Date"
+  },
+  "add_payment_model": {
+    "add_expense_title": "Add Expense",
+    "amount_label": "Amount",
+    "amount_placeholder": "Enter amount",
+    "note_label": "Note (Optional)",
+    "note_placeholder": "Add a note",
+    "cancel": "Cancel",
+    "add_expense_button": "Add Expense",
+    "processing": "Processing...",
+    "amount_required": "Amount is required!",
+    "payment_added_success": "Payment added successfully!",
+    "payment_failed": "Failed to process the transaction."
   }
 }

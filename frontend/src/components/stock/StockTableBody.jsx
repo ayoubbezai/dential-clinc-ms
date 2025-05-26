@@ -9,27 +9,45 @@ import { StocksService } from '@/services/shared/StocksService';
 import Swal from 'sweetalert2';
 import toast from 'react-hot-toast';
 
-// Lazy load the EditStockModel
 const EditStockModel = lazy(() => import('@/models/EditModels/EditStockModel'));
 
-const StockTableBody = ({ loading, error, stocks, fetchStocks }) => {
+// Translation helper for stock status
+const getTranslatedStatus = (status, t) => {
+    switch (status?.toLowerCase()) {
+        case 'out of stock':
+            return t('status.out_of_stock');
+        case 'low':
+            return t('status.low');
+        case 'medium':
+            return t('status.medium');
+        case 'good':
+            return t('status.good');
+        case 'very good':
+            return t('status.very_good');
+        case 'unknown':
+        default:
+            return t('status.unknown');
+    }
+};
+
+const StockTableBody = ({ loading, error, stocks, fetchStocks, t }) => {
     const [isEditModelOpen, setIsEditModelOpen] = useState(false);
     const [currentStock, setCurrentStock] = useState(null);
 
-    // Function to handle edit action
     const handleEdit = (stock) => {
         setCurrentStock(stock);
         setIsEditModelOpen(true);
     };
+
     const handleDelete = async (stockId) => {
         const result = await Swal.fire({
-            title: `Delete Stock"?`,
-            text: "This action cannot be undone.",
-            icon: "warning",
+            title: `${t('confirm_delete.title') || 'Delete Stock'}?`,
+            text: t('confirm_delete.text') || 'This action cannot be undone.',
+            icon: 'warning',
             showCancelButton: true,
-            confirmButtonColor: "#d33",
-            cancelButtonColor: "#3085d6",
-            confirmButtonText: "Yes, delete it!",
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#3085d6',
+            confirmButtonText: t('confirm_delete.confirm') || 'Yes, delete it!',
         });
 
         if (!result.isConfirmed) return;
@@ -37,17 +55,16 @@ const StockTableBody = ({ loading, error, stocks, fetchStocks }) => {
         try {
             const { data, error } = await StocksService.deleteStock(stockId);
             if (data) {
-                toast.success("Stock deleted successfully!");
-                fetchStocks?.(1); 
+                toast.success(t('messages.delete_success') || 'Stock deleted successfully!');
+                fetchStocks?.(1);
             } else {
-                toast.error(error || "Failed to delete stock.");
+                toast.error(error || t('messages.delete_error') || 'Failed to delete stock.');
             }
         } catch (err) {
-            toast.error("An unexpected error occurred.");
+            toast.error(t('messages.unexpected_error') || 'An unexpected error occurred.');
             console.error(err);
         }
     };
-
 
     return (
         <>
@@ -67,35 +84,35 @@ const StockTableBody = ({ loading, error, stocks, fetchStocks }) => {
                             <TableCell>{stock.quantity}</TableCell>
                             <TableCell>${parseFloat(stock.price).toFixed(2)}</TableCell>
                             <TableCell>{stock.expiry_date || 'N/A'}</TableCell>
-                            <TableCell className={"relative"}>
-                                <span className='flex gap-1 items-center'>
+                            <TableCell className="relative">
+                                <span className="flex gap-1 items-center">
                                     {renderStockIcon(stock.status)}
-                                    {stock.status} {stock.status !== 'Out Of Stock' && "Status"}
+                                    {getTranslatedStatus(stock.status, t)}
                                 </span>
                             </TableCell>
                             <TableCell>
                                 <EditAndDelete
                                     element={stock}
                                     loading={loading}
-                                    handleEdit={handleEdit} 
+                                    handleEdit={handleEdit}
                                     handleDelete={handleDelete}
-
                                 />
                             </TableCell>
                         </TableRow>
                     ))
                 ) : (
-                    <NoElmentFoundInTable element={"stocks"} />
+                    <NoElmentFoundInTable element={t('table.no_stock') || 'stocks'} />
                 )}
             </TableBody>
 
             {isEditModelOpen && currentStock && (
-                <Suspense fallback={<p>Loading edit model...</p>}>
+                <Suspense fallback={<p>{t('messages.loading_model') || 'Loading edit model...'}</p>}>
                     <EditStockModel
                         isOpen={isEditModelOpen}
                         onClose={() => setIsEditModelOpen(false)}
                         refetchStocks={fetchStocks}
                         stock={currentStock}
+                        t={t}
                     />
                 </Suspense>
             )}

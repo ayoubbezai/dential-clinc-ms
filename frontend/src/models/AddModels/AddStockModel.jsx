@@ -1,18 +1,18 @@
 import React, { useState } from 'react';
-import Model from "@/models/other/Model";
+import ModelNoClickOut from '../other/ModelNoClickOut';
 import { Input } from '@/components/designSystem/input';
 import { Label } from '@/components/designSystem/label';
 import { selectClassName } from '@/constant/classNames';
 import { Button } from '@/components/designSystem/button';
 import SelectSupplierAsync from '@/components/select/SelectSupplierAsync';
-import ModelNoClickOut from '../other/ModelNoClickOut';
 import SelectUnitAsync from '@/components/select/SelectUnitAsync';
 import SelectMedicineAsync from '@/components/select/SelectMedicineAsync';
 import { StocksService } from '@/services/shared/StocksService';
 import toast from 'react-hot-toast';
 
-const AddStockModel = ({ isOpen, onClose, fetchStocks }) => {
-    const [quantity, setQuantity] = useState();
+const AddStockModel = ({ isOpen, onClose, fetchStocks, t }) => {
+
+    const [quantity, setQuantity] = useState('');
     const [price, setPrice] = useState('');
     const [expireDate, setExpireDate] = useState('');
     const [loading, setLoading] = useState(false);
@@ -20,67 +20,74 @@ const AddStockModel = ({ isOpen, onClose, fetchStocks }) => {
     const [selectedUnit, setSelectedUnit] = useState(null);
     const [selectedMedicine, setSelectedMedicine] = useState(null);
 
-    const handleSupplierChange = (newSupplier) => {
-        setSelectedSupplier(newSupplier);
-    };
-    const handleUnitChange = (newUnit) => {
-        setSelectedUnit(newUnit);
-    };
-    const handleMedicineChange = (newMedicine) => {
-        setSelectedMedicine(newMedicine);
-    };
+    const [loadState, setLoadState] = useState({
+        medicinesLoaded: false,
+        unitsLoaded: false
+    });
 
+    const handleSupplierChange = (newSupplier) => setSelectedSupplier(newSupplier);
+    const handleUnitChange = (newUnit) => setSelectedUnit(newUnit);
+    const handleMedicineChange = (newMedicine) => setSelectedMedicine(newMedicine);
 
     const handleAdd = async (e) => {
         e.preventDefault();
-        setLoading(true)
+        setLoading(true);
 
-        const { data,error } = await StocksService.addStock(selectedMedicine.value, selectedSupplier.value, selectedUnit.value, price, quantity, expireDate);
+        const { data, error } = await StocksService.addStock(
+            selectedMedicine.value,
+            selectedSupplier.value,
+            selectedUnit.value,
+            price,
+            quantity,
+            expireDate
+        );
+
         if (data) {
-            toast.success("Stock added successfully!");
+            toast.success(t('messages.add_success') || 'Stock added successfully!');
         } else {
-            toast.error(error);
+            toast.error(error || t('messages.add_error') || 'Failed to add stock.');
         }
-        setLoading(false)
-        fetchStocks?.(1)
-        onClose?.()
 
+        setLoading(false);
+        fetchStocks?.(1);
+        onClose?.();
     };
-  const [loadState, setLoadState] = useState({
-      medicinesLoaded: false,
-      unitsLoaded: false
-  });
-    
 
     return (
         <ModelNoClickOut isOpen={isOpen} onClose={onClose}>
             <div className="p-4 py-2">
-                <h2 className="text-xl font-semibold mb-4">Add Medicine</h2>
+                <h2 className="text-xl font-semibold mb-4">{t('add_stock.title')}</h2>
                 <form className="flex flex-col" onSubmit={handleAdd}>
                     <div className="mb-3">
-                        <div className='flex flex-col gap-4 mt-2 mb-4'>
-
-                            <SelectSupplierAsync onChange={handleSupplierChange}
-                                value={selectedSupplier} 
-                                onLoaded={() => setLoadState(prev => ({ ...prev, unitsLoaded: true }))}
-                                />
-
+                        <div className="flex flex-col gap-4 mt-2 mb-4">
+                            <SelectSupplierAsync
+                                onChange={handleSupplierChange}
+                                value={selectedSupplier}
+                                onLoaded={() =>
+                                    setLoadState((prev) => ({ ...prev, unitsLoaded: true }))
+                                }
+                                t={t}
+                            />
                             <SelectUnitAsync
                                 onChange={handleUnitChange}
-                                value={selectedUnit} 
-                                onLoaded={() => setLoadState(prev => ({ ...prev, medicinesLoaded: true }))}
+                                value={selectedUnit}
                                 load={loadState.unitsLoaded}
-                                />
+                                onLoaded={() =>
+                                    setLoadState((prev) => ({ ...prev, medicinesLoaded: true }))
+                                }
+                                t={t}
 
+                            />
                             <SelectMedicineAsync
                                 onChange={handleMedicineChange}
-                                value={selectedMedicine} 
+                                value={selectedMedicine}
                                 load={loadState.medicinesLoaded}
+                                t={t}
 
-                                />
-
+                            />
                         </div>
-                        <Label className="mb-2">Quantity</Label>
+
+                        <Label className="mb-2">{t('form.quantity')}</Label>
                         <Input
                             type="number"
                             value={quantity}
@@ -91,7 +98,7 @@ const AddStockModel = ({ isOpen, onClose, fetchStocks }) => {
                     </div>
 
                     <div className="mb-3">
-                        <Label className="mb-2">Price</Label>
+                        <Label className="mb-2">{t('form.price')}</Label>
                         <Input
                             type="number"
                             value={price}
@@ -102,7 +109,7 @@ const AddStockModel = ({ isOpen, onClose, fetchStocks }) => {
                     </div>
 
                     <div className="mb-3">
-                        <Label className="mb-2">Expiration Date</Label>
+                        <Label className="mb-2">{t('form.expiry')}</Label>
                         <Input
                             type="date"
                             value={expireDate}
@@ -114,10 +121,11 @@ const AddStockModel = ({ isOpen, onClose, fetchStocks }) => {
 
                     <Button
                         type="submit"
-                        className={`mt-6 px-4 py-3 text-white w-1/2 mx-auto bg-blue-600 rounded-lg ${loading ? 'opacity-50 cursor-not-allowed' : ''}`}
+                        className={`mt-6 px-4 py-3 text-white w-1/2 mx-auto bg-blue-600 rounded-lg ${loading ? 'opacity-50 cursor-not-allowed' : ''
+                            }`}
                         disabled={loading}
                     >
-                        {loading ? "Submitting..." : "Submit"}
+                        {loading ? t('form.submitting') : t('form.submit')}
                     </Button>
                 </form>
             </div>

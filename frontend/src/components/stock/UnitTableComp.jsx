@@ -6,15 +6,15 @@ import ErrorInTable from '../TableComp/ErrorInTable';
 import Skeleton from "react-loading-skeleton";
 import { handleDeleteUnit } from '@/utils/help/unitsHelp';
 
-const UnitTableComp = ({ loading, error, units, fetchUnits }) => {
+const UnitTableComp = ({ loading, error, units, fetchUnits, t }) => {
     const [deletingId, setDeletingId] = useState(null);
 
     return (
         <Table divClassName="max-h-[30vh] overflow-y-auto">
             <TableHeader>
                 <TableRow>
-                    <TableHead>Unit Name</TableHead>
-                    <TableHead className="w-10 text-center">Delete</TableHead>
+                    <TableHead>{t('units.unit_name')}</TableHead>
+                    <TableHead className="w-10 text-center">{t('units.delete')}</TableHead>
                 </TableRow>
             </TableHeader>
             <TableBody>
@@ -35,15 +35,15 @@ const UnitTableComp = ({ loading, error, units, fetchUnits }) => {
                                 <button
                                     onClick={() => handleDeleteUnit(unit.id, fetchUnits, setDeletingId)}
                                     disabled={deletingId === unit.id}
-                                    className=' cursor-pointer'
+                                    className='cursor-pointer'
                                 >
-                                    {deletingId === unit.id ? "Deleting..." : <img src={DeleteIcon} alt="Delete" />}
+                                    {deletingId === unit.id ? t('units.deleting') : <img src={DeleteIcon} alt={t('units.delete')} />}
                                 </button>
                             </TableCell>
                         </TableRow>
                     ))
                 ) : (
-                    <NoElmentFoundInTable element="units" />
+                    <NoElmentFoundInTable element={t('units.units')} />
                 )}
             </TableBody>
         </Table>

@@ -3,7 +3,8 @@ import Select from 'react-select';
 import { suppliersService } from '@/services/shared/supplierService';
 import debounce from 'lodash/debounce';
 
-const SelectSupplierAsync = ({ onChange, value, onLoaded }) => {
+const SelectSupplierAsync = ({ onChange, value, onLoaded, t }) => {
+
     const pageRef = useRef(1);
     const currentSearch = useRef('');
     const hasMoreRef = useRef(true);
@@ -15,32 +16,28 @@ const SelectSupplierAsync = ({ onChange, value, onLoaded }) => {
             if (isLoading) return;
             setIsLoading(true);
             try {
-
                 const { data } = await suppliersService.getAllSuppliers(10, search, '', '', page);
-                const fetched = data?.data.map(supplier => ({
-                    label: supplier.name,
-                    value: supplier.id,
-                })) || [];
+                const fetched =
+                    data?.data.map((supplier) => ({
+                        label: supplier.name,
+                        value: supplier.id,
+                    })) || [];
 
                 hasMoreRef.current = fetched.length > 0;
 
-                setOptions(prev =>
-                    append ? [...prev, ...fetched] : fetched
-                );
+                setOptions((prev) => (append ? [...prev, ...fetched] : fetched));
             } catch (err) {
                 console.error(err);
             } finally {
                 setIsLoading(false);
-                onLoaded?.()
+                onLoaded?.();
             }
-        },300),
+        }, 300),
         [currentSearch, pageRef]
     );
 
     useEffect(() => {
-        
         loadOptions('', 1, false);
-
     }, [loadOptions]);
 
     const handleInputChange = debounce((inputValue) => {
@@ -68,11 +65,10 @@ const SelectSupplierAsync = ({ onChange, value, onLoaded }) => {
             onChange={onChange}
             value={value}
             defaultValue={value}
-            defaultInputValue={value}
             isClearable
-            placeholder="Select supplier..."
+            placeholder={t('form.select_supplier') || 'Select supplier...'}
             noOptionsMessage={() =>
-                isLoading ? 'Loading...' : 'No more options'
+                isLoading ? t('form.loading') : t('form.no_more_options')
             }
         />
     );

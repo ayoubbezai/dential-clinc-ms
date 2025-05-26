@@ -9,7 +9,7 @@ import { handleDeleteMedicine } from '@/utils/help/medicinesHelp';
 // Lazy load the EditMedicineModel
 const EditMedicineModel = lazy(() => import('@/models/EditModels/EditMedicineModel'));
 
-const MedicinesTableBody = ({ loading, error, medicines, fetchMedicines }) => {
+const MedicinesTableBody = ({ loading, error, medicines, fetchMedicines,t }) => {
     const [isEditModelOpen, setIsEditModelOpen] = useState(false);
     const [currentMedicine, setCurrentMedicine] = useState(null);
     const [deletingId, setDeletingId] = useState(null);
@@ -18,8 +18,8 @@ const MedicinesTableBody = ({ loading, error, medicines, fetchMedicines }) => {
         setCurrentMedicine(medicine);
         setIsEditModelOpen(true);
     };
-    const handleDelete = (medicine)=>{
-        handleDeleteMedicine(medicine,setDeletingId, fetchMedicines)
+    const handleDelete = (medicine) => {
+        handleDeleteMedicine(medicine, setDeletingId, fetchMedicines)
     }
 
 
@@ -63,6 +63,7 @@ const MedicinesTableBody = ({ loading, error, medicines, fetchMedicines }) => {
                         onClose={() => setIsEditModelOpen(false)}
                         refetchMedicines={fetchMedicines}
                         medicine={currentMedicine}
+                        t={t}
                     />
                 </Suspense>
             )}

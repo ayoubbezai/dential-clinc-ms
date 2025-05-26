@@ -1,0 +1,146 @@
+{
+  "stock_cards": {
+    "total_items": "Articles totaux",
+    "out_of_stock": "Rupture de stock",
+    "low_stock": "Stock faible",
+    "expired": "Périmé"
+  },
+  "sort": {
+    "created_at": "Date",
+    "supplier_name": "Nom du fournisseur",
+    "medicine_name": "Nom du médicament",
+    "expiry_date": "Date d'expiration"
+  },
+  "table_header": {
+    "medicine": "Médicament",
+    "supplier": "Fournisseur",
+    "unit": "Unité",
+    "quantity": "Quantité",
+    "price": "Prix",
+    "expiry": "Expiration",
+    "status": "Statut",
+    "actions": "Actions"
+  },
+  "status": {
+    "all": "Tous les statuts",
+    "out_of_stock": "Rupture de stock",
+    "low": "Faible",
+    "medium": "Moyen",
+    "good": "Bon",
+    "very_good": "Très bon",
+    "unknown": "Inconnu"
+  },
+  "confirm_delete": {
+    "title": "Supprimer le stock",
+    "text": "Cette action est irréversible.",
+    "confirm": "Oui, supprimez-le !"
+  },
+  "messages": {
+    "delete_success": "Stock supprimé avec succès !",
+    "delete_error": "Échec de la suppression du stock.",
+    "unexpected_error": "Une erreur inattendue s'est produite.",
+    "loading_model": "Chargement du modèle d’édition...",
+    "add_success": "Stock ajouté avec succès !",
+    "add_error": "Échec de l'ajout du stock."
+  },
+  "table": {
+    "no_stock": "Aucun stock trouvé"
+  },
+  "add_stock": {
+    "title": "Ajouter au stock"
+  },
+  "form": {
+    "quantity": "Quantité",
+    "price": "Prix",
+    "expiry": "Date d'expiration",
+    "submit": "Soumettre",
+    "submitting": "Soumission...",
+    "select_supplier": "Sélectionner un fournisseur...",
+    "loading": "Chargement...",
+    "no_more_options": "Aucune autre option",
+    "select_medicine": "Sélectionner un médicament...",
+    "select_unit": "Sélectionner une unité..."
+  },
+  "editStock": "Modifier le stock",
+  "addStock": "Ajouter au stock",
+  "quantity": "Quantité",
+  "price": "Prix",
+  "expirationDate": "Date d'expiration",
+  "submitting": "Envoi en cours...",
+  "submit": "Soumettre",
+  "stockUpdatedSuccessfully": "Stock mis à jour avec succès !",
+  "failedToUpdateStock": "Échec de la mise à jour du stock.",
+  "medicines": {
+    "name": "Nom",
+    "category": "Catégorie",
+    "description": "Description",
+    "low_stock": "Stock faible",
+    "medium_stock": "Stock moyen",
+    "good_stock": "Bon stock",
+    "action": "Action",
+    "medicine_name": "Nom du médicament",
+    "date": "Date"
+  },
+  "add_medicine": {
+    "title": "Ajouter un médicament",
+    "name": "Nom",
+    "category": "Catégorie",
+    "description": "Description",
+    "choose_threshold": "Choisissez le seuil du médicament",
+    "low_stock": "Stock faible",
+    "medium_stock": "Stock moyen",
+    "good_stock": "Bon stock",
+    "submit": "Soumettre",
+    "submitting": "Envoi en cours...",
+    "success_message": "Médicament ajouté avec succès !"
+  },
+  "edit_medicine": {
+    "title": "Modifier le médicament",
+    "name": "Nom",
+    "category": "Catégorie",
+    "description": "Description",
+    "choose_threshold": "Choisissez le seuil du médicament",
+    "low_stock": "Stock faible",
+    "medium_stock": "Stock moyen",
+    "good_stock": "Bon stock",
+    "submit": "Soumettre",
+    "submitting": "Envoi en cours...",
+    "success_message": "Médicament modifié avec succès !",
+    "error_message": "Une erreur est survenue lors de la modification."
+  },
+  "units": {
+    "unit_name": "Nom de l'unité",
+    "delete": "Supprimer",
+    "deleting": "Suppression...",
+    "units": "unités",
+    "enter_unit_name": "Entrez le nom de l'unité",
+    "submit": "Soumettre",
+    "submitting": "Soumission en cours..."
+  },
+  "suppliers": {
+    "supplier_name": "Nom du fournisseur",
+    "date": "Date",
+    "name": "Nom",
+    "contact_info": "Informations de contact",
+    "actions": "Actions",
+    "not_available": "N/D",
+    "element_name": "fournisseurs",
+    "loading_edit_modal": "Chargement du modal d'édition...",
+    "add": {
+      "name_label": "Nom du fournisseur",
+      "name_placeholder": "Entrez le nom du fournisseur",
+      "contact_info_label": "Informations de contact",
+      "contact_info_placeholder": "Entrez les informations de contact",
+      "submit": "Soumettre",
+      "submitting": "Soumission en cours..."
+    },
+    "edit": {
+      "name_label": "Nom du fournisseur",
+      "name_placeholder": "Entrez le nom du fournisseur",
+      "contact_info_label": "Informations de contact",
+      "contact_info_placeholder": "Entrez les informations de contact",
+      "submit": "Soumettre",
+      "submitting": "Soumission en cours..."
+    }
+  }
+}

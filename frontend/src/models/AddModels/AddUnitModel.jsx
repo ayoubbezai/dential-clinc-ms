@@ -4,7 +4,7 @@ import { selectClassName } from '@/constant/classNames';
 import { Button } from '@/components/designSystem/button';
 import { handleAddUnit } from '@/utils/models/addUnitModel';
 
-const AddUnitModel = ({ isOpen, onClose, fetchUnits }) => {
+const AddUnitModel = ({ isOpen, onClose, fetchUnits, t }) => {
   const [unit, setUnit] = useState("");
   const [loading, setLoading] = useState(false);
 
@@ -15,20 +15,20 @@ const AddUnitModel = ({ isOpen, onClose, fetchUnits }) => {
 
   return (
     <Model isOpen={isOpen} onClose={onClose}>
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit} className="p-4">
         <label className="block text-sm font-medium text-gray-700">
-          Unit Name
+          {t('units.unit_name')}
         </label>
         <input
           type="text"
           value={unit}
           onChange={(e) => setUnit(e.target.value)}
-          placeholder="Enter Unit Name"
+          placeholder={t('units.enter_unit_name')}
           className={`${selectClassName} mt-2`}
           required
         />
-        <Button type="submit" className="text-white ml-2" disabled={loading}>
-          {loading ? "Submitting..." : "Submit"}
+        <Button type="submit" className="text-white ml-2 mt-4" disabled={loading}>
+          {loading ? t('units.submitting') : t('units.submit')}
         </Button>
       </form>
     </Model>

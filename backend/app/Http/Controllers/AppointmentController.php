@@ -333,7 +333,7 @@ public function store(Request $request)
             "data" => $paginatedData->items(),
             "pagination" => [
                 "total_items" => $paginatedData->total(),
-                "items_per_page" => $paginatedData->perPage(),
+            "items_per_page" => $paginatedData->perPage(),
                 "current_page" => $paginatedData->currentPage(),
                 "total_pages" => $paginatedData->lastPage(),
                 "from" => $paginatedData->firstItem(),

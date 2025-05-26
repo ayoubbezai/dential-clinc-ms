@@ -1,9 +1,10 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import Select from 'react-select'; 
+import Select from 'react-select';
 import debounce from 'lodash/debounce';
 import { UnitsService } from '@/services/shared/UnitsService';
 
-const SelectUnitAsync = ({ onChange, value, onLoaded, load }) => {
+const SelectUnitAsync = ({ onChange, value, onLoaded, load, t }) => {
+
     const pageRef = useRef(1);
     const currentSearch = useRef('');
     const hasMoreRef = useRef(true);
@@ -28,15 +29,14 @@ const SelectUnitAsync = ({ onChange, value, onLoaded, load }) => {
                 console.error(err);
             } finally {
                 setIsLoading(false);
-                onLoaded?.()
-
+                onLoaded?.();
             }
-        },0),
+        }, 300),
         []
     );
 
     useEffect(() => {
-        if (load){
+        if (load) {
             loadOptions('', 1, false);
         }
     }, [loadOptions, load]);
@@ -45,7 +45,7 @@ const SelectUnitAsync = ({ onChange, value, onLoaded, load }) => {
         currentSearch.current = inputValue;
         pageRef.current = 1;
         hasMoreRef.current = true;
-        if (inputValue){
+        if (inputValue) {
             loadOptions(inputValue, 1, false);
         }
     }, 300);
@@ -67,9 +67,9 @@ const SelectUnitAsync = ({ onChange, value, onLoaded, load }) => {
             value={value}
             defaultInputValue={value}
             isClearable
-            placeholder="Select unit..."
+            placeholder={t('form.select_unit') || 'Select unit...'}
             noOptionsMessage={() =>
-                isLoading ? 'Loading...' : 'No more options'
+                isLoading ? t('form.loading') : t('form.no_more_options')
             }
         />
     );

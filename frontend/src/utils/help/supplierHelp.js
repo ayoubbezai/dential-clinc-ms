@@ -4,7 +4,6 @@ import Swal from "sweetalert2";
 
 export const handleDeleteSupplier = async (
   supplierId,
-  setDeletingId,
   fetchSuppliers
 ) => {
   const result = await Swal.fire({
@@ -19,7 +18,6 @@ export const handleDeleteSupplier = async (
 
   if (!result.isConfirmed) return;
 
-  setDeletingId(supplierId);
   const { data } = await suppliersService.deleteSupplier(supplierId);
 
   if (data) {
@@ -29,7 +27,6 @@ export const handleDeleteSupplier = async (
     toast.error("Failed to delete supplier.");
   }
 
-  setDeletingId(null);
 };
 
 export  const handleEditSupplier = async (supplier, setLoading, fetchSuppliers, onClose) => {

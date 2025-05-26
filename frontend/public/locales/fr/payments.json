@@ -30,5 +30,18 @@
     "patient_name": "Nom",
     "amount": "Montant",
     "date": "Date"
+  },
+  "add_payment_model": {
+    "add_expense_title": "Ajouter une dépense",
+    "amount_label": "Montant",
+    "amount_placeholder": "Entrez le montant",
+    "note_label": "Note (optionnelle)",
+    "note_placeholder": "Ajouter une note",
+    "cancel": "Annuler",
+    "add_expense_button": "Ajouter la dépense",
+    "processing": "Traitement en cours...",
+    "amount_required": "Le montant est requis !",
+    "payment_added_success": "Paiement ajouté avec succès !",
+    "payment_failed": "Échec du traitement de la transaction."
   }
 }

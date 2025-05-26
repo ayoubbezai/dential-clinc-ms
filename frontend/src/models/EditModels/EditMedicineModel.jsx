@@ -7,7 +7,7 @@ import { Button } from '@/components/designSystem/button';
 import { medicnesService } from '@/services/shared/medicnesService';
 import toast from 'react-hot-toast';
 
-const EditMedicineModel = ({ isOpen, onClose, refetchMedicines, medicine }) => {
+const EditMedicineModel = ({ isOpen, onClose, refetchMedicines, medicine, t }) => {
     const [name, setName] = useState('');
     const [category, setCategory] = useState('');
     const [description, setDescription] = useState('');
@@ -47,11 +47,11 @@ const EditMedicineModel = ({ isOpen, onClose, refetchMedicines, medicine }) => {
         );
 
         if (data) {
-            toast.success("Medicine updated successfully!");
+            toast.success(t('edit_medicine.success_message'));
             refetchMedicines?.(1);
             onClose?.();
         } else {
-            toast.error(error || "An error occurred while updating.");
+            toast.error(error || t('edit_medicine.error_message'));
         }
 
         setLoading(false);
@@ -60,10 +60,10 @@ const EditMedicineModel = ({ isOpen, onClose, refetchMedicines, medicine }) => {
     return (
         <Model isOpen={isOpen} onClose={onClose}>
             <div className="p-4 py-2">
-                <h2 className="text-xl font-semibold mb-4">Edit Medicine</h2>
+                <h2 className="text-xl font-semibold mb-4">{t('edit_medicine.title')}</h2>
                 <form className="flex flex-col" onSubmit={handleUpdate}>
                     <div className="mb-3">
-                        <Label className="mb-2">Name</Label>
+                        <Label className="mb-2">{t('edit_medicine.name')}</Label>
                         <Input
                             type="text"
                             value={name}
@@ -74,7 +74,7 @@ const EditMedicineModel = ({ isOpen, onClose, refetchMedicines, medicine }) => {
                     </div>
 
                     <div className="mb-3">
-                        <Label className="mb-2">Category</Label>
+                        <Label className="mb-2">{t('edit_medicine.category')}</Label>
                         <Input
                             type="text"
                             value={category}
@@ -84,7 +84,7 @@ const EditMedicineModel = ({ isOpen, onClose, refetchMedicines, medicine }) => {
                     </div>
 
                     <div className="mb-3">
-                        <Label className="mb-2">Description</Label>
+                        <Label className="mb-2">{t('edit_medicine.description')}</Label>
                         <Input
                             type="text"
                             value={description}
@@ -93,10 +93,10 @@ const EditMedicineModel = ({ isOpen, onClose, refetchMedicines, medicine }) => {
                         />
                     </div>
 
-                    <h2 className="my-2 mb-4 font-semibold">Choose the Medicine Threshold</h2>
-                    <div className='flex gap-2 '>
+                    <h2 className="my-2 mb-4 font-semibold">{t('edit_medicine.choose_threshold')}</h2>
+                    <div className="flex gap-2">
                         <div className="mb-3">
-                            <Label className="mb-2">Low Stock</Label>
+                            <Label className="mb-2">{t('edit_medicine.low_stock')}</Label>
                             <Input
                                 type="number"
                                 value={lowStock}
@@ -107,7 +107,7 @@ const EditMedicineModel = ({ isOpen, onClose, refetchMedicines, medicine }) => {
                         </div>
 
                         <div className="mb-3">
-                            <Label className="mb-2">Medium Stock</Label>
+                            <Label className="mb-2">{t('edit_medicine.medium_stock')}</Label>
                             <Input
                                 type="number"
                                 value={mediumStock}
@@ -118,7 +118,7 @@ const EditMedicineModel = ({ isOpen, onClose, refetchMedicines, medicine }) => {
                         </div>
 
                         <div className="mb-3">
-                            <Label className="mb-2">Good Stock</Label>
+                            <Label className="mb-2">{t('edit_medicine.good_stock')}</Label>
                             <Input
                                 type="number"
                                 value={goodStock}
@@ -135,7 +135,7 @@ const EditMedicineModel = ({ isOpen, onClose, refetchMedicines, medicine }) => {
                             }`}
                         disabled={loading}
                     >
-                        {loading ? 'Submitting...' : 'Submit'}
+                        {loading ? t('edit_medicine.submitting') : t('edit_medicine.submit')}
                     </Button>
                 </form>
             </div>

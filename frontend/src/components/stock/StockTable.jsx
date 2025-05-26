@@ -13,7 +13,7 @@ import StockTableBody from './StockTableBody';
 
 const AddStockModel = lazy(() => import('@/models/AddModels/AddStockModel'));
 
-const StockTable = ({ onLoaded }) => {
+const StockTable = ({ onLoaded, t }) => {
   const {
     stocks,
     pagination,
@@ -36,10 +36,12 @@ const StockTable = ({ onLoaded }) => {
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
 
 
+
+
   return (
     <>
       <div className="grid grid-cols-12 gap-4 mt-[10px]">
-        <StockCards statistics={statistics} />
+        <StockCards statistics={statistics} t={t} />
       </div>
 
       <div className="grid grid-cols-12 gap-4 mt-[30px]">
@@ -47,16 +49,16 @@ const StockTable = ({ onLoaded }) => {
           <div className="flex justify-between items-center mb-4">
             <SearchInTable setSearch={setSearch} search={search} />
             <div className="flex gap-3">
-              <SelectStockTable stockStatus={stockStatus} setStockStatus={setStockStatus} />
+              <SelectStockTable stockStatus={stockStatus} setStockStatus={setStockStatus} t={t} />
               <SortDirection sortDirection={sortDirection} setSortDirection={setSortDirection} />
-              <SortByStock sortBy={sortBy} setSortBy={setSortBy} />
+              <SortByStock sortBy={sortBy} setSortBy={setSortBy} t={t} />
               <AddButton onClick={() => setIsAddModalOpen(true)} />
             </div>
           </div>
 
           <Table>
-            <StockTableHeader />
-            <StockTableBody loading={loading} error={error} stocks={stocks} fetchStocks={fetchStocks}/>
+            <StockTableHeader t={t} />
+            <StockTableBody loading={loading} error={error} stocks={stocks} fetchStocks={fetchStocks} t={t} />
           </Table>
 
           <TableFooter setPerPage={setPerPage} setPage={setPage} pagination={pagination} />
@@ -69,6 +71,7 @@ const StockTable = ({ onLoaded }) => {
             isOpen={isAddModalOpen}
             onClose={() => setIsAddModalOpen(false)}
             fetchStocks={fetchStocks}
+            t={t}
           />
         </Suspense>
       )}

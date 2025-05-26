@@ -10,7 +10,7 @@ import SupplierTableComp from './SupplierTableComp';
 
 const AddSupplierModel = lazy(() => import('@/models/AddModels/AddSupplierModel'));
 
-const SuppliersTable = () => {
+const SuppliersTable = ({ t }) => {
     const [isAddModalOpen, setIsAddModalOpen] = useState(false)
 
     const { suppliers, setPerPage, setPage, pagination, loading, error, search,
@@ -26,12 +26,12 @@ const SuppliersTable = () => {
                     <SearchInTable setSearch={setSearch} search={search} />
                     <div className='flex gap-3'>
                         <SortDirection sortDirection={sortDirection} setSortDirection={setSortDirection} />
-                        <SortBySupplier sortBy={sortBy} setSortBy={setSortBy} />
+                        <SortBySupplier sortBy={sortBy} setSortBy={setSortBy} t={t} />
                         <AddButton onClick={() => setIsAddModalOpen(true)} />
                     </div>
 
                 </div>
-                <SupplierTableComp loading={loading} error={error} suppliers={suppliers} fetchSuppliers={fetchSuppliers} />
+                <SupplierTableComp loading={loading} error={error} suppliers={suppliers} fetchSuppliers={fetchSuppliers} t={t}/>
                 <TableFooter setPerPage={setPerPage} setPage={setPage} pagination={pagination} />
             </div>
 
@@ -41,6 +41,7 @@ const SuppliersTable = () => {
                         isOpen={isAddModalOpen}
                         onClose={() => setIsAddModalOpen(false)}
                         fetchSuppliers={fetchSuppliers}
+                        t={t}
                     />
                 </Suspense>
             )}

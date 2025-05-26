@@ -1,0 +1,146 @@
+{
+  "stock_cards": {
+    "total_items": "Total Items",
+    "out_of_stock": "Out of Stock",
+    "low_stock": "Low Stock",
+    "expired": "Expired"
+  },
+
+  "sort": {
+    "created_at": "Date",
+    "supplier_name": "Supplier Name",
+    "medicine_name": "Medicine Name",
+    "expiry_date": "Expiry Date"
+  },
+  "table_header": {
+    "medicine": "Medicine",
+    "supplier": "Supplier",
+    "unit": "Unit",
+    "quantity": "Quantity",
+    "price": "Price",
+    "expiry": "Expiry",
+    "status": "Status",
+    "actions": "Actions"
+  },
+  "status": {
+    "all": "All Status",
+    "out_of_stock": "Out of Stock",
+    "low": "Low",
+    "medium": "Medium",
+    "good": "Good",
+    "very_good": "Very Good",
+    "unknown": "Unknown"
+  },
+  "confirm_delete": {
+    "title": "Delete Stock",
+    "text": "This action cannot be undone.",
+    "confirm": "Yes, delete it!"
+  },
+  "messages": {
+    "delete_success": "Stock deleted successfully!",
+    "delete_error": "Failed to delete stock.",
+    "unexpected_error": "An unexpected error occurred.",
+    "loading_model": "Loading edit model...",
+    "add_success": "Stock added successfully!",
+    "add_error": "Failed to add stock."
+  },
+  "table": {
+    "no_stock": "No stocks found"
+  },
+  "add_stock": {
+    "title": "Add To Stock"
+  },
+  "form": {
+    "quantity": "Quantity",
+    "price": "Price",
+    "expiry": "Expiration Date",
+    "submit": "Submit",
+    "submitting": "Submitting...",
+    "select_supplier": "Select supplier...",
+    "loading": "Loading...",
+    "select_medicine": "Select medicine...",
+    "select_unit": "Select unit..."
+  },
+  "editStock": "Edit Stock",
+  "addStock": "Add Stock",
+  "quantity": "Quantity",
+  "price": "Price",
+  "expirationDate": "Expiration Date",
+  "submitting": "Submitting...",
+  "submit": "Submit",
+  "stockUpdatedSuccessfully": "Stock updated successfully!",
+  "failedToUpdateStock": "Failed to update stock.",
+  "medicines": {
+    "name": "Nom",
+    "category": "Catégorie",
+    "description": "Description",
+    "low_stock": "Stock faible",
+    "medium_stock": "Stock moyen",
+    "good_stock": "Bon stock",
+    "action": "Action",
+    "medicine_name": "Medicine Name",
+    "date": "Date"
+  },
+  "add_medicine": {
+    "title": "Add Medicine",
+    "name": "Name",
+    "category": "Category",
+    "description": "Description",
+    "choose_threshold": "Choose the Medicine threshold",
+    "low_stock": "Low Stock",
+    "medium_stock": "Medium Stock",
+    "good_stock": "Good Stock",
+    "submit": "Submit",
+    "submitting": "Submitting...",
+    "success_message": "Medicine added successfully!"
+  },
+  "edit_medicine": {
+    "title": "Edit Medicine",
+    "name": "Name",
+    "category": "Category",
+    "description": "Description",
+    "choose_threshold": "Choose the Medicine Threshold",
+    "low_stock": "Low Stock",
+    "medium_stock": "Medium Stock",
+    "good_stock": "Good Stock",
+    "submit": "Submit",
+    "submitting": "Submitting...",
+    "success_message": "Medicine updated successfully!",
+    "error_message": "An error occurred while updating."
+  },
+  "units": {
+    "unit_name": "Unit Name",
+    "delete": "Delete",
+    "deleting": "Deleting...",
+    "units": "units",
+    "enter_unit_name": "Enter Unit Name",
+    "submit": "Submit",
+    "submitting": "Submitting..."
+  },
+  "suppliers": {
+    "supplier_name": "Supplier Name",
+    "date": "Date",
+    "name": "Name",
+    "contact_info": "Contact Info",
+    "actions": "Actions",
+    "not_available": "N/A",
+    "element_name": "suppliers",
+    "loading_edit_modal": "Loading edit modal...",
+    "add": {
+      "name_label": "Supplier Name",
+      "name_placeholder": "Enter Supplier Name",
+      "contact_info_label": "Contact Info",
+      "contact_info_placeholder": "Enter Contact Info",
+      "submit": "Submit",
+      "submitting": "Submitting..."
+    },
+    "edit": {
+      "name_label": "Supplier Name",
+      "name_placeholder": "Enter Supplier Name",
+      "contact_info_label": "Contact Info",
+      "contact_info_placeholder": "Enter Contact Info",
+      "submit": "Submit",
+      "submitting": "Submitting..."
+    }
+  }
+}

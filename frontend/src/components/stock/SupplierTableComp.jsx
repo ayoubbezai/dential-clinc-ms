@@ -9,8 +9,7 @@ import { handleDeleteSupplier } from '@/utils/help/supplierHelp';
 // Lazy import for the edit modal
 const EditSupplierModel = lazy(() => import('@/models/EditModels/EditSupplierModel'));
 
-const SupplierTableComp = ({ loading, error, suppliers, fetchSuppliers }) => {
-    const [deletingId, setDeletingId] = useState(null);
+const SupplierTableComp = ({ loading, error, suppliers, fetchSuppliers, t }) => {
     const [isEditModalOpen, setIsEditModalOpen] = useState(false);
     const [currentSupplier, setCurrentSupplier] = useState(null);
 
@@ -19,15 +18,14 @@ const SupplierTableComp = ({ loading, error, suppliers, fetchSuppliers }) => {
         setIsEditModalOpen(true);
     }
 
-
     return (
         <>
             <Table className="my-2" divClassName="max-h-[30vh] overflow-y-auto">
                 <TableHeader>
                     <TableRow>
-                        <TableHead>Name</TableHead>
-                        <TableHead>Contact Info</TableHead>
-                        <TableHead>Actions</TableHead>
+                        <TableHead>{t('suppliers.name')}</TableHead>
+                        <TableHead>{t('suppliers.contact_info')}</TableHead>
+                        <TableHead>{t('suppliers.actions')}</TableHead>
                     </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -40,33 +38,34 @@ const SupplierTableComp = ({ loading, error, suppliers, fetchSuppliers }) => {
                     ) : suppliers?.length > 0 ? (
                         suppliers.map((supplier) => (
                             <TableRow key={supplier.id}>
-                                <TableCell>{supplier.name || 'N/A'}</TableCell>
-                                <TableCell>{supplier.contact_info || 'N/A'}</TableCell>
+                                <TableCell>{supplier.name || t('suppliers.not_available')}</TableCell>
+                                <TableCell>{supplier.contact_info || t('suppliers.not_available')}</TableCell>
                                 <TableCell>
                                     <EditAndDelete
                                         element={supplier}
                                         loading={loading}
                                         handleEdit={handleEdit}
                                         handleDelete={() =>
-                                            handleDeleteSupplier(supplier.id, setDeletingId, fetchSuppliers)
+                                            handleDeleteSupplier(supplier.id, fetchSuppliers)
                                         }
                                     />
                                 </TableCell>
                             </TableRow>
                         ))
                     ) : (
-                        <NoElmentFoundInTable element="suppliers" />
+                        <NoElmentFoundInTable element={t('suppliers.element_name')} />
                     )}
                 </TableBody>
             </Table>
 
             {isEditModalOpen && (
-                <Suspense fallback={<div>Loading edit modal...</div>}>
+                <Suspense fallback={<div>{t('suppliers.loading_edit_modal')}</div>}>
                     <EditSupplierModel
                         isOpen={isEditModalOpen}
                         onClose={() => setIsEditModalOpen(false)}
                         fetchSuppliers={fetchSuppliers}
                         currentSupplier={currentSupplier}
+                        t={t}
                     />
                 </Suspense>
             )}

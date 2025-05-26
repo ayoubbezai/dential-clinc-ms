@@ -13,7 +13,7 @@ import MedicinesTableBody from './MedicinesTableBody';
 // Lazy import for AddMedicineModel
 const AddMedicineModel = lazy(() => import('@/models/AddModels/AddMedicineModel'));
 
-const MedicinesTable = ({ onLoaded }) => {
+const MedicinesTable = ({ onLoaded, t }) => {
     const [isAddModalOpen, setIsAddModalOpen] = useState(false);
 
     const {
@@ -39,14 +39,14 @@ const MedicinesTable = ({ onLoaded }) => {
                     <SearchInTable setSearch={setSearch} search={search} />
                     <div className='flex gap-3'>
                         <SortDirection sortDirection={sortDirection} setSortDirection={setSortDirection} />
-                        <SortByMedicne sortBy={sortBy} setSortBy={setSortBy} />
+                        <SortByMedicne sortBy={sortBy} setSortBy={setSortBy} t={t} />
                         <AddButton onClick={() => setIsAddModalOpen(true)} />
                     </div>
                 </div>
                 <Table className="my-2">
-                    <MedicinesTableHeader />
-                    <MedicinesTableBody loading={loading} error={error} medicines={medicines} fetchMedicines={fetchMedicines}
- />
+                    <MedicinesTableHeader t={t} />
+                    <MedicinesTableBody loading={loading} error={error} medicines={medicines} fetchMedicines={fetchMedicines} t={t}
+                    />
                 </Table>
                 <TableFooter setPerPage={setPerPage} setPage={setPage} pagination={pagination} />
             </div>
@@ -57,6 +57,7 @@ const MedicinesTable = ({ onLoaded }) => {
                         isOpen={isAddModalOpen}
                         onClose={() => setIsAddModalOpen(false)}
                         fetchMedicines={fetchMedicines}
+                        t={t}
                     />
                 </Suspense>
             )}
