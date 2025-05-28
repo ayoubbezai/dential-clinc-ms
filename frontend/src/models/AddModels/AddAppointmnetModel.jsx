@@ -9,7 +9,7 @@ import toast from 'react-hot-toast';
 
 const statusOptions = ['pending', 'completed', 'cancelled', 'scheduled', 'rescheduled'];
 
-const AddAppointmentModel = ({ isOpen, onClose, folder_id, fetchFolderAppointments }) => {
+const AddAppointmentModel = ({ isOpen, onClose, folder_id, fetchFolderAppointments, t }) => {
     const [date, setDate] = useState('');
     const [status, setStatus] = useState('');
     const [tooth, setTooth] = useState('');
@@ -18,25 +18,25 @@ const AddAppointmentModel = ({ isOpen, onClose, folder_id, fetchFolderAppointmen
     const [loading, setLoading] = useState(false);
 
     async function handleAdd(e) {
-        e.preventDefault(); // 
+        e.preventDefault();
         if (!date || !status) {
-            toast.error("Date and Status are required!");
+            toast.error(t("add_appointment_model.error_required_fields"));
             return;
         }
 
         setLoading(true);
         try {
-            const { data } = await AppointmentService.createAppointment(folder_id,date, title, tooth, content, status);
+            const { data } = await AppointmentService.createAppointment(folder_id, date, title, tooth, content, status);
 
             if (data?.success) {
-                toast.success("Appointment added successfully!");
+                toast.success(t("add_appointment_model.success_message"));
                 fetchFolderAppointments(folder_id);
                 onClose();
             } else {
-                toast.error(data?.message || "Failed to add appointment.");
+                toast.error(data?.message || t("add_appointment_model.error_message"));
             }
         } catch (error) {
-            toast.error("Something went wrong. Please try again.");
+            toast.error(t("add_appointment_model.generic_error"));
         } finally {
             setLoading(false);
         }
@@ -45,38 +45,38 @@ const AddAppointmentModel = ({ isOpen, onClose, folder_id, fetchFolderAppointmen
     return (
         <Model isOpen={isOpen} onClose={onClose}>
             <div className="p-4 py-2">
-                <h2 className="text-xl font-semibold mb-4">Add Appointment</h2>
+                <h2 className="text-xl font-semibold mb-4">{t("add_appointment_model.title")}</h2>
 
                 <form className="flex flex-col" onSubmit={handleAdd}>
                     <div className="mb-3">
-                        <Label className="mb-2">Date</Label>
+                        <Label className="mb-2">{t("add_appointment_model.date_label")}</Label>
                         <Input type="date" value={date} onChange={(e) => setDate(e.target.value)} className={selectClassName} required />
                     </div>
 
                     <div className="mb-3">
-                        <Label className="mb-2">Status</Label>
+                        <Label className="mb-2">{t("add_appointment_model.status_label")}</Label>
                         <select value={status} onChange={(e) => setStatus(e.target.value)} className={`${selectClassName} w-full`} required>
-                            <option value="" disabled>Select status</option>
+                            <option value="" disabled>{t("add_appointment_model.select_status")}</option>
                             {statusOptions.map((option) => (
                                 <option key={option} value={option}>
-                                    {option.charAt(0).toUpperCase() + option.slice(1)}
+                                    {t(`folder_appointments.status_${option}`)}
                                 </option>
                             ))}
                         </select>
                     </div>
 
                     <div className="mb-3">
-                        <Label className="mb-2">Tooth (Optional)</Label>
+                        <Label className="mb-2">{t("add_appointment_model.tooth_label")}</Label>
                         <Input type="text" value={tooth} onChange={(e) => setTooth(e.target.value)} className={selectClassName} />
                     </div>
 
                     <div className="mb-3">
-                        <Label className="mb-2">Title (Optional)</Label>
+                        <Label className="mb-2">{t("add_appointment_model.title_label")}</Label>
                         <Input type="text" value={title} onChange={(e) => setTitle(e.target.value)} className={selectClassName} />
                     </div>
 
                     <div className="mb-3">
-                        <Label className="mb-2">Content (Optional)</Label>
+                        <Label className="mb-2">{t("add_appointment_model.content_label")}</Label>
                         <Input type="text" value={content} onChange={(e) => setContent(e.target.value)} className={selectClassName} />
                     </div>
 
@@ -85,7 +85,7 @@ const AddAppointmentModel = ({ isOpen, onClose, folder_id, fetchFolderAppointmen
                         className={`mt-6 px-4 py-3 text-white w-1/2 mx-auto bg-blue-600 rounded-lg ${loading ? 'opacity-50 cursor-not-allowed' : ''}`}
                         disabled={loading}
                     >
-                        {loading ? "Submitting..." : "Submit"}
+                        {loading ? t("add_appointment_model.submitting") : t("add_appointment_model.submit")}
                     </Button>
                 </form>
             </div>

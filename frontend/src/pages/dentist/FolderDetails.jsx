@@ -8,9 +8,12 @@ import FolderDocuments from '@/components/pagesComp/folder/FolderDocuments';
 import FolderPayments from '@/components/pagesComp/folder/FolderPayments';
 import FolderAppointments from '@/components/pagesComp/folder/FolderAppointments';
 import FolderPrescription from '@/components/pagesComp/folder/FolderPrescription';
+import { useTranslation } from "react-i18next";
 
 const FolderDetails = () => {
     const { patientId, folderId } = useParams();
+    const { t } = useTranslation("folder_details")
+    const { t: tPatient } = useTranslation("patient_details")
     const {
         loading,
         folderDetails,
@@ -34,7 +37,7 @@ const FolderDetails = () => {
     return (
         <div className="w-full px-8 bg-background py-5 text-secondary">
             <p className="flex items-center gap-2 text-gray-700">
-                <Link to="/patients_list" className="text-blue-600 font-semibold">Patients</Link>
+                <Link to="/patients_list" className="text-blue-600 font-semibold">{t("patients")}</Link>
                 <HiArrowNarrowRight className="text-gray-500 mt-1" />
                 <Link to={`/patient/${patientId}`} className="text-gray-500">{folderDetails?.patient_name}</Link>
                 <HiArrowNarrowRight className="text-gray-500 mt-1" />
@@ -42,13 +45,13 @@ const FolderDetails = () => {
             </p>
 
             <div className="grid grid-cols-12 gap-4 my-4">
-                <FolderDetailsComp folderDetails={folderDetails} fetchFolderDetails={fetchFolderDetails} />
-                <FolderNotes folderNotes={folderNotes} folderId={folderId} fetchFolderNotes={fetchFolderNotes} />
-                <FolderDocuments folderId={folderId} folderAttachments={folderAttachments} fetchFolderAttachments={fetchFolderAttachments} />
-                <FolderPayments folderDetails={folderDetails} folderPayments={folderPayments} fetchFolderPayments={fetchFolderPayments} folderId={folderId} />
+                <FolderDetailsComp folderDetails={folderDetails} fetchFolderDetails={fetchFolderDetails} t={t} tPatient={tPatient} />
+                <FolderNotes folderNotes={folderNotes} folderId={folderId} fetchFolderNotes={fetchFolderNotes} t={t} />
+                <FolderDocuments folderId={folderId} folderAttachments={folderAttachments} fetchFolderAttachments={fetchFolderAttachments} t={t} />
+                <FolderPayments folderDetails={folderDetails} folderPayments={folderPayments} fetchFolderPayments={fetchFolderPayments} folderId={folderId} t={t} />
                 <FolderPrescription />
 
-                <FolderAppointments folderId={folderId} folderAppointments={folderAppointments} fetchFolderAppointments={fetchFolderAppointments} loading={loading} setAppsPagination={setAppsPagination} appsPagination={appsPagination} />
+                <FolderAppointments folderId={folderId} folderAppointments={folderAppointments} fetchFolderAppointments={fetchFolderAppointments} loading={loading} setAppsPagination={setAppsPagination} appsPagination={appsPagination} t={t} />
 
 
             </div>

@@ -12,6 +12,7 @@ import SelectStatusAppointment from '@/components/pagesComp/appointments/SelectS
 const AppointmentList = () => {
   const { t } = useTranslation('appointments');
   const { t: t2 } = useTranslation('common');
+  const { t: t3 } = useTranslation('folder_details');
 
   const {
     appointments,
@@ -55,7 +56,7 @@ const AppointmentList = () => {
           </div>
         </div>
 
-        <AppointmentsTable appointments={appointments} appointmentloading={loading} fetchAppointments={fetchAppointments} />
+        <AppointmentsTable appointments={appointments} appointmentloading={loading} fetchAppointments={fetchAppointments} t={t3} />
 
         <div className='flex justify-between items-center pb-3 px-4 mt-4'>
           <PageChange page={page} setPage={setPage} total_pages={pagination.total_pages} loading={loading} />

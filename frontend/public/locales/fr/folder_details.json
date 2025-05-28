@@ -1,0 +1,152 @@
+{
+  "patients": "Patients",
+  "Edit": "Modifier",
+  "Delete": "Supprimer",
+  "folder_details_comp": {
+    "title": "Détails du dossier",
+    "status": {
+      "working_on_it": "En cours",
+      "pending": "En attente",
+      "unknown": "Inconnu"
+    },
+    "visit": {
+      "tooth": "Dent n°",
+      "reason": "Raison",
+      "treatment": "Traitement",
+      "no_details": "Aucun détail sur les dents disponible."
+    },
+    "modal": {
+      "delete_title": "Êtes-vous sûr ?",
+      "delete_text": "Cette action est irréversible !",
+      "delete_confirm": "Oui, supprimer !",
+      "delete_success": "Supprimé !",
+      "delete_success_message": "Le dossier a été supprimé.",
+      "delete_error": "Erreur",
+      "delete_error_message": "Échec de la suppression du dossier."
+    }
+  },
+  "folder_notes": {
+    "title": "Notes",
+    "no_notes": "Aucune note disponible.",
+    "note": {
+      "title": "Titre",
+      "content": "Contenu",
+      "untitled": "Sans titre",
+      "no_content": "Aucun contenu disponible"
+    }
+  },
+  "folder_notes_menu": {
+    "manage_notes": "Gérer les notes",
+    "add_note": "Ajouter une note"
+  },
+  "edit_note_model": {
+    "title": "Gérer les notes",
+    "remove": "Supprimer",
+    "cancel": "Annuler",
+    "save_changes": "Enregistrer les modifications",
+    "success_update": "Notes mises à jour avec succès !",
+    "error_update": "Échec de la mise à jour des notes. Veuillez réessayer.",
+    "success_delete": "Note supprimée avec succès !",
+    "error_delete": "Échec de la suppression de la note.",
+    "error_delete_generic": "Erreur lors de la suppression de la note."
+  },
+  "add_note_model": {
+    "title": "Ajouter une note",
+    "label_title": "Titre",
+    "label_content": "Contenu",
+    "placeholder_title": "Entrez le titre de la note",
+    "placeholder_content": "Entrez le contenu de la note",
+    "add_button": "Ajouter la note",
+    "success_add": "Note ajoutée avec succès !",
+    "error_add": "Échec de l'ajout de la note. Veuillez réessayer."
+  },
+  "folder_documents": {
+    "title": "Documents",
+    "no_documents": "Aucun document trouvé.",
+    "success_delete": "Document supprimé avec succès !",
+    "error_delete": "Échec de la suppression du document.",
+    "error_delete_generic": "Erreur lors de la suppression du document.",
+    "delete_button_aria": "Supprimer le document"
+  },
+  "folder_documents_menu": {
+    "add_document": "Ajouter un document",
+    "refresh_list": "Rafraîchir la liste"
+  },
+  "folder_payments": {
+    "title": "Paiements",
+    "total": "Total",
+    "paid": "Payé",
+    "rest": "Reste",
+    "done": "Terminé"
+  },
+  "folder_payments_menu": {
+    "view_details": "Voir les détails",
+    "add_payment": "Ajouter un paiement"
+  },
+  "folder_payments_details": {
+    "folder": "Dossier",
+    "date": "Date",
+    "paid": "Payé",
+    "refunded": "Remboursé",
+    "note": "Note",
+    "refund_reason": "Motif du remboursement",
+    "no_payments": "Aucun paiement enregistré."
+  },
+  "add_payment_model": {
+    "title": "Ajouter un paiement",
+    "transaction_type_label": "Type de transaction",
+    "transaction_type_pay": "Payer",
+    "transaction_type_refund": "Rembourser",
+    "amount_label": "Montant (DA)",
+    "amount_placeholder": "Entrez le montant",
+    "refund_reason_label": "Motif du remboursement",
+    "refund_reason_placeholder": "Entrez le motif du remboursement",
+    "note_label": "Note (Optionnel)",
+    "note_placeholder": "Ajouter une note (optionnel)",
+    "cancel_button": "Annuler",
+    "confirm_button": "Confirmer",
+    "refund_button": "Rembourser",
+    "processing": "Traitement...",
+    "error_amount_required": "Le montant est requis !",
+    "error_refund_reason_required": "Le motif du remboursement est requis !",
+    "success_payment_added": "Paiement ajouté avec succès !",
+    "success_refund_processed": "Remboursement effectué avec succès !",
+    "error_processing_transaction": "Échec du traitement de la transaction.",
+    "confirm_refund_title": "Confirmer le remboursement",
+    "confirm_refund_text": "Êtes-vous sûr de vouloir rembourser {{amount}} DA ?",
+    "confirm_refund_confirm": "Oui, rembourser",
+    "confirm_refund_cancel": "Annuler",
+    "confirm_payment_title": "Confirmer le paiement",
+    "confirm_payment_text": "Vous avez saisi {{amount}} DA. Que souhaitez-vous faire ?",
+    "confirm_payment_confirm": "Confirmer",
+    "confirm_payment_deny": "Confirmer avec ({{remainingAmount}} DA)",
+    "confirm_payment_cancel": "Annuler"
+  },
+  "add_appointment_model": {
+    "title": "Ajouter un rendez-vous",
+    "date_label": "Date",
+    "status_label": "Statut",
+    "select_status": "Sélectionner un statut",
+    "tooth_label": "Dent (Optionnel)",
+    "title_label": "Titre (Optionnel)",
+    "content_label": "Contenu (Optionnel)",
+    "submit": "Soumettre",
+    "submitting": "Soumission...",
+    "success_message": "Rendez-vous ajouté avec succès !",
+    "error_message": "Échec de l'ajout du rendez-vous.",
+    "generic_error": "Une erreur est survenue. Veuillez réessayer.",
+    "error_required_fields": "La date et le statut sont obligatoires !"
+  },
+  "folder_appointments": {
+    "search_placeholder": "Rechercher...",
+    "status_filter_all": "Tous",
+    "status_pending": "En attente",
+    "status_completed": "Terminé",
+    "status_cancelled": "Annulé",
+    "status_scheduled": "Planifié",
+    "status_rescheduled": "Replanifié",
+    "add_button": "Ajouter un rendez-vous",
+    "loading": "Chargement..."
+  },
+  "loading": "Chargement..."
+}

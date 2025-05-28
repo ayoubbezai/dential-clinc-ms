@@ -1,0 +1,152 @@
+{
+  "patients": "Patients",
+  "Edit": "Edit",
+  "Delete": "Delete",
+  "folder_details_comp": {
+    "title": "Folder Details",
+    "status": {
+      "working_on_it": "Working on it",
+      "pending": "Pending",
+      "unknown": "Unknown"
+    },
+    "visit": {
+      "tooth": "Tooth No.",
+      "reason": "Reason",
+      "treatment": "Treatment",
+      "no_details": "No tooth details available."
+    },
+    "modal": {
+      "delete_title": "Are you sure?",
+      "delete_text": "This action cannot be undone!",
+      "delete_confirm": "Yes, delete it!",
+      "delete_success": "Deleted!",
+      "delete_success_message": "Your folder has been removed.",
+      "delete_error": "Error",
+      "delete_error_message": "Failed to delete folder."
+    }
+  },
+  "folder_notes": {
+    "title": "Notes",
+    "no_notes": "No notes available.",
+    "note": {
+      "title": "Title",
+      "content": "Content",
+      "untitled": "Untitled",
+      "no_content": "No content available"
+    }
+  },
+  "folder_notes_menu": {
+    "manage_notes": "Manage Notes",
+    "add_note": "Add Note"
+  },
+  "edit_note_model": {
+    "title": "Manage Notes",
+    "remove": "Remove",
+    "cancel": "Cancel",
+    "save_changes": "Save Changes",
+    "success_update": "Notes updated successfully!",
+    "error_update": "Failed to update notes. Please try again.",
+    "success_delete": "Note deleted successfully!",
+    "error_delete": "Failed to delete note.",
+    "error_delete_generic": "Error deleting note."
+  },
+  "add_note_model": {
+    "title": "Add Note",
+    "label_title": "Title",
+    "label_content": "Content",
+    "placeholder_title": "Enter note title",
+    "placeholder_content": "Enter note content",
+    "add_button": "Add Note",
+    "success_add": "Note added successfully!",
+    "error_add": "Failed to add note. Please try again."
+  },
+  "folder_documents": {
+    "title": "Documents",
+    "no_documents": "No documents found.",
+    "success_delete": "Document deleted successfully!",
+    "error_delete": "Failed to delete document.",
+    "error_delete_generic": "Error deleting document.",
+    "delete_button_aria": "Delete document"
+  },
+  "folder_documents_menu": {
+    "add_document": "Add Document",
+    "refresh_list": "Refresh List"
+  },
+  "folder_payments": {
+    "title": "Payments",
+    "total": "Total",
+    "paid": "Paid",
+    "rest": "Rest",
+    "done": "Done"
+  },
+  "folder_payments_menu": {
+    "view_details": "View Details",
+    "add_payment": "Add Payment"
+  },
+  "folder_payments_details": {
+    "folder": "Folder",
+    "date": "Date",
+    "paid": "Paid",
+    "refunded": "Refunded",
+    "note": "Note",
+    "refund_reason": "Refund Reason",
+    "no_payments": "No payments recorded."
+  },
+  "add_payment_model": {
+    "title": "Add Payment",
+    "transaction_type_label": "Transaction Type",
+    "transaction_type_pay": "Pay",
+    "transaction_type_refund": "Refund",
+    "amount_label": "Amount (DA)",
+    "amount_placeholder": "Enter amount",
+    "refund_reason_label": "Refund Reason",
+    "refund_reason_placeholder": "Enter refund reason",
+    "note_label": "Note (Optional)",
+    "note_placeholder": "Add a note (optional)",
+    "cancel_button": "Cancel",
+    "confirm_button": "Confirm",
+    "refund_button": "Refund",
+    "processing": "Processing...",
+    "error_amount_required": "Amount is required!",
+    "error_refund_reason_required": "Refund reason is required!",
+    "success_payment_added": "Payment added successfully!",
+    "success_refund_processed": "Refund processed successfully!",
+    "error_processing_transaction": "Failed to process the transaction.",
+    "confirm_refund_title": "Confirm Refund",
+    "confirm_refund_text": "Are you sure you want to refund {{amount}} DA?",
+    "confirm_refund_confirm": "Yes, Refund",
+    "confirm_refund_cancel": "Cancel",
+    "confirm_payment_title": "Confirm Payment",
+    "confirm_payment_text": "You entered {{amount}} DA. What would you like to do?",
+    "confirm_payment_confirm": "Confirm",
+    "confirm_payment_deny": "Confirm with ({{remainingAmount}} DA)",
+    "confirm_payment_cancel": "Cancel"
+  },
+  "folder_appointments": {
+    "search_placeholder": "Search...",
+    "status_filter_all": "All",
+    "status_pending": "Pending",
+    "status_completed": "Completed",
+    "status_cancelled": "Cancelled",
+    "status_scheduled": "Scheduled",
+    "status_rescheduled": "Rescheduled",
+    "add_button": "Add Appointment",
+    "loading": "Loading..."
+  },
+  "add_appointment_model": {
+    "title": "Add Appointment",
+    "date_label": "Date",
+    "status_label": "Status",
+    "select_status": "Select status",
+    "tooth_label": "Tooth (Optional)",
+    "title_label": "Title (Optional)",
+    "content_label": "Content (Optional)",
+    "submit": "Submit",
+    "submitting": "Submitting...",
+    "success_message": "Appointment added successfully!",
+    "error_message": "Failed to add appointment.",
+    "generic_error": "Something went wrong. Please try again.",
+    "error_required_fields": "Date and status are required!"
+  },
+  "loading": "Loading..."
+}

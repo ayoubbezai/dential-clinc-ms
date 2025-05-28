@@ -1,14 +1,14 @@
 import { attachmentService } from "@/services/dentist/attachmentService";
 import React, { useState, lazy, Suspense } from "react";
 import { AiOutlineFilePdf } from "react-icons/ai";
-import { FaEllipsisV, FaTrash } from "react-icons/fa";
-import toast from "react-hot-toast"; // Import react-hot-toast
+import { FaTrash } from "react-icons/fa";
+import toast from "react-hot-toast";
 import ThreeDotsV from "@/components/small/ThreeDotsV";
 import FolderDocumentsMenu from "./FolderDocumentsMenu";
 
 const AddDocumentModel = lazy(() => import("@/models/AddModels/AddDocumentModel"));
 
-const FolderDocuments = ({ folderId, folderAttachments, fetchFolderAttachments }) => {
+const FolderDocuments = ({ folderId, folderAttachments, fetchFolderAttachments, t }) => {
     const [isAddModelOpen, setIsAddModelOpen] = useState(false);
     const [isMenuOpen, setIsMenuOpen] = useState(false);
 
@@ -16,13 +16,13 @@ const FolderDocuments = ({ folderId, folderAttachments, fetchFolderAttachments }
         try {
             const data = await attachmentService.deleteAttachments(attachments_id);
             if (data.success) {
-                toast.success("Document deleted successfully!");
+                toast.success(t("folder_documents.success_delete"));
                 fetchFolderAttachments(folderId);
             } else {
-                toast.error("Failed to delete document.");
+                toast.error(t("folder_documents.error_delete"));
             }
         } catch (error) {
-            toast.error("Error deleting document.");
+            toast.error(t("folder_documents.error_delete_generic"));
             console.error("Delete Error:", error);
         }
     }
@@ -31,13 +31,17 @@ const FolderDocuments = ({ folderId, folderAttachments, fetchFolderAttachments }
         <div className="col-span-4 bg-white p-5 shadow-md rounded-lg border border-gray-200 text-sm">
             {/* Title & Menu */}
             <div className="flex justify-between items-center pb-2 border-b mb-3">
-                <h3 className="text-[#223354] font-bold text-lg">Documents</h3>
+                <h3 className="text-[#223354] font-bold text-lg">{t("folder_documents.title")}</h3>
                 <div className="relative">
                     <ThreeDotsV isMenuOpen={isMenuOpen} setIsMenuOpen={setIsMenuOpen} />
 
                     {isMenuOpen && (
-                        <FolderDocumentsMenu setIsMenuOpen={setIsMenuOpen} setIsAddModelOpen={setIsAddModelOpen} onRefresh={() => fetchFolderAttachments(folderId)}/>
-
+                        <FolderDocumentsMenu
+                            setIsMenuOpen={setIsMenuOpen}
+                            setIsAddModelOpen={setIsAddModelOpen}
+                            onRefresh={() => fetchFolderAttachments(folderId)}
+                            t={t}
+                        />
                     )}
                 </div>
             </div>
@@ -67,18 +71,19 @@ const FolderDocuments = ({ folderId, folderAttachments, fetchFolderAttachments }
                             <button
                                 onClick={() => handleDelete(doc.id)}
                                 className="text-red-500/50 hover:text-red-500/80 hover:cursor-pointer text-sm"
+                                aria-label={t("folder_documents.delete_button_aria")}
                             >
                                 <FaTrash />
                             </button>
                         </div>
                     ))
                 ) : (
-                    <p className="text-gray-500 text-center">No documents found.</p>
+                    <p className="text-gray-500 text-center">{t("folder_documents.no_documents")}</p>
                 )}
             </div>
 
             {/* Add Document Modal */}
-            <Suspense fallback={<div>Loading...</div>}>
+            <Suspense fallback={<div>{t("loading")}</div>}>
                 {isAddModelOpen && (
                     <AddDocumentModel
                         isOpen={isAddModelOpen}

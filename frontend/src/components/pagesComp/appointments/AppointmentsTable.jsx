@@ -25,7 +25,7 @@ const getStatusColor = (status) => {
     return statusColors[status] || "bg-gray-100 text-gray-700";
 };
 
-const AppointmentsTable = ({ appointments, appointmentloading, fetchAppointments }) => {
+const AppointmentsTable = ({ appointments, appointmentloading, fetchAppointments, t }) => {
     const [loading, setLoading] = useState(false);
     const [isEditModalOpen, setIsEditModalOpen] = useState(false);
     const [currentAppointment, setCurrentAppointment] = useState(null);
@@ -34,10 +34,10 @@ const AppointmentsTable = ({ appointments, appointmentloading, fetchAppointments
         setLoading(true);
         const { data, error } = await AppointmentService.deleteAppointment(appointment_id);
         if (data?.success) {
-            toast.success('Success! Appointment deleted successfully');
-            fetchAppointments(); // Refresh the list after deletion
+            toast.success(t('appointments.success_delete'));
+            fetchAppointments();
         } else {
-            toast.error(error?.message || 'Error! Something went wrong.');
+            toast.error(error?.message || t('appointments.error_delete'));
         }
         setLoading(false);
     }
@@ -50,37 +50,36 @@ const AppointmentsTable = ({ appointments, appointmentloading, fetchAppointments
     return (
         <>
             <Table>
-                <AppointmnetTableHeader />
+                <AppointmnetTableHeader t={t} />
 
                 <TableBody>
                     {appointmentloading ? (
                         Array.from({ length: 5 }).map((_, index) => (
-                            <TableSkeleton index={index} />
-
+                            <TableSkeleton key={index} index={index} />
                         ))
                     ) : (
                         appointments?.map((appointment) => (
                             <TableRow key={appointment.id}>
-                                <TableCell>{appointment.title || 'N/A'}</TableCell>
-                                <TableCell>{appointment.tooth || 'N/A'}</TableCell>
-                                <TableCell>{appointment.content || 'N/A'}</TableCell>
+                                <TableCell>{appointment.title || t('appointments.na')}</TableCell>
+                                <TableCell>{appointment.tooth || t('appointments.na')}</TableCell>
+                                <TableCell>{appointment.content || t('appointments.na')}</TableCell>
                                 <TableCell>{new Date(appointment.date).toLocaleDateString()}</TableCell>
                                 <TableCell>
                                     <Badge variant="default" className={getStatusColor(appointment.status)}>
-                                        {appointment.status}
+                                        {t(`folder_appointments.status_${appointment.status}`)}
                                     </Badge>
                                 </TableCell>
                                 <TableCell>
                                     <div className="flex gap-2">
                                         <button className="cursor-pointer" onClick={() => handleEdit(appointment)}>
-                                            <img src={EditIcon} alt="edit" className="w-5" />
+                                            <img src={EditIcon} alt={t('appointments.edit')} className="w-5" />
                                         </button>
                                         <button
                                             className="cursor-pointer"
                                             onClick={() => handleDelete(appointment.id)}
                                             disabled={loading}
                                         >
-                                            <img src={DeleteIcon} alt="delete" className="w-5" />
+                                            <img src={DeleteIcon} alt={t('appointments.delete')} className="w-5" />
                                         </button>
                                     </div>
                                 </TableCell>
@@ -91,12 +90,13 @@ const AppointmentsTable = ({ appointments, appointmentloading, fetchAppointments
             </Table>
 
             {isEditModalOpen && (
-                <Suspense fallback={<div>Loading...</div>}>
+                <Suspense fallback={<div>{t('folder_appointments.loading')}</div>}>
                     <EditAppointmentModel
                         isOpen={isEditModalOpen}
                         onClose={() => setIsEditModalOpen(false)}
                         currentAppointment={currentAppointment}
                         refreshAppointments={fetchAppointments}
+                        t={t}
                     />
                 </Suspense>
             )}
