@@ -6,7 +6,7 @@ import SearchInTable from '@/components/TableComp/SearchInTable';
 const AddFolderModel = lazy(() => import("@/models/AddModels/AddFolderModel"))
 
 
-const FolderTableHeader = ({ view, setView, id, search, setSearch, refetchFolders }) => {
+const FolderTableHeader = ({ view, setView, id, search, setSearch, refetchFolders ,t }) => {
     const [isAddFolderOpen, setIsAddFolderOpen] = useState(false);
 
     return (
@@ -32,6 +32,7 @@ const FolderTableHeader = ({ view, setView, id, search, setSearch, refetchFolder
                         onClose={() => setIsAddFolderOpen(false)}
                         patientId={id}
                         refetchFolders={refetchFolders}
+                        t={t}
                     />
                 </Suspense>
             )}

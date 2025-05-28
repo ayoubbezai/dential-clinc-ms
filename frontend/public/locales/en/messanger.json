@@ -1,0 +1,22 @@
+{
+  "title": "Messenger",
+  "subtitle": "Connect and communicate with your patients",
+  "conversations": "Conversations",
+  "search_placeholder": "Search conversations...",
+  "unknown_initial": "U",
+  "unknown_user": "Unknown User",
+  "no_messages_yet": "No messages yet",
+  "new_initial": "N",
+  "new_user": "New User",
+  "click_to_start": "Click to start a conversation",
+  "new_badge": "New",
+  "loading_conversations": "Loading conversations...",
+  "no_conversations": "No conversations found",
+  "error_loading_conversations": "Error loading conversations: {{error}}",
+  "Unknown User": "Unknown User",
+  "online": "Online",
+  "Loading messages...": "Loading messages...",
+  "Error loading messages": "Error loading messages",
+  "No messages yet": "No messages yet",
+  "message_typing": "Type your message..."
+}

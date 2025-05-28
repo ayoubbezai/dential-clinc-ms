@@ -1,17 +1,17 @@
-import React from 'react'
-import { TableHeader, TableRow, TableHead } from '@/components/designSystem/table'
+import React from 'react';
+import { TableHeader, TableRow, TableHead } from '@/components/designSystem/table';
 
-const FolderTableHead = () => {
+const FolderTableHead = ({ t }) => {
   return (
     <TableHeader>
       <TableRow>
-        <TableHead>Title</TableHead>
-        <TableHead>Price</TableHead>
-        <TableHead>Status</TableHead>
-        <TableHead>Actions</TableHead>
+        <TableHead>{t("folder_table.title")}</TableHead>
+        <TableHead>{t("folder_table.price")}</TableHead>
+        <TableHead>{t("folder_table.status")}</TableHead>
+        <TableHead>{t("folder_table.actions")}</TableHead>
       </TableRow>
     </TableHeader>
-  )
-}
+  );
+};
 
-export default FolderTableHead
+export default FolderTableHead;

@@ -1,31 +1,30 @@
 import React, { useState, lazy, Suspense, useEffect, useCallback } from "react";
 import { FaEllipsisH } from "react-icons/fa";
 
-// Lazy load modals
 const AddPatientAccModel = lazy(() => import("@/models/AddModels/AddPatientAccModel"));
 const EditPatientModel = lazy(() => import("@/models/EditModels/EditPatientModel"));
 const EditUserModel = lazy(() => import("@/models/EditModels/EditUserModel"));
 
-const PatientActions = ({ patient, refetchPatient }) => {
+const PatientActions = ({ patient, refetchPatient, t }) => {
     const [menuOpen, setMenuOpen] = useState(false);
     const [isEditModalOpen, setIsEditModalOpen] = useState(false);
     const [isAddAccountModel, setIsAddAccountModel] = useState(false);
     const [isEditAccountModel, setIsEditAccountModel] = useState(false);
 
-    // ✅ Preload modals when the component mounts (makes them open instantly)
     useEffect(() => {
         import("@/models/AddModels/AddPatientAccModel");
         import("@/models/EditModels/EditPatientModel");
         import("@/models/EditModels/EditUserModel");
     }, []);
 
-    // ✅ Optimize menu state updates
     const toggleMenu = useCallback(() => setMenuOpen((prev) => !prev), []);
 
     return (
         <>
             <div className="flex justify-between items-center">
-                <h3 className="text-[#223354] font-bold text-xl pb-3">Patient Details</h3>
+                <h3 className="text-[#223354] font-bold text-xl pb-3">
+                    {t("patient_info2.title")}
+                </h3>
 
                 <div className="relative mb-2">
                     <button className="p-2 rounded-full hover:bg-gray-200" onClick={toggleMenu}>
@@ -42,7 +41,7 @@ const PatientActions = ({ patient, refetchPatient }) => {
                                     }}
                                     className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 w-full text-left"
                                 >
-                                    Edit Account
+                                    {t("patient_info2.edit_account")}
                                 </button>
                             ) : (
                                 <button
@@ -52,9 +51,10 @@ const PatientActions = ({ patient, refetchPatient }) => {
                                     }}
                                     className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 w-full text-left"
                                 >
-                                    Add Account
+                                    {t("patient_info2.add_account")}
                                 </button>
                             )}
+
                             <button
                                 onClick={() => {
                                     setIsEditModalOpen(true);
@@ -62,14 +62,13 @@ const PatientActions = ({ patient, refetchPatient }) => {
                                 }}
                                 className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 w-full text-left"
                             >
-                                Edit Patient
+                                {t("patient_info2.edit_patient")}
                             </button>
                         </div>
                     )}
                 </div>
             </div>
 
-            {/* ✅ Single Suspense Wrapper for All Modals */}
             <Suspense fallback={<p>Loading...</p>}>
                 {isEditModalOpen && (
                     <EditPatientModel

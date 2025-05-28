@@ -1,0 +1,102 @@
+{
+  "breadcrumb": {
+    "patients": "Patients",
+    "unknown_patient": "Unknown Patient"
+  },
+  "loading": {
+    "patient_info": "Loading Patient Info...",
+    "header": "Loading Header...",
+    "table": "Loading Table...",
+    "grid_view": "Loading Grid View...",
+    "footer": "Loading Footer..."
+  },
+  "alert": {
+    "delete_confirm_title": "Are you sure?",
+    "delete_confirm_text": "You won't be able to revert this!",
+    "delete_confirm_button": "Yes, delete it!",
+    "delete_success": "Folder deleted successfully!",
+    "delete_fail": "Failed to delete folder."
+  },
+  "patient_info1": {
+    "send_message": "Send Message",
+    "see_note": "See Note",
+    "hide_note": "Hide Note",
+    "no_account": "No account available",
+    "no_notes": "No notes available"
+  },
+  "patient_info2": {
+    "full_name": "Full Name:",
+    "phone": "Phone:",
+    "age": "Age:",
+    "gender": "Gender:",
+    "patient_id": "Patient ID:",
+    "diseases": "Diseases:",
+    "no_data": "N/A",
+    "no_diseases": "No known diseases",
+    "title": "Patient Details",
+    "edit_account": "Edit Account",
+    "add_account": "Add Account",
+    "edit_patient": "Edit Patient"
+  },
+  "folder_table": {
+    "title": "Title",
+    "price": "Price",
+    "status": "Status",
+    "actions": "Actions"
+  },
+  "folder_table_body": {
+    "status": {
+      "working_on_it": "Working on it",
+      "pending": "Pending",
+      "done": "Done",
+      "default": "Unknown"
+    },
+    "loading": "Loading...",
+    "folder_icon_alt": "folder",
+    "actions": {
+      "edit": "Edit",
+      "delete": "Delete"
+    }
+  },
+  "add_folder": {
+    "title": "Create Folder For Patient",
+    "error_fill_all_fields": "Please fill all required fields.",
+    "success_created": "Folder created successfully!",
+    "error_failed": "Failed to create folder.",
+    "folder_name_placeholder": "Folder Name",
+    "price_placeholder": "Price",
+    "select_status": "Select Status",
+    "dent_placeholder": "Dent",
+    "reason_placeholder": "Reason",
+    "treatment_placeholder": "Treatment",
+    "add_visit": "Add Visit",
+    "submit": "Submit",
+    "submitting": "Submitting..."
+  },
+
+  "status": {
+    "pending": "Pending",
+    "working_on_it": "Working on it",
+    "done": "Done"
+  },
+  "folder": {
+    "actions_menu": "Folder actions menu",
+    "delete_folder": "Delete Folder",
+    "icon_alt": "Folder icon",
+    "edit_folder": "Edit Folder",
+    "folder_name": "Folder Name",
+    "price": "Price",
+    "select_status": "Select Status",
+    "fill_all_required_fields": "Please fill all required fields.",
+    "updated_successfully": "Folder updated successfully!",
+    "failed_to_update": "Failed to update folder.",
+    "saving": "Saving...",
+    "save_changes": "Save Changes"
+  },
+  "visit": {
+    "dent": "Dent",
+    "reason": "Reason",
+    "treatment": "Treatment",
+    "add_visit": "Add Visit"
+  }
+}

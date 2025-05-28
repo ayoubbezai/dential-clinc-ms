@@ -2,17 +2,14 @@ import React, { useEffect, useRef, useCallback, useState } from 'react';
 import useConversation from '@/hooks/other/useConversation';
 import SearchInTable from '@/components/TableComp/SearchInTable';
 import { Link } from 'react-router-dom';
+import { useTranslation } from "react-i18next";
 
 const Messenger = () => {
+  const { t } = useTranslation("messanger")
   const { conversations, setPage, pagination, error, loading, search, setSearch } = useConversation();
   const scrollRef = useRef(null);
   const [isFetching, setIsFetching] = useState(false);
   const timeoutRef = useRef(null);
-
-
-
-
-
 
   const loadMore = useCallback(() => {
     if (timeoutRef.current) {
@@ -32,27 +29,23 @@ const Messenger = () => {
     if (!element) return false;
 
     const containerNotFull = element.scrollHeight <= element.clientHeight;
-
     const nearBottom = element.scrollTop + element.clientHeight >= element.scrollHeight - 100;
 
     return (containerNotFull || nearBottom) && !loading && pagination?.has_more_pages;
   }, [loading, pagination]);
 
-  // Handle scroll events
   const handleScroll = useCallback(() => {
     if (checkLoadMore()) {
       loadMore();
     }
   }, [checkLoadMore, loadMore]);
 
-  // Initial load check
   useEffect(() => {
     if (checkLoadMore() && conversations.length > 0) {
       loadMore();
     }
   }, [checkLoadMore, conversations.length, loadMore]);
 
-  // Set up scroll listener
   useEffect(() => {
     const element = scrollRef.current;
     if (!element) return;
@@ -61,7 +54,6 @@ const Messenger = () => {
     return () => element.removeEventListener('scroll', handleScroll);
   }, [handleScroll]);
 
-  // Set up resize observer
   useEffect(() => {
     const element = scrollRef.current;
     if (!element) return;
@@ -76,14 +68,12 @@ const Messenger = () => {
     return () => observer.disconnect();
   }, [checkLoadMore, loadMore]);
 
-  // Reset fetching state after load completes
   useEffect(() => {
     if (!loading) {
       setIsFetching(false);
     }
   }, [loading]);
 
-  // Filter conversations
   const recentConversations = conversations.filter(conv => conv.last_message);
   const newConversations = conversations.filter(conv => !conv.last_message);
 
@@ -99,7 +89,7 @@ const Messenger = () => {
             </div>
             <div className="ml-3">
               <p className="text-sm text-red-700">
-                Error loading conversations: {error}
+                {t('error_loading_conversations', { error })}
               </p>
             </div>
           </div>
@@ -111,20 +101,15 @@ const Messenger = () => {
   return (
     <div className="w-full px-8 mb-4 p-6">
       <header className="mb-8 w-5/6 mx-auto">
-        <h1 className="text-2xl font-bold text-gray-800">Messenger</h1>
-        <p className="text-gray-600 mt-2">
-          Connect and communicate with your patients
-        </p>
+        <h1 className="text-2xl font-bold text-gray-800">{t('title')}</h1>
+        <p className="text-gray-600 mt-2">{t('subtitle')}</p>
       </header>
 
       <section className="bg-white rounded-xl shadow-sm border w-5/6 mx-auto border-gray-100 overflow-hidden">
         <div className="p-4 border-b border-gray-100 flex justify-between items-center">
-          <h2 className="font-semibold text-gray-700">Conversations</h2>
+          <h2 className="font-semibold text-gray-700">{t('conversations')}</h2>
           <div className="w-64">
-            <SearchInTable
-              search={search}
-              setSearch={setSearch}
-            />
+            <SearchInTable search={search} setSearch={setSearch} placeholder={t('search_placeholder')} />
           </div>
         </div>
 
@@ -140,18 +125,18 @@ const Messenger = () => {
                   <Link to={`${conv.id}`} className="flex items-center space-x-4">
                     <div className="flex-shrink-0 relative">
                       <div className="h-10 w-10 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 font-medium">
-                        {conv.name?.charAt(0) || 'U'}
+                        {conv.name?.charAt(0) || t('unknown_initial')}
                       </div>
                       <span className="absolute bottom-0 right-0 block h-3 w-3 rounded-full bg-green-500 ring-2 ring-white"></span>
                     </div>
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center">
                         <p className="text-sm font-medium text-gray-900 truncate">
-                          {conv.name || 'Unknown User'}
+                          {conv.name || t('unknown_user')}
                         </p>
                       </div>
                       <p className={`text-sm truncate ${conv.message_type === 'sent' ? "font-semibold text-gray-700" : "text-gray-500"}`}>
-                        {conv.last_message?.message || 'No messages yet'}
+                        {conv.last_message?.message || t('no_messages_yet')}
                       </p>
                     </div>
                     {conv.message_type === 'sent' && (
@@ -172,20 +157,20 @@ const Messenger = () => {
                   <Link to={`${conv.id}`} className="flex items-center space-x-4">
                     <div className="flex-shrink-0 relative">
                       <div className="h-10 w-10 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 font-medium">
-                        {conv.name?.charAt(0) || 'N'}
+                        {conv.name?.charAt(0) || t('new_initial')}
                       </div>
                       <span className="absolute bottom-0 right-0 block h-3 w-3 rounded-full bg-gray-300 ring-2 ring-white"></span>
                     </div>
                     <div className="flex-1 min-w-0">
                       <p className="text-sm font-medium text-gray-900 truncate">
-                        {conv.name || 'New User'}
+                        {conv.name || t('new_user')}
                       </p>
                       <p className="text-sm text-gray-500 truncate">
-                        Click to start a conversation
+                        {t('click_to_start')}
                       </p>
                     </div>
                     <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
-                      New
+                      {t('new_badge')}
                     </span>
                   </Link>
                 </li>
@@ -216,7 +201,7 @@ const Messenger = () => {
                 </svg>
               </div>
               <p className="text-gray-500">
-                {loading ? 'Loading conversations...' : 'No conversations found'}
+                {loading ? t('loading_conversations') : t('no_conversations')}
               </p>
             </div>
           )}

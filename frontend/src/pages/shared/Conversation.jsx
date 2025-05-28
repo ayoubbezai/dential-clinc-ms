@@ -3,10 +3,11 @@ import { ConversationService } from '@/services/shared/ConcersationsService';
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import Echo from 'laravel-echo';
-import Pusher from 'pusher-js';
 import initializePusher from '@/services/other/initializePusher';
+import { useTranslation } from "react-i18next";
+
 const Conversation = () => {
+    const { t } = useTranslation("messanger");
     const { id } = useParams();
     const { messages, setMessages, loading, error, user, pagination, setPage } = useMessages(id);
     const [message, setMessage] = useState('');
@@ -19,24 +20,19 @@ const Conversation = () => {
     const messageList = messages || [];
 
     useEffect(() => {
-        //first link the web socket
-
         const pusherInstance = initializePusher();
-
-        //subscrib to the channel 
         const channel = pusherInstance.subscribe(`private-chat.patient.${id}`);
+
         channel.bind('pusher:subscription_succeeded', () => {
             console.log(`✅ Connected to patient channel (ID: ${id})`);
         });
 
         channel.bind('pusher:subscription_error', (error) => {
             console.error('Failed to subscribe to channel:', error);
-            toast.error('Failed to connect to chat channel');
+            toast.error(t('Error loading messages'));
         });
-        //listen to the message 
 
         channel.bind('message.sent', (data) => {
-            console.log("New message:", data);
             if (data?.message?.sender_id === id) {
                 const newMessage = {
                     message: data?.message?.message,
@@ -44,7 +40,6 @@ const Conversation = () => {
                     created_at: new Date().toISOString(),
                 };
                 setMessages(prev => [newMessage, ...prev]);
-
                 setMessage('');
             }
         });
@@ -53,10 +48,8 @@ const Conversation = () => {
             channel.unbind_all();
             channel.unsubscribe();
         };
-    }, [id]);
+    }, [id, setMessages, t]);
 
-
-    //function to send the message
     const handleSendMessage = async (e) => {
         e.preventDefault();
         if (!message.trim() || isSending) return;
@@ -65,7 +58,6 @@ const Conversation = () => {
         try {
             const { data, error } = await ConversationService.sendMessage(id, message);
             if (error) throw new Error(error.message || 'Failed to send message');
-            console.log(data);
 
             if (data) {
                 const newMessage = {
@@ -73,19 +65,16 @@ const Conversation = () => {
                     type: 'received',
                     created_at: new Date().toISOString(),
                 };
-
                 setMessages(prev => [newMessage, ...prev]);
-
                 setMessage('');
             }
         } catch (err) {
-            console.error('Send message error:', err);
-            toast.error(err.message || 'Error sending message');
+            toast.error(err.message || t('Error loading messages'));
         } finally {
             setIsSending(false);
         }
     };
-    //use keyborad to send
+
     const handleKeyDown = (e) => {
         if (e.key === 'Enter' && !e.shiftKey) {
             e.preventDefault();
@@ -93,27 +82,22 @@ const Conversation = () => {
         }
     };
 
-    //check of there are more 
-
     const checkLoadMore = useCallback(() => {
         return !loading && pagination?.has_more_pages;
     }, [loading, pagination]);
 
-    //check if the visible part is full or not 
     useEffect(() => {
         if (!initialLoadDone && !loading && scrollRef.current?.scrollHeight > scrollRef.current?.clientHeight) {
             setInitialLoadDone(true);
         }
-    }, [messages, loading]);
+    }, [messages, loading, initialLoadDone]);
 
-    // Setup observer at top of message list
     useEffect(() => {
         if (!topObserverRef.current || !checkLoadMore) return;
 
         const observer = new IntersectionObserver(
             ([entry]) => {
                 if (entry.isIntersecting && checkLoadMore()) {
-                    // Save current scroll position
                     if (scrollRef.current) {
                         prevScrollHeight.current = scrollRef.current.scrollHeight;
                     }
@@ -127,26 +111,18 @@ const Conversation = () => {
         );
 
         observer.observe(topObserverRef.current);
-
-        return () => {
-            observer.disconnect();
-        };
+        return () => observer.disconnect();
     }, [checkLoadMore, setPage]);
 
-    //this is to keep potion when add new messages
     useEffect(() => {
         if (!scrollRef.current) return;
 
-        // When loading older messages (pagination)
         if (prevScrollHeight.current && !loading) {
             const newScrollHeight = scrollRef.current.scrollHeight;
             const scrollDiff = newScrollHeight - prevScrollHeight.current;
             scrollRef.current.scrollTop += scrollDiff;
             prevScrollHeight.current = 0;
-        }
-        // When new messages arrive (real-time)
-        else if (!loading && !prevScrollHeight.current) {
-            // Only auto-scroll if we were near bottom before new message
+        } else if (!loading && !prevScrollHeight.current) {
             const { scrollTop, scrollHeight, clientHeight } = scrollRef.current;
             const wasNearBottom = scrollHeight - (scrollTop + clientHeight) < 50;
 
@@ -155,7 +131,7 @@ const Conversation = () => {
             }
         }
     }, [messages, loading]);
-    
+
     return (
         <div className='w-5/6 mx-auto bg-gray-50 h-screen flex flex-col justify-between'>
             {/* Header */}
@@ -167,8 +143,8 @@ const Conversation = () => {
                     <span className="absolute bottom-0 right-0 block h-2 w-2 rounded-full bg-green-500 ring-2 ring-white"></span>
                 </div>
                 <div>
-                    <h2 className='font-medium text-gray-800 text-sm'>{user?.name || 'Unknown User'}</h2>
-                    <p className='text-xs text-gray-400'>Online now</p>
+                    <h2 className='font-medium text-gray-800 text-sm'>{user?.name || t('Unknown User')}</h2>
+                    <p className='text-xs text-gray-400'>{t("online")}</p>
                 </div>
             </header>
 
@@ -178,20 +154,19 @@ const Conversation = () => {
                 className='flex-1 flex flex-col-reverse overflow-y-auto p-3 px-6'
             >
                 <div className='space-y-2'>
-                    {/* Top sentinel for observer */}
                     <div ref={topObserverRef} className="h-1 w-full" />
 
                     {loading && messageList.length === 0 ? (
                         <div className="flex justify-center items-center h-full">
-                            <p className="text-gray-500 text-sm">Loading messages...</p>
+                            <p className="text-gray-500 text-sm">{t("Loading messages...")}</p>
                         </div>
                     ) : error ? (
                         <div className="flex justify-center items-center h-full">
-                            <p className="text-red-500 text-sm">Error loading messages</p>
+                            <p className="text-red-500 text-sm">{t("Error loading messages")}</p>
                         </div>
                     ) : messageList.length === 0 ? (
                         <div className="flex justify-center items-center h-full">
-                            <p className="text-gray-500 text-sm">No messages yet</p>
+                            <p className="text-gray-500 text-sm">{t("No messages yet")}</p>
                         </div>
                     ) : (
                         [...messageList].reverse().map((msg, index) => (
@@ -223,7 +198,7 @@ const Conversation = () => {
                         value={message}
                         onChange={(e) => setMessage(e.target.value)}
                         onKeyDown={handleKeyDown}
-                        placeholder="Type a message..."
+                        placeholder={t("message_typing")}
                         className="flex-1 border border-gray-200 rounded-full py-1.5 px-4 focus:outline-none focus:ring-1 focus:ring-blue-500 text-sm"
                         disabled={isSending}
                     />

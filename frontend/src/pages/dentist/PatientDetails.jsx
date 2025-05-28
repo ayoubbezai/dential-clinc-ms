@@ -6,6 +6,7 @@ import usePatient from "@/hooks/other/usePatient";
 import { folderService } from "@/services/dentist/foldersService";
 import Swal from "sweetalert2";
 import toast from "react-hot-toast";
+import { useTranslation } from "react-i18next";
 
 // Lazy Load Components
 const PatientInfo1 = lazy(() => import("@/components/pagesComp/patient/PatientInfo1"));
@@ -18,32 +19,33 @@ const FolderTableFooter = lazy(() => import("@/components/TableComp/TableFooter"
 
 const PatientDetails = () => {
   const { id } = useParams();
+  const { t } = useTranslation("patient_details");
   const {
     patient, loading, folders, refetchPatient,
     perPage, setPerPage, page, setPage, pagination, search, setSearch, refetchFolders
   } = usePatient(id);
-  console.log(patient)
+
   const [view, setView] = useState("list");
   const [isEditFolderOpen, setIsEditFolderOpen] = useState(false);
 
   async function handleDelete(folderId) {
     const result = await Swal.fire({
-      title: "Are you sure?",
-      text: "You won't be able to revert this!",
+      title: t("alert.delete_confirm_title"),
+      text: t("alert.delete_confirm_text"),
       icon: "warning",
       showCancelButton: true,
       confirmButtonColor: "#d33",
       cancelButtonColor: "#3085d6",
-      confirmButtonText: "Yes, delete it!"
+      confirmButtonText: t("alert.delete_confirm_button")
     });
 
     if (result.isConfirmed) {
       const response = await folderService.deleteFolder(folderId);
       if (response?.success) {
-        toast.success("Folder deleted successfully!");
+        toast.success(t("alert.delete_success"));
         refetchPatient();
       } else {
-        toast.error(response?.message || "Failed to delete folder.");
+        toast.error(response?.message || t("alert.delete_fail"));
       }
     }
   }
@@ -52,29 +54,37 @@ const PatientDetails = () => {
     <div className="w-full px-8 bg-background py-5 text-secondary">
       {/* Breadcrumb */}
       <p className="flex items-center gap-2 text-gray-700">
-        <Link to="/patients_list" className="text-blue-600 font-semibold">Patients</Link>
+        <Link to="/patients_list" className="text-blue-600 font-semibold">{t("breadcrumb.patients")}</Link>
         <HiArrowNarrowRight className="text-gray-500 mt-1" />
-        <span className="text-gray-500">{patient?.patient_name}</span>
+        <span className="text-gray-500">{patient?.patient_name || t("breadcrumb.unknown_patient")}</span>
       </p>
 
       {/* Patient Details */}
       <div className="grid grid-cols-12 gap-4 my-4">
-        <Suspense fallback={<div>Loading Patient Info...</div>}>
-          <PatientInfo1 patient={patient} />
-          <PatientInfo2 patient={patient} refetchPatient={refetchPatient} />
+        <Suspense fallback={<div>{t("loading.patient_info")}</div>}>
+          <PatientInfo1 patient={patient} t={t} />
+          <PatientInfo2 patient={patient} refetchPatient={refetchPatient} t={t} />
         </Suspense>
 
         {/* Folders Section */}
         <div className="col-span-12 relative bg-[#fff] p-3 px-4 shadow-md rounded-lg">
-          <Suspense fallback={<div>Loading Header...</div>}>
-            <FolderTableHeader view={view} setView={setView} id={id} search={search} setSearch={setSearch} refetchFolders={refetchFolders} />
+          <Suspense fallback={<div>{t("loading.header")}</div>}>
+            <FolderTableHeader
+              view={view}
+              setView={setView}
+              id={id}
+              search={search}
+              setSearch={setSearch}
+              refetchFolders={refetchFolders}
+              t={t}
+            />
           </Suspense>
 
           <div className="pt-4">
             {view === "list" ? (
-              <Suspense fallback={<div>Loading Table...</div>}>
+              <Suspense fallback={<div>{t("loading.table")}</div>}>
                 <Table>
-                  <FolderTableHead />
+                  <FolderTableHead t={t} />
                   <FolderTableBody
                     loading={loading}
                     folders={folders}
@@ -82,11 +92,12 @@ const PatientDetails = () => {
                     isEditFolderOpen={isEditFolderOpen}
                     setIsEditFolderOpen={setIsEditFolderOpen}
                     refetchFolders={refetchFolders}
+                    t={t}
                   />
                 </Table>
               </Suspense>
             ) : (
-              <Suspense fallback={<div>Loading Grid View...</div>}>
+              <Suspense fallback={<div>{t("loading.grid_view")}</div>}>
                 <FolderGridTable
                   loading={loading}
                   folders={folders}
@@ -94,14 +105,18 @@ const PatientDetails = () => {
                   isEditFolderOpen={isEditFolderOpen}
                   setIsEditFolderOpen={setIsEditFolderOpen}
                   refetchFolders={refetchFolders}
+                  t={t}
                 />
               </Suspense>
             )}
 
-            <Suspense fallback={<div>Loading Footer...</div>}>
+            <Suspense fallback={<div>{t("loading.footer")}</div>}>
               <FolderTableFooter
-                perPage={perPage} setPerPage={setPerPage}
-                page={page} setPage={setPage} pagination={pagination}
+                perPage={perPage}
+                setPerPage={setPerPage}
+                page={page}
+                setPage={setPage}
+                pagination={pagination}
               />
             </Suspense>
           </div>

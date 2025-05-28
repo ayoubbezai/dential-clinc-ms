@@ -1,0 +1,22 @@
+{
+  "title": "Messagerie",
+  "subtitle": "Connectez-vous et communiquez avec vos patients",
+  "conversations": "Conversations",
+  "search_placeholder": "Rechercher dans les conversations...",
+  "unknown_initial": "I",
+  "unknown_user": "Utilisateur inconnu",
+  "no_messages_yet": "Aucun message pour le moment",
+  "new_initial": "N",
+  "new_user": "Nouvel utilisateur",
+  "click_to_start": "Cliquez pour démarrer une conversation",
+  "new_badge": "Nouveau",
+  "loading_conversations": "Chargement des conversations...",
+  "no_conversations": "Aucune conversation trouvée",
+  "error_loading_conversations": "Erreur lors du chargement des conversations : {{error}}",
+  "Unknown User": "Utilisateur inconnu",
+  "online": "En ligne",
+  "Loading messages...": "Chargement des messages...",
+  "Error loading messages": "Erreur lors du chargement des messages",
+  "No messages yet": "Aucun message pour le moment",
+  "message_typing": "Tapez votre message..."
+}

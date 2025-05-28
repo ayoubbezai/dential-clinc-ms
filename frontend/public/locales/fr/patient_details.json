@@ -1,0 +1,101 @@
+{
+  "breadcrumb": {
+    "patients": "Patients",
+    "unknown_patient": "Patient inconnu"
+  },
+  "loading": {
+    "patient_info": "Chargement des informations du patient...",
+    "header": "Chargement de l'en-tête...",
+    "table": "Chargement du tableau...",
+    "grid_view": "Chargement de la vue grille...",
+    "footer": "Chargement du pied de page..."
+  },
+  "alert": {
+    "delete_confirm_title": "Êtes-vous sûr ?",
+    "delete_confirm_text": "Vous ne pourrez pas revenir en arrière !",
+    "delete_confirm_button": "Oui, supprimez-le !",
+    "delete_success": "Dossier supprimé avec succès !",
+    "delete_fail": "Échec de la suppression du dossier."
+  },
+  "patient_info1": {
+    "send_message": "Envoyer un message",
+    "see_note": "Voir la note",
+    "hide_note": "Cacher la note",
+    "no_account": "Pas de compte disponible",
+    "no_notes": "Pas de notes disponibles"
+  },
+  "patient_info2": {
+    "full_name": "Nom complet :",
+    "phone": "Téléphone :",
+    "age": "Âge :",
+    "gender": "Sexe :",
+    "patient_id": "ID patient :",
+    "diseases": "Maladies :",
+    "no_data": "N/D",
+    "no_diseases": "Aucune maladie connue",
+    "title": "Détails du patient",
+    "edit_account": "Modifier le compte",
+    "add_account": "Ajouter un compte",
+    "edit_patient": "Modifier le patient"
+  },
+  "folder_table": {
+    "title": "Titre",
+    "price": "Prix",
+    "status": "Statut",
+    "actions": "Actions"
+  },
+  "folder_table_body": {
+    "status": {
+      "working_on_it": "En cours",
+      "pending": "En attente",
+      "done": "Terminé",
+      "default": "Inconnu"
+    },
+    "loading": "Chargement...",
+    "folder_icon_alt": "dossier",
+    "actions": {
+      "edit": "Modifier",
+      "delete": "Supprimer"
+    }
+  },
+  "add_folder": {
+    "title": "Créer un dossier pour le patient",
+    "error_fill_all_fields": "Veuillez remplir tous les champs obligatoires.",
+    "success_created": "Dossier créé avec succès !",
+    "error_failed": "Échec de la création du dossier.",
+    "folder_name_placeholder": "Nom du dossier",
+    "price_placeholder": "Prix",
+    "select_status": "Sélectionner le statut",
+    "dent_placeholder": "Dent",
+    "reason_placeholder": "Raison",
+    "treatment_placeholder": "Traitement",
+    "add_visit": "Ajouter une visite",
+    "submit": "Soumettre",
+    "submitting": "Envoi en cours..."
+  },
+  "status": {
+    "pending": "En attente",
+    "working_on_it": "En cours",
+    "done": "Terminé"
+  },
+  "folder": {
+    "actions_menu": "Menu des actions du dossier",
+    "delete_folder": "Supprimer le dossier",
+    "icon_alt": "Icône de dossier",
+    "edit_folder": "Modifier le dossier",
+    "folder_name": "Nom du dossier",
+    "price": "Prix",
+    "select_status": "Sélectionner le statut",
+    "fill_all_required_fields": "Veuillez remplir tous les champs obligatoires.",
+    "updated_successfully": "Dossier mis à jour avec succès !",
+    "failed_to_update": "Échec de la mise à jour du dossier.",
+    "saving": "Enregistrement...",
+    "save_changes": "Enregistrer les modifications"
+  },
+  "visit": {
+    "dent": "Dent",
+    "reason": "Raison",
+    "treatment": "Traitement",
+    "add_visit": "Ajouter une visite"
+  }
+}
