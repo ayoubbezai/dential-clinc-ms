@@ -2,6 +2,7 @@
 import { HiArrowNarrowRight } from 'react-icons/hi';
 import { Link, useParams } from 'react-router-dom';
 import useFolder from '@/hooks/other/useFolder';
+import usePatient from '@/hooks/other/usePatient';
 import FolderDetailsComp from '@/components/pagesComp/folder/FolderDetailsComp';
 import FolderNotes from '@/components/pagesComp/folder/FolderNotes';
 import FolderDocuments from '@/components/pagesComp/folder/FolderDocuments';
@@ -29,6 +30,10 @@ const FolderDetails = () => {
         setAppsPagination,
         appsPagination
     } = useFolder(folderId);
+    const { patient } = usePatient(patientId);
+    console.log(patient)
+
+
 
 
 
@@ -49,7 +54,7 @@ const FolderDetails = () => {
                 <FolderNotes folderNotes={folderNotes} folderId={folderId} fetchFolderNotes={fetchFolderNotes} t={t} />
                 <FolderDocuments folderId={folderId} folderAttachments={folderAttachments} fetchFolderAttachments={fetchFolderAttachments} t={t} />
                 <FolderPayments folderDetails={folderDetails} folderPayments={folderPayments} fetchFolderPayments={fetchFolderPayments} folderId={folderId} t={t} />
-                <FolderPrescription />
+                <FolderPrescription patient={patient}/>
 
                 <FolderAppointments folderId={folderId} folderAppointments={folderAppointments} fetchFolderAppointments={fetchFolderAppointments} loading={loading} setAppsPagination={setAppsPagination} appsPagination={appsPagination} t={t} />
 
