@@ -5,7 +5,6 @@ import { initializeFormData, handleSubmit } from "@/utils/models/editAppointment
 import { handleInputChange } from "@/utils/other/inputChange";
 import SelectInput from "@/components/inputs/SelectInput";
 import TextInput from "@/components/inputs/TextInput";
-import TextAreaInput from "@/components/inputs/TextAreaInput";
 
 const statusOptions = [
     { value: "pending", label: "Pending" },
@@ -65,7 +64,8 @@ const EditAppointmentModel = ({ isOpen, onClose, currentAppointment, refreshAppo
                     options={statusOptions}
                 />
 
-                <TextAreaInput
+                <textarea
+                    className="w-full p-2 border rounded-lg text-gray-700"
                     id="content"
                     label="Content (Optional)"
                     value={formData.content}
