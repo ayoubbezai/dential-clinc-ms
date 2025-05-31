@@ -5,11 +5,21 @@ import { Input } from "@/components/designSystem/input";
 import { selectClassName } from "@/constant/classNames";
 import { folderService } from "@/services/dentist/foldersService";
 import toast from "react-hot-toast";
+import { useTranslation } from "react-i18next";
 
 const AddFolderModel = ({ isOpen, onClose, patientId, refetchFolders, t }) => {
     const [formData, setFormData] = useState({ folder_name: "", price: "", status: "" });
     const [numberOfVisits, setNumberOfVisits] = useState([{ dent: "", reason_of_visit: "", treatment_details: "" }]);
     const [loading, setLoading] = useState(false);
+    const { t: overviewT } = useTranslation("overview");
+
+    const visitReasons = [
+        { value: "prosthesis", label: overviewT("visit_type_breakdown.prosthesis") },
+        { value: "odontology", label: overviewT("visit_type_breakdown.odontology") },
+        { value: "orthodontics", label: overviewT("visit_type_breakdown.orthodontics") },
+        { value: "care", label: overviewT("visit_type_breakdown.care") },
+        { value: "occlusion_correction", label: overviewT("visit_type_breakdown.occlusion_correction") }
+    ];
 
     const handleVisitChange = (index, field, value) => {
         const updatedVisits = [...numberOfVisits];
@@ -93,14 +103,19 @@ const AddFolderModel = ({ isOpen, onClose, patientId, refetchFolders, t }) => {
                             className={selectClassName}
                             required
                         />
-                        <Input
-                            type="text"
-                            placeholder={t("add_folder.reason_placeholder", "Reason")}
+                        <select
                             value={visit.reason_of_visit}
                             onChange={(e) => handleVisitChange(index, "reason_of_visit", e.target.value)}
                             className={selectClassName}
                             required
-                        />
+                        >
+                            <option value="">{t("add_folder.select_reason", "Select Reason")}</option>
+                            {visitReasons.map((reason) => (
+                                <option key={reason.value} value={reason.value}>
+                                    {reason.label}
+                                </option>
+                            ))}
+                        </select>
                         <Input
                             type="text"
                             placeholder={t("add_folder.treatment_placeholder", "Treatment")}

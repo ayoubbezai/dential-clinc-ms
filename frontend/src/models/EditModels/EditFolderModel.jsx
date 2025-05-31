@@ -11,6 +11,15 @@ const EditFolderModel = ({ isOpen, onClose, folder, fetchFolderDetails, t }) => 
     const [visits, setVisits] = useState([]);
     const [loading, setLoading] = useState(false);
 
+    // Visit reasons in English (translated from French)
+    const visitReasons = [
+        { value: "prosthesis", label: "Prosthesis" },
+        { value: "odontology", label: "Odontology" },
+        { value: "orthodontics", label: "Orthodontics" },
+        { value: "care", label: "Care" },
+        { value: "occlusion_correction", label: "Occlusion Correction" }
+    ];
+
     useEffect(() => {
         if (folder) {
             setFormData({
@@ -104,13 +113,18 @@ const EditFolderModel = ({ isOpen, onClose, folder, fetchFolderDetails, t }) => 
                             onChange={(e) => handleVisitChange(index, "dent", e.target.value)}
                             className={selectClassName}
                         />
-                        <Input
-                            type="text"
-                            placeholder={t("visit.reason")}
+                        <select
                             value={visit.reason_of_visit}
                             onChange={(e) => handleVisitChange(index, "reason_of_visit", e.target.value)}
                             className={selectClassName}
-                        />
+                        >
+                            <option value="">{t("visit.select_reason")}</option>
+                            {visitReasons.map((reason) => (
+                                <option key={reason.value} value={reason.value}>
+                                    {reason.label}
+                                </option>
+                            ))}
+                        </select>
                         <Input
                             type="text"
                             placeholder={t("visit.treatment")}

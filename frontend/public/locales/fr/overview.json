@@ -26,9 +26,11 @@
   },
   "visit_type_breakdown": {
     "title": "Répartition des types de visite",
-    "groupA": "Groupe A",
-    "groupB": "Groupe B",
-    "groupC": "Groupe C",
-    "groupD": "Groupe D"
+    "prosthesis": "Prothèse",
+    "odontology": "Odontologie",
+    "orthodontics": "Orthodontie",
+    "care": "Soin",
+    "occlusion_correction": "Correction d'occlusion",
+    "other": "Autre"
   }
 }

@@ -34,7 +34,6 @@ const FolderDocuments = ({ folderId, folderAttachments, fetchFolderAttachments, 
                 <h3 className="text-[#223354] font-bold text-lg">{t("folder_documents.title")}</h3>
                 <div className="relative">
                     <ThreeDotsV isMenuOpen={isMenuOpen} setIsMenuOpen={setIsMenuOpen} />
-
                     {isMenuOpen && (
                         <FolderDocumentsMenu
                             setIsMenuOpen={setIsMenuOpen}
@@ -49,34 +48,37 @@ const FolderDocuments = ({ folderId, folderAttachments, fetchFolderAttachments, 
             {/* Documents List */}
             <div className="max-h-60 overflow-y-auto space-y-2">
                 {folderAttachments?.length > 0 ? (
-                    folderAttachments.map((doc, index) => (
-                        <div
-                            key={index}
-                            className="flex items-center justify-between p-3 bg-[#F0F8FA] rounded-lg shadow-sm transition-all duration-200 hover:bg-blue-50"
-                        >
-                            <div className="flex items-center gap-3">
-                                <AiOutlineFilePdf className="text-red-500 text-2xl" />
-                                <div className="flex flex-col">
-                                    <a
-                                        href={doc.download_url}
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                        className="text-[#223354] font-medium text-[13px] truncate"
-                                    >
-                                        {doc?.title}
-                                    </a>
-                                    <span className="text-xs text-gray-500">{doc.size}</span>
-                                </div>
-                            </div>
-                            <button
-                                onClick={() => handleDelete(doc.id)}
-                                className="text-red-500/50 hover:text-red-500/80 hover:cursor-pointer text-sm"
-                                aria-label={t("folder_documents.delete_button_aria")}
+                    folderAttachments.map((doc, index) => {
+                        if (doc?.type !== "document") return null;
+                        return (
+                            <div
+                                key={index}
+                                className="flex items-center justify-between p-3 bg-[#F0F8FA] rounded-lg shadow-sm transition-all duration-200 hover:bg-blue-50"
                             >
-                                <FaTrash />
-                            </button>
-                        </div>
-                    ))
+                                <div className="flex items-center gap-3">
+                                    <AiOutlineFilePdf className="text-red-500 text-2xl" />
+                                    <div className="flex flex-col">
+                                        <a
+                                            href={doc.download_url}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className="text-[#223354] font-medium text-[13px] truncate"
+                                        >
+                                            {doc?.title}
+                                        </a>
+                                        <span className="text-xs text-gray-500">{doc.size}</span>
+                                    </div>
+                                </div>
+                                <button
+                                    onClick={() => handleDelete(doc.id)}
+                                    className="text-red-500/50 hover:text-red-500/80 hover:cursor-pointer text-sm"
+                                    aria-label={t("folder_documents.delete_button_aria")}
+                                >
+                                    <FaTrash />
+                                </button>
+                            </div>
+                        );
+                    })
                 ) : (
                     <p className="text-gray-500 text-center">{t("folder_documents.no_documents")}</p>
                 )}

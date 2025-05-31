@@ -54,7 +54,7 @@ const FolderDetails = () => {
                 <FolderNotes folderNotes={folderNotes} folderId={folderId} fetchFolderNotes={fetchFolderNotes} t={t} />
                 <FolderDocuments folderId={folderId} folderAttachments={folderAttachments} fetchFolderAttachments={fetchFolderAttachments} t={t} />
                 <FolderPayments folderDetails={folderDetails} folderPayments={folderPayments} fetchFolderPayments={fetchFolderPayments} folderId={folderId} t={t} />
-                <FolderPrescription patient={patient}/>
+                <FolderPrescription patient={patient} folderId={folderId} folderAttachments={folderAttachments} />
 
                 <FolderAppointments folderId={folderId} folderAppointments={folderAppointments} fetchFolderAppointments={fetchFolderAppointments} loading={loading} setAppsPagination={setAppsPagination} appsPagination={appsPagination} t={t} />
 

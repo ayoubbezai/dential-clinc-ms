@@ -35,7 +35,7 @@ const StatCards = ({ stat }) => {
     },
     {
       label: t('stat_cards.visits'),
-      value: 'N/A',
+      value: stat?.count?.folderVisitReasonstotal ?? 'N/A',
       icon: <Bell className="text-blue-600" size={28} />,
     },
   ]

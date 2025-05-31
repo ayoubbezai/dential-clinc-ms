@@ -39,7 +39,7 @@ const DentistDashboard = () => {
             <TooltipDashboard appointmentType={stat?.appointmentType} />
           </div>
           <div className="col-span-6 row-span-1">
-            <VisitTypeBreakdown />
+            <VisitTypeBreakdown stat={stat?.count?.folderVisitReasons} />
           </div>
         </div>
       </div>

@@ -62,7 +62,7 @@ const AppointmentsTable = ({ appointments, appointmentloading, fetchAppointments
                             <TableRow key={appointment.id}>
                                 <TableCell>{appointment.title || t('appointments.na')}</TableCell>
                                 <TableCell>{appointment.tooth || t('appointments.na')}</TableCell>
-                                <TableCell>{appointment.content || t('appointments.na')}</TableCell>
+                                <TableCell>{appointment.content || 'no content'}</TableCell>
                                 <TableCell>{new Date(appointment.date).toLocaleDateString()}</TableCell>
                                 <TableCell>
                                     <Badge variant="default" className={getStatusColor(appointment.status)}>

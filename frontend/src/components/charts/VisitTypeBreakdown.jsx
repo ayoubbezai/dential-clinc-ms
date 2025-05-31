@@ -4,27 +4,23 @@ import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer } from "recharts";
 import { Card, CardContent } from "@/components/designSystem/card";
 
 const COLORS = [
-    "#1a75ff", // Primary - strong vibrant blue
-    "#007c8f", // Supporting 2 - deep teal
-    "#66c9d9", // Supporting 1 - soft cyan
+    "#1a75ff",
+    "#007c8f",
+    "#66c9d9",
     "#3b486b",
+    "#ff6b6b",
+    "#4ecdc4",
 ];
 
-const rawData = [
-    { key: "groupA", value: 400 },
-    { key: "groupB", value: 300 },
-    { key: "groupC", value: 300 },
-    { key: "groupD", value: 200 },
-];
-
-const VisitTypeBreakdown = () => {
+const VisitTypeBreakdown = ({ stat }) => {
     const { t } = useTranslation("overview");
 
-    // Translate each name key from i18n
-    const data = rawData.map(({ key, value }) => ({
-        name: t(`visit_type_breakdown.${key}`),
-        value,
-    }));
+    // Transform stat data with translations
+    const data = stat?.map(({ type, count }) => ({
+        name: t(`visit_type_breakdown.${type}`), // Get translated label
+        value: count,
+        originalType: type // Keep original type for tooltip
+    })) || [];
 
     return (
         <Card className="py-4 px-1 border-gray-50 bg-white shadow-xl rounded-2xl h-full mx-auto">
@@ -49,7 +45,12 @@ const VisitTypeBreakdown = () => {
                                     <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                                 ))}
                             </Pie>
-                            <Tooltip />
+                            <Tooltip
+                                formatter={(value, name, props) => [
+                                    value,
+                                    t(`visit_type_breakdown.${props.payload.originalType}`)
+                                ]}
+                            />
                         </PieChart>
                     </ResponsiveContainer>
                 </div>

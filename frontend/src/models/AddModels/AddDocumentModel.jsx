@@ -18,6 +18,7 @@ const AddDocumentModel = ({ isOpen, onClose, folderId }) => {
                 const formData = new FormData();
                 formData.append("file", file);
                 formData.append("title", title);
+                formData.append("type", "document");
     
                 await attachmentService.storeAttachment(folderId, formData);
                 alert("File uploaded successfully!");

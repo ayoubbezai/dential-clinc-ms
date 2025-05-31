@@ -26,9 +26,11 @@
   },
   "visit_type_breakdown": {
     "title": "Visit Type Breakdown",
-    "groupA": "Group A",
-    "groupB": "Group B",
-    "groupC": "Group C",
-    "groupD": "Group D"
+    "prosthesis": "Prosthesis",
+    "odontology": "Odontology",
+    "orthodontics": "Orthodontics",
+    "care": "Care",
+    "occlusion_correction": "Occlusion Correction",
+    "other": "Other"
   }
 }
