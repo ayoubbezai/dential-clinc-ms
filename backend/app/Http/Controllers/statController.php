@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Appointment;
 use App\Models\Patient;
+use App\Models\FolderVisit;
 use App\Models\User;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
@@ -20,6 +21,7 @@ class StatController extends Controller
             $appointmentsNumber = Appointment::count();
             $patientsNumber = Patient::count();
             $usersNumber = User::count();
+            $folderVisitReasonstotal = FolderVisit::count();
 
             //get appointments fo 6 and 12 montes by month
 
@@ -50,6 +52,14 @@ $appointmentType = [
     ["type" => "cancelled", "count" => Appointment::where("status", "cancelled")->count()],
     ["type" => "rescheduled", "count" => Appointment::where("status", "rescheduled")->count()],
 ];
+$folderVisitReasons = [
+    ["type" => "prosthesis", "count" => FolderVisit::where("reason_of_visit", "prosthesis")->count()],
+    ["type" => "odontology", "count" => FolderVisit::where("reason_of_visit", "odontology")->count()],
+    ["type" => "orthodontics", "count" => FolderVisit::where("reason_of_visit", "orthodontics")->count()],
+    ["type" => "care", "count" => FolderVisit::where("reason_of_visit", "care")->count()],
+    ["type" => "occlusion_correction", "count" => FolderVisit::where("reason_of_visit", "occlusion_correction")->count()],
+    ["type" => "other", "count" => FolderVisit::whereNotIn("reason_of_visit", ["prosthesis", "odontology", "orthodontics", "care", "occlusion_correction"])->count()],
+];
         
         
                  return response()->json([
@@ -58,7 +68,9 @@ $appointmentType = [
             "data" => [
                 'count'=>[
                     'appointmentsNumber' => $appointmentsNumber,
+                    'folderVisitReasons' => $folderVisitReasons,
                     'patientsNumber' => $patientsNumber,
+                    'folderVisitReasonstotal' => $folderVisitReasonstotal,
                     'usersNumber' => $usersNumber,],
 
             'lastYearAppointems' => $monthNames($lastYearAppointems),

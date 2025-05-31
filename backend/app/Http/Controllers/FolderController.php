@@ -75,7 +75,7 @@ class FolderController extends Controller
                     $visit['dent'] = Crypt::encryptString($visit['dent']);
                 }
                 if (!empty($visit['reason_of_visit'])) {
-                    $visit['reason_of_visit'] = Crypt::encryptString($visit['reason_of_visit']);
+                    $visit['reason_of_visit'] = $visit['reason_of_visit'];
                 }
                 if (!empty($visit['treatment_details'])) {
                     $visit['treatment_details'] = Crypt::encryptString($visit['treatment_details']);
@@ -137,7 +137,7 @@ class FolderController extends Controller
                     //decrypte each visit data
                 foreach ($visits as $visit) {
                     $visit->dent = $visit->dent ? Crypt::decryptString($visit->dent) : null;
-                    $visit->reason_of_visit = $visit->reason_of_visit ? Crypt::decryptString($visit->reason_of_visit) : null;
+                    $visit->reason_of_visit = $visit->reason_of_visit ? $visit->reason_of_visit : null;
                     $visit->treatment_details = $visit->treatment_details ? Crypt::decryptString($visit->treatment_details) : null;
                 }
 
@@ -216,7 +216,7 @@ public function update(Request $request, string $id)
                     ["id" => $visitData["id"] ?? null],
                     [
                         "dent" => isset($visitData["dent"]) ? Crypt::encryptString($visitData["dent"]) : null,
-                        "reason_of_visit" => isset($visitData["reason_of_visit"]) ? Crypt::encryptString($visitData["reason_of_visit"]) : null,
+                        "reason_of_visit" => isset($visitData["reason_of_visit"]) ? $visitData["reason_of_visit"] : null,
                         "treatment_details" => isset($visitData["treatment_details"]) ? Crypt::encryptString($visitData["treatment_details"]) : null,
                     ]
                 );
@@ -295,7 +295,7 @@ public function getFoldersOfPatient(Request $request, string $id)
                         return [
                             'id' => $visit->id,
                             'dent' => $visit->dent ? Crypt::decryptString($visit->dent) : null,
-                            'reason_of_visit' => $visit->reason_of_visit ? Crypt::decryptString($visit->reason_of_visit) : null,
+                            'reason_of_visit' => $visit->reason_of_visit ? $visit->reason_of_visit : null,
                             'treatment_details' => $visit->treatment_details ? Crypt::decryptString($visit->treatment_details) : null,
                         ];
                     } catch (DecryptException $e) {
@@ -344,7 +344,7 @@ public function getAllFolderDetails(string $id)
         // Decrypt visit data if available
         foreach ($folder->visits as $visit) {
             $visit->dent = $visit->dent ? Crypt::decryptString($visit->dent) : null;
-            $visit->reason_of_visit = $visit->reason_of_visit ? Crypt::decryptString($visit->reason_of_visit) : null;
+            $visit->reason_of_visit = $visit->reason_of_visit ? $visit->reason_of_visit : null;
             $visit->treatment_details = $visit->treatment_details ? Crypt::decryptString($visit->treatment_details) : null;
         }
         foreach ($folder->notes as $note) {
@@ -361,6 +361,7 @@ $total_payments = $folder->payments->where("type", "income")->sum('amount') -
             return [
                 'id' => $file->id,
                 'title' => $file->title,
+                'type' => $file->type,
                  'size' => $this->formatBytes($file->size),
                 'download_url' => url("/api/attachments/{$file->id}/download"),
             ];

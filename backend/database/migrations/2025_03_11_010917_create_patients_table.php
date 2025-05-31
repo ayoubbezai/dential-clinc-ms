@@ -21,7 +21,8 @@ return new class extends Migration
             $table->integer('age')->nullable();
             $table->text('notes')->nullable();
             $table->text('diseases')->nullable();
-            $table->timestamps(); // created_at & updated_at
+            $table->timestamps();
+            $table->softDeletes();
         });
     }
 

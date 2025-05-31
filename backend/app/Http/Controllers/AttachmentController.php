@@ -16,14 +16,14 @@ class AttachmentController extends Controller
 
         public function store(Request $request, Folder $folder){
 
-            //validate the attachment
 
             try{
 
                 
                 $request->validate([
-            'file' => 'required|file|max:20480', // 20MB max
+            'file' => 'required|file|max:20480',
             "title"=> 'required|string',
+            "type"=> 'required|string',
             ]);
 
             $file = $request->file('file');
@@ -32,6 +32,7 @@ class AttachmentController extends Controller
 
             $attachment = $folder->attachments()->create([
                 'title' => $request->title,
+                'type' => $request->type,
                 'original_name' => $file->getClientOriginalName(),
                 'storage_path' => $path,
                 'mime_type' => $file->getMimeType(),
@@ -66,7 +67,8 @@ public function getAttachments(string $id)
                     return [
                         'id' => $file->id,
                         'title' => $file->title,
-                        'type' => $file->mime_type,
+                        'type' => $file->type,
+                        'typeOfFile' => $file->mime_type,
                         'size' => $this->formatBytes($file->size),
                         'uploaded_at' => $file->created_at->format('M d, Y'),
                         'download_url' => url("/api/attachments/{$file->id}/download"),

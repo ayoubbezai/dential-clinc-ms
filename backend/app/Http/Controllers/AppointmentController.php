@@ -43,7 +43,7 @@ class AppointmentController extends Controller
             //get the data
             
             $data = Appointment::query()
-    ->with(["folder:id,folder_name,patient_id", "folder.patient:id,patient_name"]);
+    ->with(["folder:id,folder_name,patient_id", "folder.patient:id"]);
 
      //search by appointemnt title
 
@@ -97,7 +97,6 @@ class AppointmentController extends Controller
                 'tooth' => $appointment->tooth,
                 'content' => $appointment->content,
                 'folder_name' => $appointment->folder->folder_name,
-                'patient_name' => $appointment->folder->patient->patient_name,
             ];
         });
                 //get collection to set items of paginatedData
