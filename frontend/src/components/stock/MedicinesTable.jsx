@@ -1,4 +1,4 @@
-import useMedicine from '@/hooks/other/usemedicine';
+import useMedicine from '@/hooks/other/useMedicine';
 import React, { useState, lazy, Suspense } from 'react';
 import { Table } from '@/components/designSystem/table';
 
