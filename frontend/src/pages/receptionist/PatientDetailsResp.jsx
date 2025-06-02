@@ -42,32 +42,32 @@ const PatientDetailsResp = () => {
         }
     }
     return (
-        <div className="w-full px-8 bg-background py-5 text-secondary ">
+        <div className="w-full px-8 bg-[#f0f8fa] py-5 text-[#223354] ">
             <div className="grid grid-cols-12 gap-4 my-4">
 
-            <PatientInfo1 patient={patient} />
+                <PatientInfo1 patient={patient} />
                 <PatientInfo2 patient={patient} refetchPatient={refetchPatient} />
 
 
-            <div className="col-span-12 relative bg-[#fff] p-3 px-4 shadow-md rounded-lg mt-12">
-                <FolderTableHeader view={view} setView={setView} id={id} search={search} setSearch={setSearch} refetchFolders={refetchFolders} />
+                <div className="col-span-12 relative bg-[#fff] p-3 px-4 shadow-md rounded-lg mt-12">
+                    <FolderTableHeader view={view} setView={setView} id={id} search={search} setSearch={setSearch} refetchFolders={refetchFolders} />
                     <div className="pt-4">
 
-                <FolderGridTable
-                    loading={loading}
-                    folders={folders}
-                    handleDelete={handleDelete}
-                    isEditFolderOpen={isEditFolderOpen}
-                    setIsEditFolderOpen={setIsEditFolderOpen}
-                    refetchFolders={refetchFolders}
-                />
-</div>
-                <FolderTableFooter
-                    perPage={perPage} setPerPage={setPerPage}
-                    page={page} setPage={setPage} pagination={pagination}
-                />
+                        <FolderGridTable
+                            loading={loading}
+                            folders={folders}
+                            handleDelete={handleDelete}
+                            isEditFolderOpen={isEditFolderOpen}
+                            setIsEditFolderOpen={setIsEditFolderOpen}
+                            refetchFolders={refetchFolders}
+                        />
+                    </div>
+                    <FolderTableFooter
+                        perPage={perPage} setPerPage={setPerPage}
+                        page={page} setPage={setPage} pagination={pagination}
+                    />
 
-            </div>
+                </div>
             </div>
         </div>
     )

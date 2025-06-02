@@ -30,7 +30,7 @@ const PatientTableComp = ({ handleEdit, handleDelete, patientLoading, loading, p
                         <TableRow key={patient.id}>
                             <TableCell><Link to={getLink(patient.id)}>{patient.patient_name}</Link></TableCell>
                             <TableCell>{patient.phone}</TableCell>
-                            <TableCell className="text-primary">
+                            <TableCell className="text-[#1a75ff]">
                                 {patient?.user?.email || "No Account"}
                             </TableCell>
                             <TableCell>{patient.age}</TableCell>

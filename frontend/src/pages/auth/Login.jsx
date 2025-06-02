@@ -26,7 +26,7 @@ const Login = () => {
                     alt="Decorative background"
                     className="w-full h-full object-cover absolute inset-0 filter blur-[1px]"
                 />
-                <div className="absolute inset-0 bg-primary/20 mix-blend-multiply" />
+                <div className="absolute inset-0 bg-[#1a75ff]/20 mix-blend-multiply" />
             </div>
 
             {/* Right side - Login Form */}
@@ -47,7 +47,7 @@ const Login = () => {
                             <h2 className="text-2xl font-bold text-gray-900">Sign in to your account</h2>
                             {/* <p className="text-gray-500 mt-2 text-sm">
                                 Don't have an account?{' '}
-                                <a href="#" className="text-primary font-medium hover:underline">
+                                <a href="#" className="text-[#1a75ff] font-medium hover:underline">
                                     Contact admin
                                 </a>
                             </p> */}
@@ -77,7 +77,7 @@ const Login = () => {
                                     required
                                     type="email"
                                     placeholder="you@example.com"
-                                    className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-primary focus:border-primary text-sm"
+                                    className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-[#1a75ff] focus:border-[#1a75ff] text-sm"
                                 />
                             </div>
 
@@ -89,7 +89,7 @@ const Login = () => {
 
                             <div>
                                 {LoadingButton(loading, "Sign in", {
-                                    className: "w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-primary hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary"
+                                    className: "w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-[#1a75ff] hover:bg-[#1a75ff]/90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#1a75ff]"
                                 })}
                             </div>
                         </form>

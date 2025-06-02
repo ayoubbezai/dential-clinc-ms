@@ -6,10 +6,10 @@
     --card-foreground: 222.2 84% 4.9%;
     --popover: 0 0% 100%;
     --popover-foreground: 222.2 84% 4.9%;
-    --primary: 217.2 91.2% 55%; /* Deep blue */
-    --primary-foreground: 210 40% 98%;
-    --secondary: 158 85% 30%; /* Deep emerald green */
-    --secondary-foreground: 0 0% 100%;
+    --[#1a75ff]: 217.2 91.2% 55%; /* Deep blue */
+    --[#1a75ff]-foreground: 210 40% 98%;
+    --[#223354]: 158 85% 30%; /* Deep emerald green */
+    --[#223354]-foreground: 0 0% 100%;
     --muted: 210 40% 96.1%;
     --muted-foreground: 215.4 16.3% 44%;
     --accent: 10 80% 45%; /* Burnt red */
@@ -19,7 +19,7 @@
     --border: 214.3 31.8% 91.4%;
     --input: 214.3 31.8% 91.4%;
     --ring: 217.2 91.2% 55%;
-    
+
     /* Chart Colors */
     --chart-1: 217 88% 52%; /* Strong blue */
     --chart-2: 158 75% 35%; /* Deep green */
@@ -35,10 +35,10 @@
     --card-foreground: 0 0% 98%;
     --popover: 240 10% 3.9%;
     --popover-foreground: 0 0% 98%;
-    --primary: 217.2 91.2% 50%;
-    --primary-foreground: 210 40% 98%;
-    --secondary: 158 85% 30%; /* Deep emerald green */
-    --secondary-foreground: 0 0% 100%;
+    --[#1a75ff]: 217.2 91.2% 50%;
+    --[#1a75ff]-foreground: 210 40% 98%;
+    --[#223354]: 158 85% 30%; /* Deep emerald green */
+    --[#223354]-foreground: 0 0% 100%;
     --muted: 240 3.7% 15.9%;
     --muted-foreground: 240 5% 64.9%;
     --accent: 10 75% 40%; /* Burnt red */

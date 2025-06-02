@@ -51,7 +51,7 @@ const PatientDetails = () => {
   }
 
   return (
-    <div className="w-full px-8 bg-background py-5 text-secondary">
+    <div className="w-full px-8 bg-[#f0f8fa] py-5 text-[#223354]">
       {/* Breadcrumb */}
       <p className="flex items-center gap-2 text-gray-700">
         <Link to="/patients_list" className="text-blue-600 font-semibold">{t("breadcrumb.patients")}</Link>
