@@ -1,14 +1,13 @@
-// pusherService.js
 import Pusher from "pusher-js";
 
 const initializePusher = () => {
   const token = localStorage.getItem("token");
   const pusher = new Pusher("xs5n6ysk7wwrglkxyrle", {
-    wsHost: "192.168.1.4",
-    wsPort: 8080,
-    forceTLS: false,
+    wsHost: "reverb.ayoubbezai.site",
+    wsPort: 443,
+    forceTLS: true,
     enabledTransports: ["ws", "wss"],
-    authEndpoint: "http://192.168.1.4:8000/api/broadcasting/auth",
+    authEndpoint: "https://api.ayoubbezai.site/api/broadcasting/auth",
     cluster: "",
     auth: {
       headers: {
