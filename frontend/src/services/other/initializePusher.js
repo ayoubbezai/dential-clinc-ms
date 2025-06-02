@@ -3,7 +3,7 @@ import Pusher from "pusher-js";
 const initializePusher = () => {
   const token = localStorage.getItem("token");
   const pusher = new Pusher("xs5n6ysk7wwrglkxyrle", {
-    wsHost: "api.ayoubbezai.site",
+    wsHost: "reverb.ayoubbezai.site",
     wsPort: 443,
     forceTLS: true,
     enabledTransports: ["ws", "wss"],
