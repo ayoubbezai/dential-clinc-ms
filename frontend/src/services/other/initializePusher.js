@@ -5,7 +5,7 @@ const initializePusher = () => {
   const pusher = new Pusher("xs5n6ysk7wwrglkxyrle", {
     wsHost: "reverb.ayoubbezai.site",
     wsPort: 443,
-    forceTLS: true,
+    forceTLS: false,
     enabledTransports: ["ws", "wss"],
     authEndpoint: "https://api.ayoubbezai.site/api/broadcasting/auth",
     cluster: "",
