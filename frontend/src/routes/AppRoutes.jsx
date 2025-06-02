@@ -11,7 +11,6 @@ const ClientDashboard = lazy(() => import("../pages/client/ClientDashboard"));
 const ReceptionistDashboard = lazy(() => import("../pages/receptionist/ReceptionistDashboard"));
 const Schedule = lazy(() => import("../pages/shared/Schedule"));
 const Login = lazy(() => import("../pages/auth/Login"));
-const LandingPage = lazy(() => import("../pages/LandingPage"));
 const UsersList = lazy(() => import("../pages/shared/UsersList"));
 const PatientsList = lazy(() => import("../pages/shared/PatientsList"));
 const AppointmentList = lazy(() => import("../pages/shared/AppointmentList"));
@@ -27,7 +26,6 @@ const AppRoutes = () => {
             <Routes>
                 {/* Public Route */}
                 <Route path="/login" element={<Login />} />
-                <Route path="/" element={<LandingPage />} />
 
                 {/* Protected Routes */}
                 <Route element={<ProtectedRoute />}>
