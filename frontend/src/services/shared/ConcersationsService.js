@@ -25,7 +25,7 @@ export const ConversationService = {
       };
     }
   },
-  async getConversation(id,perPage, page = 1) {
+  async getConversation(id, perPage, page = 1) {
     try {
       const params = new URLSearchParams();
       const appendParam = (key, value) => {
@@ -36,7 +36,7 @@ export const ConversationService = {
       appendParam("page", page);
 
       const response = await api.get(
-        `/getConversation/${id}/?${params.toString()}`
+        `/getConversation/${id}?${params.toString()}`
       );
       return { data: response.data, error: null };
     } catch (error) {
@@ -47,20 +47,20 @@ export const ConversationService = {
       };
     }
   },
-  async sendMessage(reciver_id,message){
-     try {
-       const response = await api.post("/sendMessage", {
-         reciver_id,
-         message,
-       });
-       console.log(response);
-       return { data: response.data, error: null };
-     } catch (error) {
-       console.log(error);
-       return {
-         data: null,
-         error: error.message || "Failed to send message",
-       };
-     }
-  }
+  async sendMessage(reciver_id, message) {
+    try {
+      const response = await api.post("/sendMessage", {
+        reciver_id,
+        message,
+      });
+      console.log(response);
+      return { data: response.data, error: null };
+    } catch (error) {
+      console.log(error);
+      return {
+        data: null,
+        error: error.message || "Failed to send message",
+      };
+    }
+  },
 };
