@@ -60,7 +60,7 @@ const DashboardLayout = ({ children }) => {
                         <SidebarComponent />
                     </Suspense>
                 )}
-                <div className="flex-grow w-1/2 max-h-screen overflow-auto pb-12">
+                <div className="flex-grow bg-[#f0f8fa] w-1/2 max-h-screen overflow-auto pb-12">
 
                     {children}
                 </div>
