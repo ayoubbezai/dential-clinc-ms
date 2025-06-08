@@ -91,11 +91,11 @@ class UserController extends Controller
         // Start building the query
         $data = User::query();
     
-        // Add tenant filter manually here:
-        $tenantId = Auth::user()->tenant_id ?? null;
-        if ($tenantId) {
-            $data->where('users.tenant_id', $tenantId);
-        }
+        // // Add tenant filter manually here:
+        // $tenantId = Auth::user()->tenant_id ?? null;
+        // if ($tenantId) {
+        //     $data->where('users.tenant_id', $tenantId);
+        // }
     
         // Join with roles for role filters
         $data->leftJoin('roles', 'users.role_id', '=', 'roles.id')

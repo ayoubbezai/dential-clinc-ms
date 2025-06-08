@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Scopes\TenantScope;
 
 class Stock extends Model
 {
@@ -14,6 +15,11 @@ class Stock extends Model
         'quantity',
         'expiry_date'
     ];
+
+        protected static function booted()
+    {
+        static::addGlobalScope(new TenantScope);
+    }
 
     // Define relationships
     public function medicine()

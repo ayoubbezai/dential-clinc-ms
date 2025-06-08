@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Traits\BelongsToTenant;
+use App\Scopes\TenantScope;
 
 class Patient extends Model
 {
@@ -26,6 +27,12 @@ class Patient extends Model
         "patient_name_tokens",
         'tenant_id',
     ];
+
+    protected static function booted()
+    {
+        static::addGlobalScope(new TenantScope);
+    }
+
 
     public function user()
     {
