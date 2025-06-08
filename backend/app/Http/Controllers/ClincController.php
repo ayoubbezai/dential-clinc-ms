@@ -59,6 +59,7 @@ class ClincController extends Controller
             'email' => $request->email,
             'password' => bcrypt($request->password),
             'role_id' => $clinicRole->id,
+            'tenant_id' => $subdomain,
         ]);
     
         tenancy()->end();
