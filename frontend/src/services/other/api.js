@@ -1,19 +1,21 @@
 import axios from "axios";
 
-// Get API URL from .env file
+// Extract subdomain (e.g., drsmile from drsmile.ayoubbezai.site)
+const host = window.location.hostname;
+const subdomain = host.split(".")[0];
 
-const API_URL = import.meta.env.VITE_API_URL;
-console.log(API_URL);
+// Build API URL dynamically
+const API_URL = `https://${subdomain}.api.ayoubbezai.site/api`;
 
-// add base url and header so no need to do it each time
+console.log("API URL:", API_URL);
 
+// Create Axios instance
 const api = axios.create({
   baseURL: API_URL,
   headers: { "Content-Type": "application/json" },
 });
 
-// add Bearer token auto
-
+// Add Bearer token automatically
 api.interceptors.request.use(
   (config) => {
     const token = localStorage.getItem("token");
