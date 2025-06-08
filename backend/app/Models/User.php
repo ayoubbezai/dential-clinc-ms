@@ -8,11 +8,15 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Database\Eloquent\Concerns\HasUuids; // Import UUID trait
+use App\Traits\BelongsToTenant;
+
 
 class User extends Authenticatable
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory,HasApiTokens, Notifiable,HasUuids;
+    use BelongsToTenant;
+
 
 
     protected $keyType = 'string'; // UUID is stored as a string

@@ -27,7 +27,7 @@ class ClincController extends Controller
         }
     
         $subdomain = strtolower($request->subdomain);
-        $fullDomain = "{$subdomain}.yoursaas.com";
+        $fullDomain = "{$subdomain}.ayoubbezai.site";
     
         if (Tenant::find($subdomain)) {
             return response()->json(['error' => 'Subdomain already exists.'], 409);
