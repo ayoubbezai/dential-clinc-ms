@@ -124,7 +124,7 @@ class UserController extends Controller
         }
     
         // Date range filter
-        $startDate = $request_query['start_date'] ?? null;
+$startDate = $request_query['start_date'] ?? null;
         $endDate = $request_query['end_date'] ?? now()->toDateString();
     
         if ($startDate && $endDate) {
