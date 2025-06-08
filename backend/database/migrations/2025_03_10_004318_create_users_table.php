@@ -14,7 +14,7 @@ return new class extends Migration {
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->foreignId('role_id')->constrained('roles')->onDelete('cascade');
-            $table->unsignedBigInteger('tenant_id')->nullable();
+            $table->string('tenant_id')->nullable();
             $table->foreign('tenant_id')->references('id')->on('tenants')->onDelete('cascade');
             $table->rememberToken();
             $table->timestamps();
