@@ -5,8 +5,11 @@ const host = window.location.hostname;
 const subdomain = host.split(".")[0];
 
 // Build API URL dynamically
-const API_URL = `https://${subdomain}.api.ayoubbezai.site/api`;
-
+const isLocalhost = host.includes('localhost');
+const API_URL = isLocalhost
+  ? 'http://localhost:8000/api'
+  : `https://${subdomain}.api.ayoubbezai.site/api`;
+  
 console.log("API URL:", API_URL);
 
 // Create Axios instance
