@@ -3,10 +3,22 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-
+use App\Traits\BelongsToTenant;
+use App\Scopes\TenantScope;
 class Attachment extends Model
 {
     //
+
+       
+    use BelongsToTenant;
+
+    protected static function booted()
+    {
+        static::addGlobalScope(new TenantScope);
+    }
+
+
+
     protected $fillable = [
     'folder_id',
     'title',
@@ -14,7 +26,7 @@ class Attachment extends Model
     'original_name',
     'storage_path',
     'mime_type',
-    'size'
+    'size','tenant_id'
 ];
 
 public function folder()

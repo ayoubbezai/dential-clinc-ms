@@ -13,7 +13,15 @@ class Patient extends Model
 {
     use HasFactory;
     use SoftDeletes;
+
+    
     use BelongsToTenant;
+
+    protected static function booted()
+    {
+        static::addGlobalScope(new TenantScope);
+    }
+
 
 
 
@@ -29,10 +37,6 @@ class Patient extends Model
         'tenant_id',
     ];
 
-    protected static function booted()
-    {
-        static::addGlobalScope(new TenantScope);
-    }
 
 
     public function user()

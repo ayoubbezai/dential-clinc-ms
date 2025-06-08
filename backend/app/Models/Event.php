@@ -3,10 +3,20 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-
+use App\Traits\BelongsToTenant;
+use App\Scopes\TenantScope;
 class Event extends Model
 {
     //
+
+       
+    use BelongsToTenant;
+
+    protected static function booted()
+    {
+        static::addGlobalScope(new TenantScope);
+    }
+
  protected $fillable =[
         "start_date",
         "start_time",
@@ -15,7 +25,7 @@ class Event extends Model
         "location",
         "user_id",
         "people",
-        "title","calendarId"
+        "title","calendarId",'tenant_id'
     ];
 
     public function user(){
