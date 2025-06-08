@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Traits\BelongsToTenant;
 use App\Scopes\TenantScope;
 
+
 class Patient extends Model
 {
     use HasFactory;
