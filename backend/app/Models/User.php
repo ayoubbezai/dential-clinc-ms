@@ -9,7 +9,7 @@ use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Database\Eloquent\Concerns\HasUuids; // Import UUID trait
 use App\Traits\BelongsToTenant;
-use App\Scopes\TenantScope;
+
 
 
 
@@ -18,10 +18,7 @@ class User extends Authenticatable
     /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory,HasApiTokens, Notifiable,HasUuids;
     use BelongsToTenant;
-    protected static function booted()
-    {
-        static::addGlobalScope(new TenantScope);
-    }
+    
 
 
 
