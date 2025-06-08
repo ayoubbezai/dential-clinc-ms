@@ -16,6 +16,8 @@ return new class extends Migration
             $table->string("title");
             $table->text("content");
             $table->foreignId('folder_id')->constrained('folders')->onDelete('cascade');
+            $table->string('tenant_id')->nullable();
+            $table->foreign('tenant_id')->references('id')->on('tenants')->onDelete('cascade');
             $table->timestamps();
         });
     }

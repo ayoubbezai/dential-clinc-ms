@@ -18,6 +18,8 @@ return new class extends Migration
             $table->foreign("folder_id")->references('id')->on('folders')->onDelete('cascade');
         $table->enum("type", ["income", "expense", "refund"])->default("income");
             $table->text("note")->nullable();
+            $table->string('tenant_id')->nullable();
+            $table->foreign('tenant_id')->references('id')->on('tenants')->onDelete('cascade');
             $table->timestamps();
         });
     }

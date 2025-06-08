@@ -22,6 +22,8 @@ return new class extends Migration
             $table->string("calendarId")->nullable();
             $table->foreignUuid("user_id")->constrained()->onDelete('cascade');
             $table->json("people")->nullable();
+            $table->string('tenant_id')->nullable();
+            $table->foreign('tenant_id')->references('id')->on('tenants')->onDelete('cascade');
             $table->timestamps();
         });
     }

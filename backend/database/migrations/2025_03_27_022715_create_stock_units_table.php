@@ -14,6 +14,8 @@ return new class extends Migration
         Schema::create('stock_units', function (Blueprint $table) {
             $table->id();
             $table->string("name")->unique();
+            $table->string('tenant_id')->nullable();
+            $table->foreign('tenant_id')->references('id')->on('tenants')->onDelete('cascade');
             $table->timestamps();
         });
     }

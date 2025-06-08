@@ -17,6 +17,8 @@ return new class extends Migration
             $table->text('reason_of_visit')->nullable();
             $table->text('treatment_details')->nullable();
             $table->foreignId('folder_id')->constrained('folders')->onDelete('cascade');
+            $table->string('tenant_id')->nullable();
+            $table->foreign('tenant_id')->references('id')->on('tenants')->onDelete('cascade');
             $table->timestamps();
         });
     }

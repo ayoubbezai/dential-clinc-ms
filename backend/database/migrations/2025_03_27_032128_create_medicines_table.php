@@ -19,6 +19,8 @@ return new class extends Migration
              $table->integer("low_stock_threshold")->nullable();
              $table->integer("medium_stock_threshold")->nullable();
              $table->integer("good_stock_threshold")->nullable();
+             $table->string('tenant_id')->nullable();
+             $table->foreign('tenant_id')->references('id')->on('tenants')->onDelete('cascade');
             $table->timestamps();
         });
     }

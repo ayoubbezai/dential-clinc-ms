@@ -17,6 +17,8 @@ return new class extends Migration
             $table->foreign('sender_id')->references('id')->on('users')->onDelete('cascade');
             $table->string('reciver_id')->nullable();
             $table->string("message");
+            $table->string('tenant_id')->nullable();
+            $table->foreign('tenant_id')->references('id')->on('tenants')->onDelete('cascade');
             $table->timestamps();
         });
     }

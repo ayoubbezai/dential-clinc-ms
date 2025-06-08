@@ -21,6 +21,8 @@ Schema::create('attachments', function (Blueprint $table) {
     $table->string('storage_path'); // Path in storage
     $table->string('mime_type');
     $table->unsignedInteger('size');
+    $table->string('tenant_id')->nullable();
+    $table->foreign('tenant_id')->references('id')->on('tenants')->onDelete('cascade');
     $table->timestamps();
 });
     }
