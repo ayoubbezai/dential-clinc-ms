@@ -21,6 +21,8 @@ return new class extends Migration
             $table->integer('age')->nullable();
             $table->text('notes')->nullable();
             $table->text('diseases')->nullable();
+            $table->string('tenant_id')->nullable();
+            $table->foreign('tenant_id')->references('id')->on('tenants')->onDelete('cascade');
             $table->timestamps();
             $table->softDeletes();
         });
