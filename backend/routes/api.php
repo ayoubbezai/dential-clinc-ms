@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AgentController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\ClincController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\PatientController;
 use App\Http\Controllers\FolderController;
@@ -34,6 +35,9 @@ Route::prefix('auth')->group(function () {
     Route::post('/register', [AuthController::class, 'register']);
     Route::post('/login', [AuthController::class, 'login'])->middleware('throttle:login');
     Route::post('mobile/login', [AuthController::class, 'loginMobile'])->middleware('throttle:login');
+    Route::post('/register-clinic', [ClincController::class, 'registerClinic'])->middleware('throttle:login');
+
+
 
 });
 Route::middleware($auth)->prefix('auth/mobile')->group(function () {
