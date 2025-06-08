@@ -23,7 +23,8 @@ class Patient extends Model
         'age',
         'notes',
         'diseases',
-        "patient_name_tokens"
+        "patient_name_tokens",
+        'tenant_id',
     ];
 
     public function user()
