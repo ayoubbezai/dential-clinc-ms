@@ -18,7 +18,8 @@ class AuthController extends Controller
             "name" => "required|string",
             "email" => "required|string|email|unique:users",
             "password" => "required|min:6",
-            "role_name" => "nullable|string|exists:roles,name"
+            "role_name" => "nullable|string|exists:roles,name",
+            "tenant_id" => "required|exists:tenants,id"
         ]);
 
         $role_name = $request->role_name;
@@ -36,7 +37,8 @@ class AuthController extends Controller
                 "name" => $data["name"],
                 "email" => $data["email"],
                 "password" => $data["password"],//password ishashed auto
-                "role_id" => $role->id
+                "role_id" => $role->id,
+                "tenant_id" => $data["tenant_id"]
             ]);
 
             // Generate a token for the user
