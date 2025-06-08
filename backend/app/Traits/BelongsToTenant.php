@@ -2,13 +2,16 @@
 
 namespace App\Traits;
 
+use Illuminate\Support\Facades\Auth;
+
 trait BelongsToTenant
 {
-    // Example: scope to filter queries by tenant_id
-    public function scopeForTenant($query, $tenantId)
+    public static function bootBelongsToTenant()
     {
-        return $query->where('tenant_id', $tenantId);
+        static::creating(function ($model) {
+            if (Auth::check() && !$model->tenant_id) {
+                $model->tenant_id = Auth::user()->tenant_id;
+            }
+        });
     }
-
-    // You can add more tenant-related methods here
 }
