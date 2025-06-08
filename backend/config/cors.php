@@ -19,7 +19,7 @@ return [
 
     'allowed_methods' => ['*'],
 
-'allowed_origins' => ['http://localhost:5173','http://localhost:8000',"https://ayoubbezai.com","https://ayoubbezai.site","https://api.ayoubbezai.com","https://api.ayoubbezai.site"],
+'allowed_origins' => ['http://localhost:5173','http://localhost:8000',"https://ayoubbezai.com","https://ayoubbezai.site","https://api.ayoubbezai.com","https://api.ayoubbezai.site","https://*.ayoubbezai.com","https://*.ayoubbezai.site"],
 
     'allowed_origins_patterns' => [],
 
