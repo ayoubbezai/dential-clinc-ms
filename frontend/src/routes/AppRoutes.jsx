@@ -19,6 +19,7 @@ const Payment = lazy(() => import("../pages/shared/Payment"));
 const PatientDetails = lazy(() => import("@/pages/dentist/PatientDetails"));
 const FolderDetails = lazy(() => import("@/pages/dentist/FolderDetails"));
 const Inventory = lazy(() => import("@/pages/shared/Inventory"));
+const StatisticsPage = lazy(() => import("@/pages/dentist/StatisticsPage"));
 
 const AppRoutes = () => {
     return (
@@ -37,6 +38,7 @@ const AppRoutes = () => {
                         <Route path="/payment" element={<Payment />} />
                         <Route path="/inventory" element={<Inventory />} />
                         <Route path="/patient/:patientId/folder/:folderId" element={<FolderDetails />} />
+                        <Route path="/statistics" element={<StatisticsPage />} />
                         <Route path="/patient/:id" element={<PatientDetails />} />
                     </Route>
                     <Route element={<RoleBasedRoute allowedRoles={["receptionist"]} />}>

@@ -1,0 +1,38 @@
+{
+  "gender_breakdown": {
+    "title": "Gender Distribution",
+    "male": "Male",
+    "female": "Female",
+    "total_patients": "Total Patients",
+    "male_patients": "Male Patients",
+    "female_patients": "Female Patients",
+    "percentage": "Percentage",
+    "count": "Count"
+  },
+  "age_breakdown": {
+    "title": "Age Distribution",
+    "under_18": "Under 18",
+    "18_30": "18-30",
+    "31_50": "31-50",
+    "51_65": "51-65",
+    "over_50": "Over 50"
+  },
+  "visit_statistics": {
+    "title": "Visit Statistics",
+    "total_visits": "Total Visits",
+    "new_patients": "New Patients",
+    "returning_patients": "Returning Patients",
+    "average_visits": "Average Visits per Patient"
+  },
+  "common": {
+    "total": "Total",
+    "count": "Count",
+    "percentage": "Percentage",
+    "distribution": "Distribution",
+    "breakdown": "Breakdown",
+    "statistics": "Statistics",
+    "chart": "Chart",
+    "data": "Data",
+    "summary": "Summary"
+  }
+} 

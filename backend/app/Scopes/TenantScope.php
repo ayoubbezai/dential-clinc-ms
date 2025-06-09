@@ -13,6 +13,7 @@ class TenantScope implements Scope
     {
         // Get the current tenant id, implement your logic here
         $tenantId = Auth::user()->tenant_id ?? null;
+        
 
         if ($tenantId) {
             $builder->where('tenant_id', $tenantId);

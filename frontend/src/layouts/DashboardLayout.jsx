@@ -22,7 +22,8 @@ const DashboardLayout = ({ children }) => {
         "/messanger",
         "/receptionist/",
         "/patient/",
-        "/inventory"
+        "/inventory",
+        "/statistics"
     ];
 
     const showSidebar = sidebarPaths.some(path =>

@@ -3,13 +3,13 @@ import axios from "axios";
 // Extract subdomain (e.g., drsmile from drsmile.ayoubbezai.site)
 const host = window.location.hostname;
 const subdomain = host.split(".")[0];
-
+console.log("hostis", host, subdomain);
 // Build API URL dynamically
-const isLocalhost = host.includes('localhost');
+const isLocalhost = host.includes("localhost");
 const API_URL = isLocalhost
-  ? 'http://localhost:8000/api'
+  ? "http://localhost:8000/api"
   : `https://${subdomain}.api.ayoubbezai.site/api`;
-  
+
 console.log("API URL:", API_URL);
 
 // Create Axios instance

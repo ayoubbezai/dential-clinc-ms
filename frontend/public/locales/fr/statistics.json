@@ -1,0 +1,38 @@
+{
+  "gender_breakdown": {
+    "title": "Répartition par Genre",
+    "male": "Homme",
+    "female": "Femme",
+    "total_patients": "Total des Patients",
+    "male_patients": "Patients Masculins",
+    "female_patients": "Patients Féminines",
+    "percentage": "Pourcentage",
+    "count": "Nombre"
+  },
+  "age_breakdown": {
+    "title": "Répartition par Âge",
+    "under_18": "Moins de 18 ans",
+    "18_30": "18-30 ans",
+    "31_50": "31-50 ans",
+    "51_65": "51-65 ans",
+    "over_50": "Plus de 50 ans"
+  },
+  "visit_statistics": {
+    "title": "Statistiques des Visites",
+    "total_visits": "Total des Visites",
+    "new_patients": "Nouveaux Patients",
+    "returning_patients": "Patients Récurrents",
+    "average_visits": "Moyenne des Visites par Patient"
+  },
+  "common": {
+    "total": "Total",
+    "count": "Nombre",
+    "percentage": "Pourcentage",
+    "distribution": "Répartition",
+    "breakdown": "Répartition",
+    "statistics": "Statistiques",
+    "chart": "Graphique",
+    "data": "Données",
+    "summary": "Résumé"
+  }
+} 

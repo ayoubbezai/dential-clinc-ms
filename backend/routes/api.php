@@ -94,6 +94,7 @@ Route::middleware($auth)->group(function () {
 
 });
 Route::get('/dashboard_stat', [StatController::class, 'dashboardStat']);
+Route::get('/statistic_stat', [StatController::class, 'statisticStat']);
 Route::get('/attachments/{id}/download', [AttachmentController::class, 'download']);
 
 
