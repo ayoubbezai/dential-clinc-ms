@@ -96,6 +96,7 @@ const EditFolderModel = ({ isOpen, onClose, folder, fetchFolderDetails, t }) => 
                     >
                         <option value="">{t("folder.select_status")}</option>
                         <option value="pending">{t("status.pending")}</option>
+                        <option value="completed">{t("status.completed")}</option>
                         <option value="working_on_it">{t("status.working_on_it")}</option>
                     </select>
                 </div>

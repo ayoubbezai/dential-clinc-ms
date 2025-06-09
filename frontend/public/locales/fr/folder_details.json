@@ -5,6 +5,7 @@
   "folder_details_comp": {
     "title": "Détails du dossier",
     "status": {
+      "completed": "Terminé",
       "working_on_it": "En cours",
       "pending": "En attente",
       "unknown": "Inconnu"

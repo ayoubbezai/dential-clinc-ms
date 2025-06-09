@@ -10,6 +10,7 @@ use App\Models\Folder;
 use App\Models\Stock;
 use App\Models\User;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\DB;
 
 
@@ -107,7 +108,8 @@ $folderVisitReasons = [
             $withDiseases = Patient::whereNotNull("diseases")->count();
             $withoutDiseases = Patient::whereNull("diseases")->count();
     
-            $newPatientsByMonth = Patient::select(
+
+                $growthOfPatientsByMonths = Patient::select(
                     DB::raw("MONTH(created_at) as month"),
                     DB::raw("COUNT(*) as count")
                 )
@@ -119,9 +121,10 @@ $folderVisitReasons = [
                     $item->month = Carbon::create()->month($item->month)->format('M');
                     return $item;
                 });
+                
+                
     
-            $averageNewPatientsPerDay = round(Patient::where('created_at', '>=', Carbon::now()->subDays(30))->count() / 30, 2);
-            $averageNewPatientsPerMonth = Patient::where('created_at', '>=', Carbon::now()->subDays(30))->count();
+     
     
             // FOLDERS
             $completedFolders = Folder::where('status', 'completed')->count();
@@ -133,7 +136,7 @@ $folderVisitReasons = [
                 ->count();
     
             $partiallyPaidFolders = Folder::where('price', '>', 0)
-                ->whereRaw("price > (SELECT COALESCE(SUM(price),0) FROM payments WHERE folder_id = folders.id)")
+                ->whereRaw("price > (SELECT COALESCE(SUM(price),0) FROM payments WHERE folder_id = folders.id) AND (SELECT COALESCE(SUM(price),0) FROM payments WHERE folder_id = folders.id) > 0")
                 ->count();
     
             $unpaidFolders = Folder::where('price', '>', 0)
@@ -141,10 +144,61 @@ $folderVisitReasons = [
                 ->count();
     
             // APPOINTMENTS
-            $mostVisitedTooth = Appointment::select('tooth', DB::raw('count(*) as total'))
-                ->groupBy('tooth')
-                ->orderBy('total', 'desc')
-                ->first();
+
+
+            $topTeethRaw = FolderVisit::select('dent', DB::raw('COUNT(*) as total'))
+            ->whereNotNull('dent')
+            ->groupBy('dent')
+            ->get();
+        
+        $decryptedToothCounts = [];
+        
+        foreach ($topTeethRaw as $item) {
+            try {
+                $toothNumber = Crypt::decryptString($item->dent);
+            } catch (\Exception $e) {
+                $toothNumber = 'Unknown';
+            }
+        
+            if (!isset($decryptedToothCounts[$toothNumber])) {
+                $decryptedToothCounts[$toothNumber] = 0;
+            }
+        
+            $decryptedToothCounts[$toothNumber] += $item->total;
+        }
+        
+        // Sort by total visits descending
+        arsort($decryptedToothCounts);
+        
+        // Prepare top 3 with messages
+        $mostVisitedTeeth = collect();
+        
+        foreach (array_slice($decryptedToothCounts, 0, 3, true) as $toothNumber => $visitCount) {
+            // Convert tooth number to integer for proper matching
+            $toothInt = (int)$toothNumber;
+            
+            $message = match ($toothInt) {
+                11, 21 => 'Central incisors — essential for cutting and aesthetics.',
+                12, 22 => 'Lateral incisors — support central incisors.',
+                13, 23 => 'Canines — tearing function and facial support.',
+                14, 15, 24, 25 => 'Premolars — key for grinding.',
+                16, 17, 18, 26, 27, 28 => 'Molars — heavy chewing load, prone to decay.',
+                31, 41 => 'Lower central incisors — alignment-sensitive.',
+                32, 42 => 'Lower lateral incisors — important for bite.',
+                33, 43 => 'Lower canines — critical for jaw guidance.',
+                34, 35, 44, 45 => 'Lower premolars — help with chewing and support.',
+                36, 37, 38, 46, 47, 48 => 'Lower molars — high wear, often decayed.',
+                default => 'Tooth not identified — general high-visit area.',
+            };
+        
+            $mostVisitedTeeth->push([
+                'tooth_number' => $toothInt,
+                'visits' => $visitCount,
+                'message' => $message,
+            ]);
+        }
+        
+
     
             $appointmentsThisWeek = Appointment::whereBetween('date', [
                 Carbon::now()->startOfWeek(),
@@ -181,22 +235,8 @@ $folderVisitReasons = [
     
             $averageAppointmentsPerDay = round(Appointment::where('date', '>=', Carbon::now()->subDays(30))->count() / 30, 2);
     
-            // PAYMENTS
-            $transactionsPerDay = round(DB::table('payments')
-                ->where('created_at', '>=', Carbon::now()->subDays(30))
-                ->count() / 30, 2);
-    
-            $transactionsPerMonth = DB::table('payments')
-                ->where('created_at', '>=', Carbon::now()->subDays(30))
-                ->count();
-    
-            $averagePaymentAmountPerDay = round(DB::table('payments')
-                ->where('created_at', '>=', Carbon::now()->subDays(30))
-                ->avg('amount'), 2);
-    
-            $averagePaymentAmountPerMonth = round(DB::table('payments')
-                ->where('created_at', '>=', Carbon::now()->subDays(30))
-                ->sum('amount') / 30, 2);
+
+            
     
             // USERS
             $totalUsers = User::count();
@@ -209,53 +249,37 @@ $folderVisitReasons = [
     
             // STOCK
             $stocks = Stock::with('medicine')->get();
-    
-            $lowStock = [];
-            $goodStock = [];
-            $outOfStock = [];
-            $expired = [];
-    
+
+            $lowCount = 0;
+            $goodCount = 0;
+            $outOfStockCount = 0;
+            $expiredCount = 0;
+            
             foreach ($stocks as $stock) {
                 $quantity = $stock->quantity;
                 $threshold = $stock->medicine->low_stock_threshold ?? 0;
                 $isExpired = $stock->expiry_date && $stock->expiry_date < now();
-    
+            
                 if ($isExpired) {
-                    $expired[] = [
-                        'medicine' => $stock->medicine->name,
-                        'quantity' => $quantity,
-                        'expiry_date' => $stock->expiry_date,
-                        'status' => 'Expired'
-                    ];
-                } elseif ($quantity == 0) {
-                    $outOfStock[] = [
-                        'medicine' => $stock->medicine->name,
-                        'quantity' => $quantity,
-                        'status' => 'Out of Stock'
-                    ];
+                    $expiredCount++;
+                    continue; // Don't check other statuses if expired
+                }
+            
+                if ($quantity === 0) {
+                    $outOfStockCount++;
                 } elseif ($quantity <= $threshold) {
-                    $lowStock[] = [
-                        'medicine' => $stock->medicine->name,
-                        'quantity' => $quantity,
-                        'threshold' => $threshold,
-                        'status' => 'Low'
-                    ];
+                    $lowCount++;
                 } else {
-                    $goodStock[] = [
-                        'medicine' => $stock->medicine->name,
-                        'quantity' => $quantity,
-                        'threshold' => $threshold,
-                        'status' => 'Good'
-                    ];
+                    $goodCount++;
                 }
             }
-    
+            
             $stockStats = [
-                'total_items' => $stocks->count(),
-                'low_stock' => $lowStock,
-                'good_stock' => $goodStock,
-                'out_of_stock' => $outOfStock,
-                'expired' => $expired,
+                'total_items'    => $stocks->count(),
+                'expired'        => $expiredCount,
+                'out_of_stock'   => $outOfStockCount,
+                'low_stock'      => $lowCount,
+                'good_stock'     => $goodCount,
             ];
 
             $data = [
@@ -270,8 +294,8 @@ $folderVisitReasons = [
                         'with' => $withDiseases,
                         'without' => $withoutDiseases,
                     ],
-                    'averageNewPerDay' => $averageNewPatientsPerDay,
-                    'averageNewPerMonth' => $averageNewPatientsPerMonth,
+                    'growthOfPatientsByMonths' => $growthOfPatientsByMonths,
+
                 ],
                 'folders' => [
                     'total' => Folder::count(),
@@ -288,18 +312,12 @@ $folderVisitReasons = [
                     ]
                 ],
                 'appointments' => [
-                    'mostVisitedTooth' => $mostVisitedTooth,
+                    'mostVisitedTooth' => $mostVisitedTeeth,
                     'averagePerDay' => $averageAppointmentsPerDay,
                     'byMonth' => $appointmentsByMonth,
                     'byWeekDay' => $appointmentsByDayOfWeek,
                     'thisWeek' => $appointmentsThisWeek,
                     'thisMonth' => $appointmentsThisMonth,
-                ],
-                'payments' => [
-                    'transactionsPerDay' => $transactionsPerDay,
-                    'transactionsPerMonth' => $transactionsPerMonth,
-                    'averageAmountPerDay' => $averagePaymentAmountPerDay,
-                    'averageAmountPerMonth' => $averagePaymentAmountPerMonth,
                 ],
                 'users' => [
                     'total' => $totalUsers,

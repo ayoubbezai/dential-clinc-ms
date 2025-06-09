@@ -11,11 +11,66 @@
   },
   "age_breakdown": {
     "title": "Age Distribution",
-    "under_18": "Under 18",
+    "under_18": "< 18",
     "18_30": "18-30",
     "31_50": "31-50",
     "51_65": "51-65",
-    "over_50": "Over 50"
+    "over_50": "> 50"
+  },
+  "disease_breakdown": {
+    "title": "Disease Status",
+    "with_diseases": "With Diseases",
+    "without_diseases": "Without Diseases",
+    "total_patients": "Total Patients",
+    "percentage": "Percentage",
+    "count": "Count"
+  },
+  "folder_status": {
+    "title": "Folder Status",
+    "subtitle": "Track your progress",
+    "completed": "Completed",
+    "working_on_it": "Working on it",
+    "pending": "Pending",
+    "folders": "folders"
+  },
+  "folder_payment": {
+    "title": "Payment Status",
+    "fully_paid": "Fully Paid",
+    "partially_paid": "Partially Paid",
+    "unpaid": "Unpaid"
+  },
+  "average_breakdown": {
+    "title": "New Patients Average",
+    "per_day": "Per Day",
+    "per_month": "Per Month",
+    "daily_avg": "Daily Average",
+    "monthly_avg": "Monthly Average",
+    "day": "Day",
+    "week": "Week",
+    "month": "Month"
+  },
+  "patient_growth_chart": {
+    "title": "Patient Growth",
+    "subtitle": "Growth over {{range}}",
+    "last_6": "Last 6 Months",
+    "this_year": "This Year",
+    "tooltip": "{{count}} patients"
+  },
+  "dashboard": {
+    "title": "Healthcare Analytics Dashboard",
+    "subtitle": "Comprehensive insights into patient demographics, health trends, and growth patterns",
+    "tabs": {
+      "patients": "Patients",
+      "growth": "Growth",
+      "health": "Health"
+    },
+    "descriptions": {
+      "patients": "Explore patient demographics including gender distribution, age groups, and disease status",
+      "growth": "Track patient growth trends and monthly acquisition patterns",
+      "health": "Monitor health statistics and disease prevalence among patients"
+    },
+    "health_overview": "Health Overview",
+    "health_description": "Comprehensive health statistics and disease monitoring dashboard"
   },
   "visit_statistics": {
     "title": "Visit Statistics",
@@ -33,6 +88,57 @@
     "statistics": "Statistics",
     "chart": "Chart",
     "data": "Data",
-    "summary": "Summary"
+    "summary": "Summary",
+    "health_status": "Health Status",
+    "visits": "Visits"
+  },
+  "user_roles": {
+    "title": "User Roles",
+    "subtitle": "System user distribution",
+    "clinic": "Clinic",
+    "dentist": "Dentist",
+    "patient": "Patient",
+    "receptionist": "Receptionist",
+    "assistant": "Assistant",
+    "users": "users",
+    "active_roles": "Active Roles",
+    "avg_per_role": "Avg/Role"
+  },
+  "weekdays": {
+    "monday": "Monday",
+    "tuesday": "Tuesday",
+    "wednesday": "Wednesday",
+    "thursday": "Thursday",
+    "friday": "Friday",
+    "saturday": "Saturday",
+    "sunday": "Sunday"
+  },
+  "weekday_appointments": {
+    "title": "Appointments by Day",
+    "no_data": "No appointment data available.",
+    "appointments": "appointments",
+    "busiest_day": "Busiest Day",
+    "average_per_day": "Avg/Day"
+  },
+  "most_visited_tooth": {
+    "title": "Most Visited Tooth",
+    "subtitle": "Dental appointment insights",
+    "tooth_number": "Tooth Number",
+    "total_visits": "Total Visits",
+    "top_3": "Top 3 Most Visited",
+    "no_data": "No visit data available",
+    "description": "Tooth {{tooth}} has been visited {{visits}} times"
+  },
+  "stock": {
+    "title": "Stock Status",
+    "subtitle": "Inventory management overview",
+    "total_items": "Total Items",
+    "expired": "Expired",
+    "out_of_stock": "Out of Stock",
+    "low_stock": "Low Stock",
+    "good_stock": "Good Stock",
+    "items": "items",
+    "stock_level": "Stock Level",
+    "inventory": "Inventory"
   }
 } 

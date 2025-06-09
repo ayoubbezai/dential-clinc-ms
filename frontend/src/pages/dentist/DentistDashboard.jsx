@@ -19,9 +19,9 @@ const DentistDashboard = () => {
     <>
       <TopNavBar />
       <div className="w-full px-6 sm:px-8 py-4">
-        <div className="grid grid-cols-12 grid-rows-2 gap-4">
+        <div className="grid grid-cols-12 gap-4">
           {/* Chart */}
-          <div className="col-span-12 row-span-1 lg:col-span-6">
+          <div className="col-span-12 lg:col-span-6">
             <AppointmentsChart
               selectedRange={selectedRange}
               setSelectedRange={setSelectedRange}
@@ -30,15 +30,17 @@ const DentistDashboard = () => {
           </div>
 
           {/* Stat Cards */}
-          <div className="col-span-12 row-span-1 lg:col-span-6 grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <StatCards stat={stat} />
+          <div className="col-span-12 lg:col-span-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <StatCards stat={stat} />
+            </div>
           </div>
 
           {/* TooltipDashboard and VisitTypeBreakdown */}
-          <div className="col-span-6 row-span-1">
+          <div className="col-span-12 lg:col-span-6">
             <TooltipDashboard appointmentType={stat?.appointmentType} />
           </div>
-          <div className="col-span-6 row-span-1">
+          <div className="col-span-12 lg:col-span-6">
             <VisitTypeBreakdown stat={stat?.count?.folderVisitReasons} />
           </div>
         </div>

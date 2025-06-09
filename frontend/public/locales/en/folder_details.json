@@ -5,11 +5,12 @@
   "folder_details_comp": {
     "title": "Folder Details",
     "status": {
+      "completed": "Completed",
       "working_on_it": "Working on it",
       "pending": "Pending",
       "unknown": "Unknown"
     },
-    "visit": {
+    "visit": {  
       "tooth": "Tooth No.",
       "reason": "Reason",
       "treatment": "Treatment",

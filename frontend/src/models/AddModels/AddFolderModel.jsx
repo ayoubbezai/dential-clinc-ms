@@ -86,6 +86,7 @@ const AddFolderModel = ({ isOpen, onClose, patientId, refetchFolders, t }) => {
                     >
                         <option value="">{t("add_folder.select_status", "Select Status")}</option>
                         <option value="pending">{t("status.pending", "Pending")}</option>
+                        <option value="completed">{t("status.completed", "Completed")}</option>
                         <option value="working_on_it">{t("status.working_on_it", "Working on it")}</option>
                     </select>
                 </div>

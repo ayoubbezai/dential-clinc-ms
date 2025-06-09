@@ -11,11 +11,66 @@
   },
   "age_breakdown": {
     "title": "Répartition par Âge",
-    "under_18": "Moins de 18 ans",
-    "18_30": "18-30 ans",
-    "31_50": "31-50 ans",
+    "under_18": "< 18",
+    "18_30": "18-30",
+    "31_50": "31-50",
     "51_65": "51-65 ans",
-    "over_50": "Plus de 50 ans"
+    "over_50": "> 50"
+  },
+  "disease_breakdown": {
+    "title": "Statut des Maladies",
+    "with_diseases": "Avec Maladies",
+    "without_diseases": "Sans Maladies",
+    "total_patients": "Total des Patients",
+    "percentage": "Pourcentage",
+    "count": "Nombre"
+  },
+  "folder_status": {
+    "title": "Statut des Dossiers",
+    "subtitle": "Suivez votre progression",
+    "completed": "Terminé",
+    "working_on_it": "En Cours",
+    "pending": "En Attente",
+    "folders": "dossiers"
+  },
+  "folder_payment": {
+    "title": "Statut de Paiement",
+    "fully_paid": "Entièrement Payé",
+    "partially_paid": "Partiellement Payé",
+    "unpaid": "Non Payé"
+  },
+  "average_breakdown": {
+    "title": "Moyenne Nouveaux Patients",
+    "per_day": "Par Jour",
+    "per_month": "Par Mois",
+    "daily_avg": "Moyenne Quotidienne",
+    "monthly_avg": "Moyenne Mensuelle",
+    "day": "Jour",
+    "week": "Semaine",
+    "month": "Mois"
+  },
+  "patient_growth_chart": {
+    "title": "Croissance des Patients",
+    "subtitle": "Croissance sur {{range}}",
+    "last_6": "6 Derniers Mois",
+    "this_year": "Cette Année",
+    "tooltip": "{{count}} patients"
+  },
+  "dashboard": {
+    "title": "Tableau de Bord Analytics Santé",
+    "subtitle": "Aperçu complet des démographies des patients, tendances de santé et modèles de croissance",
+    "tabs": {
+      "patients": "Patients",
+      "growth": "Croissance",
+      "health": "Santé"
+    },
+    "descriptions": {
+      "patients": "Explorez les démographies des patients incluant la répartition par genre, groupes d'âge et statut de maladie",
+      "growth": "Suivez les tendances de croissance des patients et les modèles d'acquisition mensuels",
+      "health": "Surveillez les statistiques de santé et la prévalence des maladies parmi les patients"
+    },
+    "health_overview": "Aperçu de la Santé",
+    "health_description": "Tableau de bord complet des statistiques de santé et de surveillance des maladies"
   },
   "visit_statistics": {
     "title": "Statistiques des Visites",
@@ -26,13 +81,64 @@
   },
   "common": {
     "total": "Total",
-    "count": "Nombre",
+    "count": "Compte",
     "percentage": "Pourcentage",
     "distribution": "Répartition",
     "breakdown": "Répartition",
     "statistics": "Statistiques",
     "chart": "Graphique",
     "data": "Données",
-    "summary": "Résumé"
+    "summary": "Résumé",
+    "health_status": "Statut de Santé",
+    "visits": "Visites"
+  },
+  "user_roles": {
+    "title": "Rôles Utilisateurs",
+    "subtitle": "Répartition des utilisateurs du système",
+    "clinic": "Clinique",
+    "dentist": "Dentiste",
+    "patient": "Patient",
+    "receptionist": "Réceptionniste",
+    "assistant": "Assistant",
+    "users": "utilisateurs",
+    "active_roles": "Rôles Actifs",
+    "avg_per_role": "Moy/Rôle"
+  },
+  "weekdays": {
+    "monday": "Lundi",
+    "tuesday": "Mardi",
+    "wednesday": "Mercredi",
+    "thursday": "Jeudi",
+    "friday": "Vendredi",
+    "saturday": "Samedi",
+    "sunday": "Dimanche"
+  },
+  "weekday_appointments": {
+    "title": "Rendez-vous par Jour",
+    "no_data": "Aucune donnée de rendez-vous disponible.",
+    "appointments": "rendez-vous",
+    "busiest_day": "Jour le Plus Occupé",
+    "average_per_day": "Moy/Jour"
+  },
+  "most_visited_tooth": {
+    "title": "Dent la Plus Visitée",
+    "subtitle": "Aperçu des rendez-vous dentaires",
+    "tooth_number": "Numéro de Dent",
+    "total_visits": "Total Visites",
+    "top_3": "Top 3 Plus Visitées",
+    "no_data": "Aucune donnée de visite disponible",
+    "description": "La dent {{tooth}} a été visitée {{visits}} fois"
+  },
+  "stock": {
+    "title": "Statut du Stock",
+    "subtitle": "Aperçu de la gestion des stocks",
+    "total_items": "Total Articles",
+    "expired": "Expiré",
+    "out_of_stock": "Rupture de Stock",
+    "low_stock": "Stock Faible",
+    "good_stock": "Bon Stock",
+    "items": "articles",
+    "stock_level": "Niveau de Stock",
+    "inventory": "Inventaire"
   }
 } 

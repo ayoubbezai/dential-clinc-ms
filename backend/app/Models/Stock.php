@@ -11,10 +11,10 @@ class Stock extends Model
        
     use BelongsToTenant;
 
-    protected static function booted()
-    {
-        static::addGlobalScope(new TenantScope);
-    }
+    // protected static function booted()
+    // {
+    //     static::addGlobalScope(new TenantScope);
+    // }
 
 
 
