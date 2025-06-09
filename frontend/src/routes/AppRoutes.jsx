@@ -20,6 +20,7 @@ const PatientDetails = lazy(() => import("@/pages/dentist/PatientDetails"));
 const FolderDetails = lazy(() => import("@/pages/dentist/FolderDetails"));
 const Inventory = lazy(() => import("@/pages/shared/Inventory"));
 const StatisticsPage = lazy(() => import("@/pages/dentist/StatisticsPage"));
+const AppointmentsSchedule = lazy(() => import("@/pages/shared/ApoointmentSchedule"));
 
 const AppRoutes = () => {
     return (
@@ -40,6 +41,7 @@ const AppRoutes = () => {
                         <Route path="/patient/:patientId/folder/:folderId" element={<FolderDetails />} />
                         <Route path="/statistics" element={<StatisticsPage />} />
                         <Route path="/patient/:id" element={<PatientDetails />} />
+                        <Route path="/appointments_schedule" element={<AppointmentsSchedule />} />
                     </Route>
                     <Route element={<RoleBasedRoute allowedRoles={["receptionist"]} />}>
                         <Route path="/receptionist/patient/:id" element={<PatientDetailsResp />} />

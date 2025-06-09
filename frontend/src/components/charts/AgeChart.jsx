@@ -97,28 +97,28 @@ const AgeChart = ({ total, ageGroups = {} }) => {
 
                 {/* Age groups summary */}
                 <div className="mt-3 grid grid-cols-2 gap-2">
-                    <div 
+                    <div
                         className="text-center p-2 rounded-lg"
                         style={{ backgroundColor: `${COLORS[0]}20` }}
                     >
                         <div className="text-sm font-bold" style={{ color: COLORS[0] }}>{ageGroups["<18"] || 0}</div>
                         <div className="text-xs text-gray-600">{t("age_breakdown.under_18")}</div>
                     </div>
-                    <div 
+                    <div
                         className="text-center p-2 rounded-lg"
                         style={{ backgroundColor: `${COLORS[1]}20` }}
                     >
                         <div className="text-sm font-bold" style={{ color: COLORS[1] }}>{ageGroups["18-30"] || 0}</div>
                         <div className="text-xs text-gray-600">{t("age_breakdown.18_30")}</div>
                     </div>
-                    <div 
+                    <div
                         className="text-center p-2 rounded-lg"
                         style={{ backgroundColor: `${COLORS[2]}20` }}
                     >
                         <div className="text-sm font-bold" style={{ color: COLORS[2] }}>{ageGroups["31-50"] || 0}</div>
                         <div className="text-xs text-gray-600">{t("age_breakdown.31_50")}</div>
                     </div>
-                    <div 
+                    <div
                         className="text-center p-2 rounded-lg"
                         style={{ backgroundColor: `${COLORS[3]}20` }}
                     >

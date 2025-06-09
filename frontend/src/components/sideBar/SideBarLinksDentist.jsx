@@ -30,7 +30,8 @@ const iconComponents = {
     ai: <MdOutlineAutoAwesome size={16} />,
     chat: <MdOutlineForum size={16} />,
     payment: <MdOutlinePayment size={16} />,
-    statistics: <MdOutlineBarChart size={16} />
+    statistics: <MdOutlineBarChart size={16} />,
+    appointmentsSchedule: <MdOutlineCalendarToday size={16} />
 };
 
 const SideBarLinksDentist = ({ isOpen }) => {
@@ -46,7 +47,9 @@ const SideBarLinksDentist = ({ isOpen }) => {
         { name: t('payment'), link: "/payment", icon: "payment" },
         { name: t('inventory'), link: "/inventory", icon: "inventory" },
         { name: t('chat'), link: "/messanger", icon: "chat" },
-        { name: t('statistics'), link: "/statistics", icon: "statistics" }
+        { name: t('statistics'), link: "/statistics", icon: "statistics" },
+        { name: t('appointments_schedule', 'Appointments Schedule'), link: "/appointments_schedule", icon: "appointmentsSchedule" },
+
     ];
 
     return (
