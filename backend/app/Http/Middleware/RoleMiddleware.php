@@ -19,7 +19,7 @@ class RoleMiddleware
         // Get the current host
         $host = $request->getHost(); // e.g., "localhost" or "app.domain.com"
         $isLocal = str_contains($host, 'localhost');
-        $isMobileApi = str_starts_with($host, 'api.'); // Check if it's mobile API request
+        $isMobileApi = str_starts_with($host, 'api.') || strpos($host, 'api.') === 0; // Check if it's mobile API request
         
         // Check if it's main website (no subdomain or specific main domain)
         $isMainWebsite = !str_contains($host, '.') || 
@@ -31,15 +31,14 @@ class RoleMiddleware
             'isLocal' => $isLocal,
             'isMobileApi' => $isMobileApi,
             'isMainWebsite' => $isMainWebsite,
-            'user_tenant_id' => $user->tenant_id ?? 'null'
+            'user_tenant_id' => $user->tenant_id ?? 'null',
+            'str_starts_with_result' => str_starts_with($host, 'api.'),
+            'strpos_result' => strpos($host, 'api.') === 0
         ]);
 
         if (!$isLocal) {
             // For mobile API requests (api.domain.com), accept without strict subdomain checking
             if ($isMobileApi) {
-                // Extract the main domain from api.domain.com
-                $mainDomain = substr($host, 4); // Remove 'api.' prefix
-                
                 // Set a default tenant or allow access
                 app()->instance('tenant_id', $user->tenant_id);
                 app()->instance('domain', null);
