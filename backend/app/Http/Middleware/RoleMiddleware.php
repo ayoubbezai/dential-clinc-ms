@@ -23,9 +23,7 @@ class RoleMiddleware
         
         // Check if it's main website (no subdomain or specific main domain)
         $isMainWebsite = !str_contains($host, '.') || 
-                        $host === 'domain.com' || 
-                        $host === 'yourdomain.com' || // Add your actual main domain
-                        preg_match('/^[^.]+\.[^.]+$/', $host); // Matches domain.com pattern
+                        preg_match('/^[^.]+\.[^.]+$/', $host); // Matches domain.com pattern (any main domain)
 
         // Debug logging (you can remove this later)
         \Log::info('RoleMiddleware Debug', [
