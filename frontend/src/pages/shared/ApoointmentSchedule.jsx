@@ -34,12 +34,7 @@ function AppointmentSchedule() {
         <>
             <div className='flex justify-between w-5/6 my-3 mt-5 mx-auto items-center'>
                 <div className="flex items-center gap-4">
-                    <Button
-                        className="text-white text-[13px]"
-                        onClick={() => setIsModalOpen(true)}
-                    >
-                        + {t('add_appointment_button', 'Add Appointment')}
-                    </Button>
+                    <h1>Appointmets Schedule</h1>
                 </div>
 
                 {/* Status Legend */}
@@ -76,12 +71,7 @@ function AppointmentSchedule() {
                 )}
             </div>
 
-            <AddEventModel
-                isOpen={isModalOpen}
-                onClose={() => setIsModalOpen(false)}
-                eventsServicePlugin={eventsServicePlugin}
-                isAppointment={true}
-            />
+
         </>
     );
 }

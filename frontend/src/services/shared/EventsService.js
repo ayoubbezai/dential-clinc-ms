@@ -3,13 +3,22 @@ export const EventsService = {
 
   async scheduleEvents(start, end) {
     try {
-      // API call using api
-      const response = await api.get(`/schedule?start=${start}&end=${end}`);
-      console.log(response.data);
-      console.log(response.data.data);
-      return { data: response.data.data, error: null }; // Return data and no error
+      console.log('EventsService: Making API call to /events with params:', { start, end });
+      // API call using api - Changed from /schedule to /events
+      const response = await api.get(`/events?start=${start}&end=${end}`);
+      console.log('EventsService: Full API response:', response);
+      console.log('EventsService: Response data:', response.data);
+      
+      // Check if the response has the expected structure
+      if (response.data && response.data.success) {
+        console.log('EventsService: Success response, returning data:', response.data.data);
+        return { data: response.data.data, error: null };
+      } else {
+        console.log('EventsService: No success flag, returning data directly:', response.data.data || response.data);
+        return { data: response.data.data || response.data || [], error: null };
+      }
     } catch (error) {
-      console.error("Error fetching events:", error);
+      console.error('EventsService: API call failed:', error);
       return {
         data: null,
         error: error.message || "Failed to fetch events",

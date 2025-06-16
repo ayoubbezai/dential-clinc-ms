@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo, useRef } from 'react';
 import { useCalendarApp } from '@schedule-x/react';
 import { createEventsServicePlugin } from '@schedule-x/events-service';
 import { createViewMonthGrid, createViewDay } from '@schedule-x/calendar';
@@ -66,6 +66,10 @@ const useAppointmentCalendar = (setSelectedEvent, t, i18n) => {
     const { appointments, setStart, setEnd } = UseAppointments();
     const [modalPosition, setModalPosition] = useState({ x: 0, y: 0 });
 
+    // Use ref to track if we're currently updating dates to prevent race conditions
+    const isUpdatingDates = useRef(false);
+    const lastRangeRef = useRef(null);
+
     // Transform appointments to calendar events format - MEMOIZED to prevent infinite re-renders
     const events = useMemo(() => {
         if (!appointments || appointments.length === 0) return [];
@@ -101,9 +105,14 @@ const useAppointmentCalendar = (setSelectedEvent, t, i18n) => {
                     return null;
                 }
 
+                // Generate a stable, unique ID for the event
+                const eventId = appointment.id
+                    ? `appointment-${appointment.id}`
+                    : `appointment-${appointmentDate}-${appointmentTime || '00:00'}-${appointment.patient_name || 'unknown'}`;
+
                 const event = {
-                    id: appointment.id || `appointment-${Date.now()}-${Math.random()}`,
-                    title: `${appointment.patientName || appointment.patient?.name || 'Unknown Patient'} - ${appointment.type || appointment.appointmentType || 'Appointment'}`,
+                    id: eventId,
+                    title: `${appointment.patient_name || 'Unknown Patient'} - ${appointment.title || 'Appointment'}`,
                     start: start,
                     end: end,
                     color: APPOINTMENT_COLORS[appointment.status] || '#1a75ff',
@@ -120,10 +129,11 @@ const useAppointmentCalendar = (setSelectedEvent, t, i18n) => {
         }).filter(event => event !== null);
     }, [appointments]); // Only depend on appointments, not on every render
 
+    // Separate effect for syncing events to prevent unnecessary re-renders
     useEffect(() => {
         console.log('Syncing events with calendar...');
         syncEvents(events, prevEvents, setPrevEvents, eventsServicePlugin);
-    }, [events, eventsServicePlugin, prevEvents]); // Include prevEvents in dependencies
+    }, [events, eventsServicePlugin]); // Remove prevEvents from dependencies
 
     const calendar = useCalendarApp({
         views: [createViewMonthGrid(), createViewDay()],
@@ -134,11 +144,40 @@ const useAppointmentCalendar = (setSelectedEvent, t, i18n) => {
         plugins: [eventsServicePlugin],
         callbacks: {
             onRangeUpdate(range) {
+                // Prevent race conditions by checking if we're already updating
+                if (isUpdatingDates.current) {
+                    console.log('Skipping range update - already updating dates');
+                    return;
+                }
+
+                // Check if the range has actually changed
+                const rangeKey = `${range.start}-${range.end}`;
+                if (lastRangeRef.current === rangeKey) {
+                    console.log('Skipping range update - same range');
+                    return;
+                }
+
+                isUpdatingDates.current = true;
+                lastRangeRef.current = rangeKey;
+
+                console.log('Updating date range:', range.start, range.end);
                 DateUpdate(range.start, range.end, setStart, setEnd);
+
+                // Reset the flag after a short delay
+                setTimeout(() => {
+                    isUpdatingDates.current = false;
+                }, 100);
             },
             beforeRender($app) {
+                // Only update if we haven't already updated for this range
                 const range = $app.calendarState.range.value;
-                DateUpdate(range.start, range.end, setStart, setEnd);
+                const rangeKey = `${range.start}-${range.end}`;
+
+                if (lastRangeRef.current !== rangeKey && !isUpdatingDates.current) {
+                    console.log('Initial render - setting date range:', range.start, range.end);
+                    lastRangeRef.current = rangeKey;
+                    DateUpdate(range.start, range.end, setStart, setEnd);
+                }
             },
             onEventClick(calendarEvent, event) {
                 if (event) {
